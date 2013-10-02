@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateRespuestaObtenidaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateRespuestaObtenidaLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{respuestaObtenidaController.selected.id}" title="#{bundle.CreateRespuestaObtenidaTitle_id}" required="true" requiredMessage="#{bundle.CreateRespuestaObtenidaRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateRespuestaObtenidaLabel_encuestaId}" for="encuestaId" />
+                    <h:selectOneMenu id="encuestaId" value="#{respuestaObtenidaController.selected.encuestaId}" title="#{bundle.CreateRespuestaObtenidaTitle_encuestaId}" required="true" requiredMessage="#{bundle.CreateRespuestaObtenidaRequiredMessage_encuestaId}">
+                        <f:selectItems value="#{encuestaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateRespuestaObtenidaLabel_respuestaConfId}" for="respuestaConfId" />
+                    <h:selectOneMenu id="respuestaConfId" value="#{respuestaObtenidaController.selected.respuestaConfId}" title="#{bundle.CreateRespuestaObtenidaTitle_respuestaConfId}" required="true" requiredMessage="#{bundle.CreateRespuestaObtenidaRequiredMessage_respuestaConfId}">
+                        <f:selectItems value="#{respuestaConfController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateRespuestaObtenidaLabel_preguntaId}" for="preguntaId" />
+                    <h:selectOneMenu id="preguntaId" value="#{respuestaObtenidaController.selected.preguntaId}" title="#{bundle.CreateRespuestaObtenidaTitle_preguntaId}" required="true" requiredMessage="#{bundle.CreateRespuestaObtenidaRequiredMessage_preguntaId}">
+                        <f:selectItems value="#{preguntaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{respuestaObtenidaController.create}" value="#{bundle.CreateRespuestaObtenidaSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{respuestaObtenidaController.prepareList}" value="#{bundle.CreateRespuestaObtenidaShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateRespuestaObtenidaIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

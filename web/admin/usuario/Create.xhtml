@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h:outputText value="#{bundle.CreateUsuarioTitle}"></h:outputText>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <p:panel id="panel" header="Crear Usuario" style="width:60%; margin-left:15px;">
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabel_nombre}" for="nombre" />
+                    <p:inputText id="nombre" value="#{usuarioControllerExt.selected.nombre}" 
+                                 required="true" requiredMessage="El campo Nombre es requerido"
+                                 title="#{bundle.CreateUsuarioTitle_nombre}" />
+                    <p:message for="nombre"/>
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabel_apellido}" for="apellido" />
+                    <p:inputText id="apellido" value="#{usuarioControllerExt.selected.apellido}"
+                                 required="true" requiredMessage="El campo Apellido es requerido"
+                                 title="#{bundle.CreateUsuarioTitle_apellido}" />
+                    <p:message for="apellido"/>
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabel_user}" for="user" />
+                    <p:inputText id="user" value="#{usuarioControllerExt.selected.user}" 
+                                 title="#{bundle.CreateUsuarioTitle_user}" required="true" 
+                                 requiredMessage="#{bundle.CreateUsuarioRequiredMessage_user}"/>
+                    <p:message for="user"/>
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabel_psw}" for="psw" />
+                    <p:password id="psw" value="#{usuarioControllerExt.selected.psw}" 
+                                match="psw_repeat"
+                                 title="#{bundle.CreateUsuarioTitle_psw}" required="true" 
+                                 requiredMessage="#{bundle.CreateUsuarioRequiredMessage_psw}"/>
+                    <p:message for="psw"/>
+                    
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabelRepeat_psw}" for="psw_repeat" />
+                    <p:password id="psw_repeat" value="#{usuarioControllerExt.selected.pswRepeat}" 
+                                 title="#{bundle.CreateUsuarioTitleRepeat_psw}" required="true" 
+                                 requiredMessage="#{bundle.CreateUsuarioRequiredMessage_psw}"/>
+                    <p:message for="psw_repeat"/>
+                    <p:outputLabel value="#{bundle.CreateUsuarioLabel_perfilId}" for="perfilId" />
+                    <h:selectOneMenu id="perfilId" value="#{usuarioControllerExt.selected.perfilId}" style="width: 130px;"
+                                     required="true" 
+                                     requiredMessage="#{bundle.CreateUsuarioRequiredMessage_perfilId}">
+                        <f:selectItems value="#{perfilController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <p:message for="perfilId"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Guardar" title="Guardar" icon="ui-icon-disk" 
+                                         action="#{usuarioControllerExt.create}"
+                                         ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{usuarioController.prepareList}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <p:ajaxStatus style="right:45%; left:45%">  
+            <f:facet name="start">  
+                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+            </f:facet>  
+            <f:facet name="complete">  
+                <h:outputText value="" />  
+            </f:facet>  
+        </p:ajaxStatus>
+    </ui:define>
+</ui:composition>
+

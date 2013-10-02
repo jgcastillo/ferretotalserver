@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateRespuestaConfTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateRespuestaConfLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{respuestaConfController.selected.id}" title="#{bundle.CreateRespuestaConfTitle_id}" required="true" requiredMessage="#{bundle.CreateRespuestaConfRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateRespuestaConfLabel_textoRespuesta}" for="textoRespuesta" />
+                    <h:inputText id="textoRespuesta" value="#{respuestaConfController.selected.textoRespuesta}" title="#{bundle.CreateRespuestaConfTitle_textoRespuesta}" required="true" requiredMessage="#{bundle.CreateRespuestaConfRequiredMessage_textoRespuesta}"/>
+                    <h:outputLabel value="#{bundle.CreateRespuestaConfLabel_preguntaId}" for="preguntaId" />
+                    <h:selectOneMenu id="preguntaId" value="#{respuestaConfController.selected.preguntaId}" title="#{bundle.CreateRespuestaConfTitle_preguntaId}" required="true" requiredMessage="#{bundle.CreateRespuestaConfRequiredMessage_preguntaId}">
+                        <f:selectItems value="#{preguntaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{respuestaConfController.create}" value="#{bundle.CreateRespuestaConfSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{respuestaConfController.prepareList}" value="#{bundle.CreateRespuestaConfShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateRespuestaConfIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

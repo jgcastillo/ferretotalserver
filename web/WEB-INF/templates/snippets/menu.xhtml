@@ -1,0 +1,105 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:body>
+        <h:panelGroup rendered="#{loginBean.loggedIn}">
+            <p style="font-weight: bold"> Bienvenido, #{loginBean.current.nombre} </p>
+        </h:panelGroup>
+        <h:form>
+            <c:if test="#{loginBean.admin}" >
+                <p:panelMenu style="width: 95%">
+                    <p:submenu label="Configurar Sistema">
+                        <p:menuitem value="Tiendas" action="/admin/tienda/List.xhtml" ajax="false" icon="ui-icon-home"/>
+                        <p:menuitem value="Usuarios" action="/admin/usuario/List.xhtml" ajax="false" icon="ui-icon-person"/>
+                    </p:submenu>
+                    <p:submenu label="Reportes Llamadas">
+                        <p:menuitem value="Total Llamadas" action="/gerente/reportes/total_llamadas.xhtml" ajax="false" icon="ui-icon-contact" />
+<!--                        <p:menuitem value="Llamadas por Dispositivo" action="/gerente/reportes/llamadasXdispositivo.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Llamadas por FerreAsesor" action="/gerente/reportes/llamadasXasesor.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Llamadas por Turno" action="/gerente/reportes/llamadasXturno.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Promedio de Llamadas" action="/gerente/reportes/promediosXturno.xhtml" ajax="false" icon="ui-icon-contact" />-->
+                    </p:submenu>
+                    <p:submenu label="Encuestas">
+                        <p:menuitem value="Config. Encuestas" action="/gerente/encuesta/encuestaMain" 
+                                    ajax="false" icon="ui-icon-comment"/>
+                        <p:menuitem value="Análisis Encuestas" action="/gerente/encuesta/surveyAnalysisMain" 
+                                    ajax="false" icon="ui-icon-image"/>
+                        <p:menuitem value="Ver Encuesta" action="/main.xhtml" ajax="false" icon="ui-icon-search"/>
+                    </p:submenu>
+                    <p:submenu label="Navegación">
+                        <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Logout" action="#{loginBean.logout}" icon="ui-icon-power"/>
+                    </p:submenu>
+                </p:panelMenu>
+            </c:if>
+            <c:if test="#{loginBean.gerente}" >
+                <p:panelMenu id="menuGerente">
+                    <p:submenu label="Reportes Llamadas">
+                        <p:menuitem value="Total Llamadas" action="/gerente/reportes/total_llamadas.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Llamadas por Dispositivo" action="/gerente/reportes/llamadasXdispositivo.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Llamadas por FerreAsesor" action="/gerente/reportes/llamadasXasesor.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Llamadas por Turno" action="/gerente/reportes/llamadasXturno.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Promedio de Llamadas" action="/gerente/reportes/promediosXturno.xhtml" ajax="false" icon="ui-icon-contact" />
+                    </p:submenu>
+                    <p:submenu label="Reportes Tiempo">
+                        <p:menuitem value="Total Atención en Tienda" action="/gerente/reportes/tiempoTotal.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Atención por Dispositivo" action="/gerente/reportes/tiempoXdispositivo.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Atención por FerreAsesor" action="/gerente/reportes/tiempoXasesor.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Atención por Turno" action="/gerente/reportes/tiempoXturno.xhtml" ajax="false" icon="ui-icon-contact" />
+                    </p:submenu>
+                    <p:submenu label="Reportes Calidad">
+                        <p:menuitem value="Total Calidad" action="/gerente/reportes/calidadTotal.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Calidad por Dispositivo" action="/gerente/reportes/calidadXdispositivo.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Calidad por FerreAsesor" action="/gerente/reportes/calidadXasesor.xhtml" ajax="false" icon="ui-icon-contact" />
+                        <p:menuitem value="Calidad por Turno" action="/gerente/reportes/calidadXturno.xhtml" ajax="false" icon="ui-icon-contact" />
+                    </p:submenu>
+                    <p:submenu label="Configurar Atención">
+                        <p:menuitem value="Atención Asesor-Turno" action="/admin/distribucion/List.xhtml" ajax="false" icon="ui-icon-person"/>
+                        <p:menuitem value="Definir Asesor para Feriado" action="/admin/asesorFeriado/Create.xhtml" ajax="false" icon="ui-icon-person"/>
+                    </p:submenu>
+                    <p:submenu label="Encuestas">
+                        <p:menuitem value="Config. Encuestas" action="/gerente/encuesta/encuestaMain" 
+                                    ajax="false" icon="ui-icon-comment"/>
+                        <p:menuitem value="Análisis Encuestas" action="/gerente/encuesta/surveyAnalysisMain" 
+                                    ajax="false" icon="ui-icon-image"/>
+                        <p:menuitem value="Ver Encuesta" action="/main.xhtml" ajax="false" icon="ui-icon-search"/>
+                    </p:submenu>
+                    <p:submenu label="Recolector de Información">
+                        <p:menuitem value="Config. Categorías" action="/admin/categoria/List.xhtml" 
+                                    ajax="false" icon="ui-icon-person"/>
+                        <p:menuitem value="Config. Motivos" action="/admin/motivo/List.xhtml" 
+                                    ajax="false" icon="ui-icon-person"/>
+                        <p:menuitem value="Lista de Respuestas" action="/admin/respuestaMotivo/List.xhtml" 
+                                    ajax="false" icon="ui-icon-person"/>
+                        <p:menuitem value="Ver Recolector Información" action="/recolectorInformacion.xhtml" 
+                                    ajax="false" icon="ui-icon-search"/>
+                    </p:submenu>
+                    <p:submenu label="Navegación">
+                        <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Status Dispositivos" action="/statusDispositivos.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Logout" action="#{loginBean.logout}" icon="ui-icon-power"/>
+                    </p:submenu>
+
+                </p:panelMenu>
+            </c:if>
+            <c:if test="#{loginBean.asesor}" >
+                <p:panelMenu id="menuAsesor">
+                    <p:submenu label="Encuestas">
+                        <p:menuitem value="Ver Encuesta" action="/main.xhtml" ajax="false" icon="ui-icon-search"/>
+                    </p:submenu>
+                    <p:submenu label="Recolector de Información">
+                        <p:menuitem value="Ver Recolector Información" action="/recolectorInformacion.xhtml" 
+                                    ajax="false" icon="ui-icon-search"/>
+                    </p:submenu>
+                    <p:submenu label="Navegación">
+                        <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Logout" action="#{loginBean.logout}" icon="ui-icon-power"/>
+                    </p:submenu>
+                </p:panelMenu>
+            </c:if>
+        </h:form>
+    </h:body>
+</ui:composition>

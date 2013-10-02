@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="preguntaBody"/>
+        <cc:attribute name="preguntaPrompt" default="Opciones: "/>
+        <cc:attribute name="preguntaBean"/>
+        <cc:editableValueHolder name="questionVal" targets="myform:cantTextBox"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="myForm">
+            <p:fieldset style="width: 70%; margin-left:25px;">
+                <h:outputText value="#{cc.attrs.preguntaBean.preguntaTexto}"/>
+                <br/>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="opciones" value="#{cc.attrs.preguntaPrompt}: "/>
+                    <p:selectOneRadio id="opciones" value="#{cc.attrs.preguntaBean.respuestaSeleccion}"
+                                      layout="pageDirection">
+                        <f:selectItems value="#{cc.attrs.preguntaBean.opcionesSeleccion}"/>
+                    </p:selectOneRadio>
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </cc:implementation>
+</html>

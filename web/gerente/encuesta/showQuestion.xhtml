@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Vista de la Pregunta 
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="viewForm">
+            <p:growl id="mensajes"/>
+            <p:panel id="panel" header="Así se verá la pregunta en la encuesta: #{preguntaBean.encuesta.nombre}" style="width:75%; margin-left:15px;">
+                <br/>
+                <c:if test="#{preguntaBean.tipoPregunta == 1}">
+                    <br/>
+                    <h:outputText value="#{preguntaBean.preguntaTexto}" style="font-size: 14px; font-weight: bold; margin-left:3px;"/><br/>
+                    <h:panelGrid columns="2" style="">
+                        <p:outputLabel value="#{preguntaBean.promptPreguntaTextual}: "/>
+                        <p:inputTextarea id="opinionTextBox#{status.index}" rows="6" cols="85" counter="counter" maxlength="350"  value=""      
+                                         counterTemplate="{0} caracteres restantes." disabled="true"/><br/> 
+
+                        <h:outputText id="counter" /><br/> 
+                        <p:message for="opinionTextBox"/>
+                    </h:panelGrid>
+<!--                    <ez:textualQuestion preguntaBody="#{preguntaBean.preguntaTexto}"
+                                        preguntaPrompt="#{preguntaBean.promptPreguntaTextual}"
+                                        preguntaBean="#{preguntaBean}"/>-->
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 2}">
+                    <br/>
+                    <h:outputText value="#{preguntaBean.preguntaTexto}" style="font-size: 14px; font-weight: bold; margin-left:3px;"/><br/>
+                    <h:panelGrid columns="3">
+                        <h:outputText value="#{preguntaBean.promptPreguntaTextual}: "/>
+                        <p:inputText id="respuesta" value="" style="width: 60px;" disabled="true">
+                            <f:convertNumber integerOnly="true" maxIntegerDigits="2"/>
+                        </p:inputText>
+                        <p:message for="respuesta"/>
+                    </h:panelGrid> 
+<!--                    <ez:numericQuestion preguntaBody="#{preguntaBean.preguntaTexto}"
+                                    preguntaPrompt="#{preguntaBean.promptPreguntaTextual}"
+                                    preguntaBean="#{preguntaBean}"/>-->
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 3}">
+                    <br/>
+                    <h:outputText value="#{preguntaBean.preguntaTexto}" style="font-size: 14px; font-weight: bold; margin-left:3px;"/><br/>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="opciones" value="Opciones: "/>
+                        <p:selectOneRadio id="opciones" value="#{preguntaBean.respuestaSeleccion}"
+                                          layout="pageDirection">
+                            <f:selectItems value="#{preguntaBean.opcionesSeleccion}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+<!--                    <ez:selectionQuestion preguntaBody="#{preguntaBean.preguntaTexto}"
+                                      preguntaPrompt="#{preguntaBean.promptPreguntaTextual}"
+                                      preguntaBean="#{preguntaBean}"/>-->
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 4}">
+                    <br/>
+                    <h:outputText value="#{preguntaBean.preguntaTexto}" style="font-size: 14px; font-weight: bold; margin-left:3px;"/><br/>
+                    <h:panelGrid columns="3">
+                        <h:outputText value="En una escala del 1 al 10, siendo 1 la más baja y 10 la más alta, ¿cómo lo califica?: "/>
+                        <p:inputText id="ratingTextBox" value="" disabled="true" style="width: 60px;">
+                            <f:convertNumber integerOnly="true" maxIntegerDigits="2"/>
+                        </p:inputText>
+                        <p:message for="ratingTextBox"/>
+                    </h:panelGrid>
+<!--                    <ez:ratingQuestion preguntaBody="#{preguntaBean.preguntaTexto}"
+                                       preguntaPrompt="En una escala del 1 al 10, siendo el 1 la más baja y 10 la mas alta, ¿cómo lo califica?" 
+                                       preguntaBean="#{preguntaBean}"/>-->
+                </c:if>
+
+                <f:facet name="footer">
+                    <h:panelGrid columns="5" style="display:block;margin-left: 50%">
+                        <c:if test="#{preguntaBean.tipoPregunta != 1 and preguntaBean.tipoPregunta != 2}">
+                            <p:commandButton value="Regresar" title="Regresar" icon="ui-icon-arrowthick-1-w" immediate="true"
+                                             action="#{preguntaBean.configuraPregunta}"/>
+                            <p:spacer width="10"/>
+                        </c:if>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{preguntaBean.retornaCreate}"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-disk" 
+                                         action="#{preguntaBean.guardaPregunta}" update="mensajes"/>
+                        <p:spacer width="10"/>
+                    </h:panelGrid>
+                </f:facet>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

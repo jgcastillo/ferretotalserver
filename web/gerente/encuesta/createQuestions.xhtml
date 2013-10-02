@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="title">
+        Creación de preguntas
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form">
+            <p:panel id="panel" header="Agregar preguntas para la Encuesta: #{preguntaBean.encuesta.nombre}" style="width:75%; margin-left:15px;">
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="textoPregunta" value="Texto Pregunta: "/>
+                    <p:inputText id="textoPregunta" value="#{preguntaBean.preguntaTexto}"
+                                 required="true" requiredMessage="El 'Texto de la pregunta es requerido'"
+                                 style="width: 300px; margin-left: 108px;"/>
+                    <p:message for="textoPregunta"/>
+
+                    <p:outputLabel for="tipoPregunta" value="Tipo pregunta: "/>
+                    <h:selectOneMenu id="tipoPregunta" value="#{preguntaBean.tipoPregunta}" style="margin-left: 108px;"
+                                     required="true" requiredMessage="El Tipo de Pregunta es requerido">
+                        <f:selectItem itemLabel="Seleccione un tipo" itemValue=""/>
+                        <f:selectItem itemLabel="Textual" itemValue="1"/>
+                        <f:selectItem itemLabel="Numérico" itemValue="2"/>
+                        <f:selectItem itemLabel="Selección" itemValue="3"/>
+                        <f:selectItem itemLabel="Calificación" itemValue="4"/>
+                        <p:ajax update="prompt" />
+                    </h:selectOneMenu>
+                    <p:message for="tipoPregunta"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" id="prompt">
+                    <p:outputLabel for="sugerencia" value="Indique el apuntador que desea usar: " rendered="#{preguntaBean.tipoPregunta == 1 || preguntaBean.tipoPregunta == 2}"/>
+                    <p:inputText id="sugerencia" value="#{preguntaBean.promptPreguntaTextual}" rendered="#{preguntaBean.tipoPregunta == 1 || preguntaBean.tipoPregunta == 2}"/>
+                    <p:message for="sugerencia"/>
+                </h:panelGrid>
+
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="/gerente/encuesta/encuestaMain"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Configurar" title="Configurar" icon="ui-icon-disk" 
+                                         action="#{preguntaBean.configuraPregunta}"
+                                         ajax="true" update="panel"/>
+
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+            <br/>
+            <p:fieldset legend="Preguntas: " style="width: 75%;">
+                <p:dataTable value="#{preguntaBean.preguntaItems}" var="pregunta">
+                    <p:column headerText="Pregunta">
+                        <h:outputText value="#{pregunta.pregunta}"/>
+                    </p:column>
+                    <p:column headerText="Tipo" style="width: 15%; text-align: center">
+                        <h:outputText value="Textual" rendered="#{pregunta.tipo == 1}"/>
+                        <h:outputText value="Numérica" rendered="#{pregunta.tipo == 2}"/>
+                        <h:outputText value="Selección" rendered="#{pregunta.tipo == 3}"/>
+                        <h:outputText value="Calificación" rendered="#{pregunta.tipo == 4}"/>
+                    </p:column>
+
+                    <p:column headerText="Acción" style="width: 15%; text-align: center">
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" 
+                                         action="#{preguntaBean.prepareDelete}" immediate="true"/>
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup id="messagePanel1" layout="block" rendered="${preguntaBean.message1}">
+                    <h:outputLabel style="color:green; margin-top: 10px;" value="Pregunta eliminada de la encuesta!"></h:outputLabel>
+                </h:panelGroup>
+                <h:panelGroup id="messagePanel2" layout="block" rendered="${preguntaBean.message2}">
+                    <h:outputLabel style="color:red; margin-top: 10px;" value="La pregunta no puede ser eliminada, ya que tiene respuestas asociadas"></h:outputLabel>
+                </h:panelGroup>
+                <h:panelGroup id="messagePanel3" layout="block" rendered="${preguntaBean.message3}">
+                    <h:outputLabel style="color:green; margin-top: 10px;" value="Pregunta agregada con éxito!"></h:outputLabel>
+                </h:panelGroup>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

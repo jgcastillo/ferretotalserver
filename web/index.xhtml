@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+   <ui:define name="title">
+        <title>Sistema FerreAsesorServer</title>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <c:if test="#{!loginBean.loggedIn}">
+                <p:growl id="growl" life="3000"/>
+                <p:panel header="Ingreso a la aplicación" style="width: 250px;"
+                         styleClass="center-panel">
+                    <h:panelGrid id="grid" columns="2">
+                        <h:outputLabel value="Usuario: " for="usuario" />
+                        <p:inputText id="usuario" value="#{loginBean.usuario}" required="true" 
+                                     label="Usuario" requiredMessage="Por favor, ingrese un usuario!!"/>
+
+                        <h:outputLabel value="Password: " for="password" />
+                        <p:password id="password" value="#{loginBean.password}" required="true" 
+                                    label="Password" requiredMessage="Por favor, ingrese un password!!"/>
+
+                        <p:spacer height="50"/>
+                        <p:commandButton id="ingresoButton" action="#{loginBean.login}" value="Ingresar" update="growl"/>
+                    </h:panelGrid>
+                </p:panel>
+            </c:if>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

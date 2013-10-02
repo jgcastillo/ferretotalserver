@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ferretotal" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a125dc4-ac7c-498a-ab05-c265fe13bb28">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.sheet.names.sheet1" value="&quot;Reporte Ferretotal&quot;"/>
+	<style name="Heading 1" fontSize="16" isBold="true"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="respuesta" class="java.lang.String"/>
+	<parameter name="nombrereporte" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="pregunta" class="java.lang.String"/>
+	<parameter name="totalRespuestas" class="java.lang.String"/>
+	<field name="respuesta" class="java.lang.String"/>
+	<field name="numero" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bc29100d-d077-4f2d-95bb-8195ab023743" positionType="FixRelativeToBottom" mode="Opaque" x="404" y="71" width="60" height="20" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[  Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d962561-25b0-4d39-97f8-e125b99553fa" positionType="Float" mode="Opaque" x="404" y="91" width="60" height="20" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[   Hora:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="32337cf5-0572-4ec6-aaea-a02b104e78c9" x="464" y="71" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm a">
+				<reportElement uuid="cf0ea993-c088-4d5c-84a7-80199c153fd6" x="464" y="91" width="98" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="0eda68a4-47f7-4768-8654-7fc61bf4d02c" x="0" y="0" width="235" height="114"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="0f207b24-1ce2-4c73-a5e3-2ae5e6833b42" style="Heading 1" x="235" y="6" width="331" height="23"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Encuesta:  "+$P{nombrereporte}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9de06a4a-1dbf-4fdc-a85f-95d9c3b2d6be" style="Heading 1" mode="Opaque" x="3" y="5" width="566" height="24" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pregunta:  "+$P{pregunta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="bec0bac7-caaa-46b9-8eb4-b0bb28ca02a6" x="3" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9019dad6-a155-4d8d-bfca-399bc7603614" style="Heading 1" mode="Opaque" x="1" y="0" width="23" height="20" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}+".-  "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="565a24aa-a9cc-4396-8e7b-0f45014d854d" stretchType="RelativeToTallestObject" x="25" y="0" width="543" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph lineSpacing="Double" spacingAfter="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{respuesta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="123" splitType="Stretch">
+			<elementGroup/>
+			<textField>
+				<reportElement uuid="739a4bdf-3d24-45a2-ae5a-ee509c4c78f6" style="Heading 1" mode="Opaque" x="354" y="0" width="218" height="20" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Respuestas Obtenidas:  "+$P{totalRespuestas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3c499dcb-3f46-428f-9430-77bc76ee0664" mode="Opaque" x="446" y="0" width="80" height="20" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="447c0f9b-db00-4923-bd6b-499c4d13f06f" mode="Opaque" x="526" y="0" width="40" height="20" backcolor="#CCCCFF"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="39" splitType="Stretch"/>
+	</summary>
+</jasperReport>

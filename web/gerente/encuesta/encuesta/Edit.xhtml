@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditEncuestaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{encuestaController.selected.id}" title="#{bundle.EditEncuestaTitle_id}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_nombre}" for="nombre" />
+                    <h:inputText id="nombre" value="#{encuestaController.selected.nombre}" title="#{bundle.EditEncuestaTitle_nombre}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_nombre}"/>
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_fechaInicio}" for="fechaInicio" />
+                    <h:inputText id="fechaInicio" value="#{encuestaController.selected.fechaInicio}" title="#{bundle.EditEncuestaTitle_fechaInicio}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_fechaInicio}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_fechaFin}" for="fechaFin" />
+                    <h:inputText id="fechaFin" value="#{encuestaController.selected.fechaFin}" title="#{bundle.EditEncuestaTitle_fechaFin}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_status}" for="status" />
+                    <h:inputText id="status" value="#{encuestaController.selected.status}" title="#{bundle.EditEncuestaTitle_status}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_status}"/>
+                    <h:outputLabel value="#{bundle.EditEncuestaLabel_tiendaId}" for="tiendaId" />
+                    <h:selectOneMenu id="tiendaId" value="#{encuestaController.selected.tiendaId}" title="#{bundle.EditEncuestaTitle_tiendaId}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_tiendaId}">
+                        <f:selectItems value="#{tiendaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{encuestaController.update}" value="#{bundle.EditEncuestaSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditEncuestaViewLink}"/>
+                <br />
+                <h:commandLink action="#{encuestaController.prepareList}" value="#{bundle.EditEncuestaShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditEncuestaIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

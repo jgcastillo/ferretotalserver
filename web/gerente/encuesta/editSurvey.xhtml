@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../WEB-INF/templates/layout.xhtml">
+
+            <ui:define name="title">
+                Editar Encuesta
+            </ui:define>
+
+            <ui:define name="content">
+
+                <h:form id="form">
+                    <p:growl id="mensajes" />
+                    <p:panel id="panel" header="Editar Encuesta" style="width:75%; margin-left:15px;">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="Nombre de la encuesta: " for="nombre"/>
+                            <p:inputText id="nombre" value="#{encuestaBeanController.selected.nombre}" 
+                                         required="true" requiredMessage="El campo 'Nombre de la encuesta' es requerido"
+                                         style="width: 300px;"/>
+                            <p:message for="nombre"/>
+                            <p:outputLabel value="Fecha inicio: " for="fecha_inicio"/>
+                            <p:calendar id="fecha_inicio" value="#{encuestaBeanController.selected.fechaInicio}"
+                                        required="true" requiredMessage="El campo 'fecha inicio' es requerido"
+                                        showOn="button"/>
+                            <p:message for="fecha_inicio"/>
+                            <p:outputLabel value="Fecha fin: " for="fecha_fin"/>
+                            <p:calendar id="fecha_fin" value="#{encuestaBeanController.selected.fechaFin}"
+                                        required="true" requiredMessage="El campo 'fecha fin' es requerido"
+                                        showOn="button"/>
+                            <p:message for="fecha_fin"/>
+
+                        </h:panelGrid>
+
+                        <f:facet name="footer">
+                            <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                                <p:commandButton value="Guardar" title="Guardar" icon="ui-icon-disk" 
+                                                 action="#{encuestaBeanController.update}"
+                                                 ajax="true" update="panel"/>
+                                <p:spacer width="10"/>
+                                <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                                 action="#{encuestaBeanController.prepareCancel}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+                <p:ajaxStatus style="right:45%; left:45%">  
+                    <f:facet name="start">  
+                        <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+                    </f:facet>  
+                    <f:facet name="complete">  
+                        <h:outputText value="" />  
+                    </f:facet>  
+                </p:ajaxStatus>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
+

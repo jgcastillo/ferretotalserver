@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./../../WEB-INF/templates/layout.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListLlamadaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form">
+                <p:panel header="Lista de Llamadas" style="width:100%">
+                    <p:dataTable value="#{llamadaController.items}" var="item" paginator="true"
+                                 rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 paginatorPosition="top"
+                                 resizableColumns="false">
+                        <p:column headerText="Tienda" width="15%" style="text-align: center;" filterBy="#{item.tiendaId.id}">
+                            <h:outputText value="#{item.tiendaId.id}"/>
+                        </p:column>
+                        <p:column headerText="Fecha" width="15%" style="text-align: center;" filterBy="#{item.fechaOpen}" filterMatchMode="contains">
+                            <h:outputText value="#{item.fechaOpen}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        
+<!--                        <p:column headerText="Hora Inicio" width="15%" style="text-align: center;" filterBy="#{item.horaOpen}" filterMatchMode="contains">
+                            <h:outputText value="#{item.horaOpen}">
+                                <f:convertDateTime pattern="hh:mm:ss"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Hora Fin" width="15%" style="text-align: center;" filterBy="#{item.horaClose}" filterMatchMode="contains">
+                            <h:outputText value="#{item.horaClose}">
+                                <f:convertDateTime pattern="hh:mm:ss"/>
+                            </h:outputText>
+                        </p:column>-->
+                        
+                        <p:column headerText="Turno" width="15%" style="text-align: center;" filterBy="#{item.turno}" filterMatchMode="contains">
+                            <h:outputText value="#{item.turno}"/>
+                        </p:column>
+                        <p:column headerText="Dispositivo" width="15%" style="text-align: center;" filterBy="#{item.dispositivo}" filterMatchMode="contains">
+                            <h:outputText value="#{item.dispositivo}"/>
+                        </p:column>
+                        <p:column headerText="Asesor" width="15%" style="text-align: center;" filterBy="#{item.asesor}" filterMatchMode="contains">
+                            <h:outputText value="#{item.asesor}"/>
+                        </p:column>
+                        <p:column headerText="Calidad" width="15%" style="text-align: center;" filterBy="#{item.calidad}" filterMatchMode="contains">
+                            <h:outputText value="#{item.calidad}"/>
+                        </p:column>
+                        <p:column headerText="Tiempo" width="15%" style="text-align: center;" filterBy="#{item.tiempo}" filterMatchMode="contains">
+                            <h:outputText value="#{item.tiempo}"/>
+                        </p:column>
+                        <p:column headerText="N / F" width="15%" style="text-align: center;" filterBy="#{item.feriado}" filterMatchMode="contains">
+                            <h:outputText value="Normal" rendered="#{item.feriado==0}" />
+                            <h:outputText value="Feriado" rendered="#{item.feriado==1}" />
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                    </h:panelGroup>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
+

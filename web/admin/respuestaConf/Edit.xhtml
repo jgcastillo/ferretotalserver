@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditRespuestaConfTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditRespuestaConfLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{respuestaConfController.selected.id}" title="#{bundle.EditRespuestaConfTitle_id}" required="true" requiredMessage="#{bundle.EditRespuestaConfRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditRespuestaConfLabel_opcion}" for="opcion" />
+                    <h:inputText id="opcion" value="#{respuestaConfController.selected.opcion}" title="#{bundle.EditRespuestaConfTitle_opcion}" />
+                    <h:outputLabel value="#{bundle.EditRespuestaConfLabel_prompt}" for="prompt" />
+                    <h:inputText id="prompt" value="#{respuestaConfController.selected.prompt}" title="#{bundle.EditRespuestaConfTitle_prompt}" />
+                    <h:outputLabel value="#{bundle.EditRespuestaConfLabel_preguntaId}" for="preguntaId" />
+                    <h:selectOneMenu id="preguntaId" value="#{respuestaConfController.selected.preguntaId}" title="#{bundle.EditRespuestaConfTitle_preguntaId}" required="true" requiredMessage="#{bundle.EditRespuestaConfRequiredMessage_preguntaId}">
+                        <f:selectItems value="#{preguntaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{respuestaConfController.update}" value="#{bundle.EditRespuestaConfSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditRespuestaConfViewLink}"/>
+                <br />
+                <h:commandLink action="#{respuestaConfController.prepareList}" value="#{bundle.EditRespuestaConfShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditRespuestaConfIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
