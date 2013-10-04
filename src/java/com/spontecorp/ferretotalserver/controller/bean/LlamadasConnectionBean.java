@@ -8,6 +8,7 @@ import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
 import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.HttpURLConnectionLlamadas;
+import com.spontecorp.ferretotalserver.jpa.LlamadaFacade;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
 import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
@@ -23,6 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
@@ -141,7 +143,7 @@ public class LlamadasConnectionBean implements Serializable {
             setListaLlamadas(listaLlamadas);
         }
     }
-
+    
     /**
      * Reinicio la Lista de Llamadas
      */

@@ -52,6 +52,8 @@ public class HttpURLConnectionLlamadas implements Serializable {
             serverAddress = new URL(hostname);
             connection = (HttpURLConnection) serverAddress.openConnection();
 
+            System.out.println("URL: "+hostname);
+            
             if (connection != null) {
                 try {
                     connection.setRequestMethod("GET");
@@ -71,7 +73,7 @@ public class HttpURLConnectionLlamadas implements Serializable {
                     } else {
                         setStatusConnection(true);
 
-                        rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        rd = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
                         sb = new StringBuilder();
 
                         while ((line = rd.readLine()) != null) {
@@ -81,6 +83,8 @@ public class HttpURLConnectionLlamadas implements Serializable {
                         Gson gson = new Gson();
                         lista = gson.fromJson(sb.toString(), new TypeToken<List<Llamada>>() {
                         }.getType());
+                        
+                        System.out.println("Json recibido: "+lista);
                     }
 
                     connection.disconnect();

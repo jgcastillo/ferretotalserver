@@ -15,7 +15,7 @@
          <p:fieldset>
             <f:facet name="legend">
                 <h3>
-                    <h:outputText value="Llamadas por Tiendas"/>
+                    <h:outputText value="Consultar Llamadas por Tiendas"/>
                 </h3>
             </f:facet>
 
@@ -99,6 +99,12 @@
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
             </h:form>
+             
+             <h:form id="formUpdate">
+                 <h:outputText value="Actualizando Llamadas"/>
+                 <p:poll interval="25" listener="#{llamadasUpdateBean.updateLlamadas}" update="formUpdate" />  
+             </h:form>
+             
 
         </p:fieldset>
 

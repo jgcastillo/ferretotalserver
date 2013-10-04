@@ -35,6 +35,7 @@ public class JpaUtilities {
     public static final String COMMON_PATH = "ferreasesorweb/webresources/llamadaService";
     
     //PAra Seleccionar el Metodo del WS dependiendo de la solicitud
+    public static final String TOTAL_LLAMADA_TIENDA = "totaltienda" ;
     public static final String UPDATE_TIENDA_X_FECHA = "tiendaporfecha" ;
     public static final String ENVIAR_ENCUESTA = "enviarencuesta";
     public static final String OBTENER_RESULTADOS_ENCUESTA = "obtenerresultadosencuesta3";
