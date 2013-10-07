@@ -13,14 +13,11 @@ import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
@@ -52,10 +49,8 @@ public class LlamadasUpdateBean implements Serializable {
      * Método para actualizar la lista de Llamadas por Tienda a la BD del Server
      */
     public void updateLlamadas() throws NamingException {
-        System.out.println("Actualizando lista de llamadas: ");
         //Lista de Tiendas
         for (Tienda actual : getListTienda()) {
-            System.out.println("Tienda: " + actual.getNombre());
             //Seteo el id de la Sucursal (Tienda)
             sucursalId = actual.getSucursal();
             //Seteo el URL de la Tienda
@@ -85,7 +80,6 @@ public class LlamadasUpdateBean implements Serializable {
                 llamadasTienda = httpURLConnection.getLlamadasWS(url);
                 //Se insertan las Llamadas X Tienda en la BD del Server
                 if (llamadasTienda != null) {
-                    System.out.println("Total Llamadas encontradas en la Tienda: " + llamadasTienda.size());
                     for (Llamada lla : llamadasTienda) {
                         lla.setTiendaId(tiendaServer);
                         llamadaFacade.create(lla);

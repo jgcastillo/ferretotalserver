@@ -83,8 +83,7 @@ public class HttpURLConnectionLlamadas implements Serializable {
                         Gson gson = new Gson();
                         lista = gson.fromJson(sb.toString(), new TypeToken<List<Llamada>>() {
                         }.getType());
-                        
-                        System.out.println("Json recibido: "+lista);
+
                     }
 
                     connection.disconnect();
