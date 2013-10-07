@@ -39,6 +39,7 @@ public class JpaUtilities {
     public static final String UPDATE_TIENDA_X_FECHA = "tiendaporfecha" ;
     public static final String ENVIAR_ENCUESTA = "enviarencuesta";
     public static final String OBTENER_RESULTADOS_ENCUESTA = "obtenerresultadosencuesta3";
+    public static final String UPDATE_LLAMADA_FECHA = "updatellamadasporfecha";
     
     //Encuesta Tipo de pregunta
     public static final int PREGUNTA_TEXTUAL = 1;

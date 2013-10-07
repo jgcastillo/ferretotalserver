@@ -42,16 +42,17 @@ public class LlamadasUpdateBean implements Serializable {
     private int sucursalId;
     private Tienda tienda;
     private List<Tienda> listTienda;
+    private Date fechaInicioLast;
+    private Date horaInicioLast;
 
     public LlamadasUpdateBean() {
     }
 
     /**
-     *
+     * Método para actualizar la lista de Llamadas por Tienda a la BD del Server
      */
     public void updateLlamadas() throws NamingException {
         System.out.println("Actualizando lista de llamadas: ");
-
         //Lista de Tiendas
         for (Tienda actual : getListTienda()) {
             System.out.println("Tienda: " + actual.getNombre());
@@ -59,36 +60,39 @@ public class LlamadasUpdateBean implements Serializable {
             sucursalId = actual.getSucursal();
             //Seteo el URL de la Tienda
             hostname = actual.getUrl();
-            //Con el Id de la Sucursal Obtengo el Id de la Tienda
-            Tienda tiendaServer = tiendaFacade.findTiendaServer(sucursalId);
-            
-            Llamada lastLlamadaTienda = llamadaFacade.findLlamadasTienda(actual);
 
-            if (lastLlamadaTienda == null) {
+            if (!hostname.equals("") && hostname != null) {
+                //Con el Id de la Sucursal Obtengo el Id de la Tienda
+                Tienda tiendaServer = tiendaFacade.findTiendaServer(sucursalId);
+                Llamada lastLlamadaTienda = llamadaFacade.findLlamadasTienda(actual);
+
                 String url = null;
                 List<Llamada> llamadasTienda = new ArrayList<>();
 
-                if (!hostname.equals("") && hostname != null) {
+                if (lastLlamadaTienda == null) {
                     //Construyo el URL para conectarme al WS
                     url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.TOTAL_LLAMADA_TIENDA + "/"
                             + sucursalId;
-                    //Llamo al método del WS para obtener la lista de Llamadas X Tienda
-                    llamadasTienda = httpURLConnection.getLlamadasWS(url);
-
-                    if (llamadasTienda != null) {
-                        System.out.println("Total Llamadas encontradas en la Tienda: " + llamadasTienda.size());
-                        for (Llamada lla : llamadasTienda) {
-                            lla.setTiendaId(tiendaServer);
-                            llamadaFacade.create(lla);
-                        }
+                } else {
+                    //Seteo la Fecha y la Hora Inicio de la última Llamada
+                    fechaInicioLast = lastLlamadaTienda.getFechaOpen();
+                    horaInicioLast = lastLlamadaTienda.getHoraOpen();
+                    //Construyo el URL para conectarme al WS
+                    url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.UPDATE_LLAMADA_FECHA + "/"
+                            + getFormatedFechaInicio() + "/" + getFormatedHoraInicio() + "/" + sucursalId;
+                }
+                //Llamo al método del WS para obtener la lista de Llamadas X Tienda 
+                llamadasTienda = httpURLConnection.getLlamadasWS(url);
+                //Se insertan las Llamadas X Tienda en la BD del Server
+                if (llamadasTienda != null) {
+                    System.out.println("Total Llamadas encontradas en la Tienda: " + llamadasTienda.size());
+                    for (Llamada lla : llamadasTienda) {
+                        lla.setTiendaId(tiendaServer);
+                        llamadaFacade.create(lla);
                     }
                 }
-            } else {
-                System.out.println("Ya hay llamadas en la Tienda: " + actual.getNombre());
-                System.out.println("Ultima llamada encontrada: " + lastLlamadaTienda);
             }
         }
-
     }
 
     /**
@@ -106,5 +110,13 @@ public class LlamadasUpdateBean implements Serializable {
 
     public void setListTienda(List<Tienda> listTienda) {
         this.listTienda = listTienda;
+    }
+
+    public String getFormatedFechaInicio() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(fechaInicioLast);
+    }
+
+    public String getFormatedHoraInicio() {
+        return new SimpleDateFormat("HH:mm:ss").format(horaInicioLast);
     }
 }
