@@ -34,8 +34,10 @@ public abstract class LlamadaReporteAbstract {
     protected Tienda tienda;
     protected List<Tienda> listTienda;
     protected List<Llamada> totalLlamadas;
-    protected List<Tienda> selectedTiendas;  
-    protected Map<String,Integer> tiendas;  
+    protected List<String> selectedTiendas;  
+    protected List<String> selectedAllTiendas;
+    protected Map<String,Integer> tiendas; 
+    private Map<String, String> allTiendas;
     protected boolean showTable = false;
     protected boolean showChart = false;
     protected boolean showStackedChart = false;
@@ -89,12 +91,20 @@ public abstract class LlamadaReporteAbstract {
         return listTienda;
     }
 
-    public List<Tienda> getSelectedTiendas() {
+    public List<String> getSelectedTiendas() {
         return selectedTiendas;
     }
 
-    public void setSelectedTiendas(List<Tienda> selectedTiendas) {
+    public void setSelectedTiendas(List<String> selectedTiendas) {
         this.selectedTiendas = selectedTiendas;
+    }
+    
+    public List<String> getSelectedAllTiendas() {
+        return selectedAllTiendas;
+    }
+
+    public void setSelectedAllTiendas(List<String> selectedAllTiendas) {
+        this.selectedAllTiendas = selectedAllTiendas;
     }
 
     public Map<String, Integer> getTiendas() {
@@ -110,6 +120,16 @@ public abstract class LlamadaReporteAbstract {
 
     public void setTiendas(Map<String, Integer> tiendas) {
         this.tiendas = tiendas;
+    }
+    
+    public Map<String, String> getAllTiendas() {
+        allTiendas = new HashMap<String, String>();
+        allTiendas.put("Todas las Tiendas", "0");
+        return allTiendas;
+    }
+
+    public void setAllTiendas(Map<String, String> allTiendas) {
+        this.allTiendas = allTiendas;
     }
 
     public void setListTienda(List<Tienda> listTienda) {

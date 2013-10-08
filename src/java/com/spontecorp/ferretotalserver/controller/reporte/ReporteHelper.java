@@ -1,11 +1,14 @@
 package com.spontecorp.ferretotalserver.controller.reporte;
 
+import com.spontecorp.ferretotalserver.entity.Tienda;
+
 /**
  *
  * @author jgcastillo
  */
 public class ReporteHelper {
     
+    private Tienda tienda;
     private Object rango;
     private Number dominio;
     private Object nombreObj;
@@ -53,6 +56,14 @@ public class ReporteHelper {
 
     public void setPropiedadObj(Object[] propiedadObj) {
         this.propiedadObj = propiedadObj;
+    }
+
+    public Tienda getTienda() {
+        return tienda;
+    }
+
+    public void setTienda(Tienda tienda) {
+        this.tienda = tienda;
     }
 
 }

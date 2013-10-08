@@ -1,11 +1,14 @@
 package com.spontecorp.ferretotalserver.controller.reporte;
 
 import com.spontecorp.ferretotalserver.controller.chart.BarChart;
+import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
+import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
@@ -35,34 +38,62 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
-        
+
+        //Obtengo las Tiendas Seleccionadas
+        getSelectedAllTiendas();
+        getSelectedTiendas();
         //Verifico las fechas
         getFechasVacias();
-        
-        //Obtengo las Tiendas Seleccionadas
-        getSelectedTiendas();
-        System.out.println("getSelectedTiendas: "+getSelectedTiendas().size());
-                
-        for(int i=0; i<selectedTiendas.size();i++){ 
-            System.out.println("Tienda seleccionada: "+selectedTiendas.get(i));
+
+        List<Tienda> listTiendaFinal = new ArrayList<>();
+
+        //Si se selecciona el check todas las Tiendas
+        if (getSelectedAllTiendas().size() > 0) {
+            System.out.println("Se seleccionaron todas las Tiendas");
+            for (int i = 0; i < listTienda.size(); i++) {
+                listTiendaFinal.add(listTienda.get(i));
+            }
+            //Si se selecciona el check de cada Tienda
+        } else if (selectedTiendas.size() > 0) {
+            System.out.println("Se selecciono la Tienda: ");
+            for (int i = 0; i < selectedTiendas.size(); i++) {
+                int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
+                tienda = tiendaFacade.find(idTiendaSelected);
+                System.out.println(" *** Tienda: " + tienda.getNombre());
+                listTiendaFinal.add(tienda);
+            }
+            //Si no se selecciona el check de ninguna Tienda ni el check de Todas las Tiendas
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda que desea consultar.");
+        }
+
+        if (listTiendaFinal.size() > 0) {
+            for (int i = 0; i < listTiendaFinal.size(); i++) {
+                List<Llamada> llamadasTienda = new ArrayList<>();
+                //Busco la Tienda seleccionada
+                tienda = listTiendaFinal.get(i);
+                if (tienda != null) {
+                    //Seteo la busqueda
+                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, tienda, fechaInicio, fechaFin));
+                    System.out.println("Para la Tienda: " + tienda.getNombre() + "el Total es: " +getResult().size());
+                    for (Object[] array : getResult()) {
+                        ReporteHelper helper = new ReporteHelper();
+                        helper.setRango(sdf.format((Date) array[0]));
+                        helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
+                        helper.setTienda(tienda);
+                        reporteData.add(helper);
+                    }
+                }
+            }
+            //Seteo los Datos del Reporte
+            setNombreReporte(nombreReporte);
+            setNombreRango(nombreRango);
+            setNombreDominio(nombreDominio);
+
+            showTable = true;
+            chartButtonDisable = false;
         }
         
-        //Seteo los Datos del Reporte
-        setNombreReporte(nombreReporte);
-        setNombreRango(nombreRango);
-        setNombreDominio(nombreDominio);
-        //Seteo la busqueda
-        //setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, fechaInicio, fechaFin));
-        
-//        for(Object[] array : getResult()){
-//            ReporteHelper helper = new ReporteHelper();
-//            helper.setRango(sdf.format((Date)array[0]));
-//            helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-//            reporteData.add(helper);
-//        }
-        
-        showTable = true;
-        chartButtonDisable = false;
     }
     
     @Override

@@ -8,34 +8,39 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
-        <title>Total llamadas por Tiendas entre fechas</title>
+        <title>Cantidad Total de Llamadas por Tienda en un Período</title>
     </ui:define>
 
     <ui:define name="content">
         <p:fieldset>
             <f:facet name="legend">
                 <h3>
-                    <h:outputText value="Total Llamadas por Tiendas"/>
+                    <h:outputText value="Cantidad Total de Llamadas por Tienda en un Período"/>
                 </h3>
             </f:facet>
 
-            <h:form id="formTotalLlamada"><br/>
-                <h:panelGrid columns="2" style="margin-bottom: 10px;">
-                    <h:outputText value="Seleccione una Tienda: " />  
-                    <p:selectManyCheckbox value="#{llamadasConnectionBean.selectedTiendas}">  
-                        <f:selectItems value="#{llamadasConnectionBean.tiendas}" /> 
+            <h:form id="formTotalLlamada"><br/>               
+                <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{totalLlamadasBean.selectedTiendas}" >  
+                        <f:selectItems value="#{totalLlamadasBean.tiendas}" /> 
                     </p:selectManyCheckbox> 
                 </h:panelGrid>
-                
+                <h:panelGrid columns="2" style="margin-bottom: 10px;">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{totalLlamadasBean.selectedAllTiendas}">  
+                        <f:selectItems value="#{totalLlamadasBean.allTiendas}" /> 
+                    </p:selectManyCheckbox> 
+                </h:panelGrid>
                 <h:panelGrid columns="8">
                     <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
-                    <p:calendar id="fechaInicio" value="#{llamadasConnectionBean.fechaInicio}" 
+                    <p:calendar id="fechaInicio" value="#{totalLlamadasBean.fechaInicio}" 
                                 showOn="button" pattern="dd/MM/yyyy"/>
                     <h:outputLabel value="Fecha fin: " for="fechaFin"/>
-                    <p:calendar id="fechaFin" value="#{llamadasConnectionBean.fechaFin}" 
+                    <p:calendar id="fechaFin" value="#{totalLlamadasBean.fechaFin}" 
                                 showOn="button" pattern="dd/MM/yyyy"/>
                     <p:spacer height="15"/>
-                    <p:commandButton value="Obtener Datos"  actionListener="#{llamadasConnectionBean.obtenerListLlamadas}" ajax="true" update="formTotalLlamada"/>
+                    <p:commandButton value="Obtener Datos"  actionListener="#{totalLlamadasBean.populateLlamadas}" ajax="true" update="formTotalLlamada"/>
                     <p:spacer style="width: 10px;"/>
                 </h:panelGrid>
                 <br/>
@@ -47,49 +52,46 @@
                         <h:outputText value="" />  
                     </f:facet>  
                 </p:ajaxStatus>
-                <br/>
-                <p:dataTable value="#{llamadasConnectionBean.listaLlamadas}" var="item" style="width: 60%; margin-top: 15px;" 
-                             rendered="#{llamadasConnectionBean.showTable}">
-                    <p:column headerText="Sucursal" width="15%" style="text-align: center;" filterBy="#{item.tiendaId.nombre}" filterMatchMode="contains">
-                        <h:outputText value="#{item.tiendaId.nombre}"/>
-                    </p:column>
-                    <p:column headerText="Fecha" width="15%" style="text-align: center;" filterBy="#{item.fechaOpen}" filterMatchMode="contains">
-                        <h:outputText value="#{item.fechaOpen}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </h:outputText>
-                    </p:column>
+                <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
+                    <p:dataTable value="#{totalLlamadasBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{totalLlamadasBean.showTable}"
+                                 paginator="true" rows="10"  
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <p  style="text-align: center">Total Llamadas entre Fechas<br/>
+                                (<h:outputText value="#{totalLlamadasBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                                - <h:outputText value="#{totalLlamadasBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                            </p>
+                        </f:facet><br/>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{llamada.rango}"/>
+                        </p:column>
+                        <p:column headerText="Tienda">
+                            <h:outputText value="#{llamada.tienda.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.dominio}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Gráfico Barras" rendered="#{totalLlamadasBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
+                                     actionListener="#{totalLlamadasBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
 
-                    <!-- <p:column headerText="Hora Inicio" width="15%" style="text-align: center;" filterBy="#{item.horaOpen}" filterMatchMode="contains">
-                        <h:outputText value="#{item.horaOpen}">
-                            <f:convertDateTime pattern="hh:mm:ss"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Hora Fin" width="15%" style="text-align: center;" filterBy="#{item.horaClose}" filterMatchMode="contains">
-                        <h:outputText value="#{item.horaClose}">
-                            <f:convertDateTime pattern="hh:mm:ss"/>
-                        </h:outputText>
-                    </p:column>-->
-
-                    <p:column headerText="Turno" width="15%" style="text-align: center;" filterBy="#{item.turno}" filterMatchMode="contains">
-                        <h:outputText value="#{item.turno}"/>
-                    </p:column>
-                    <p:column headerText="Dispositivo" width="15%" style="text-align: center;" filterBy="#{item.dispositivo}" filterMatchMode="contains">
-                        <h:outputText value="#{item.dispositivo}"/>
-                    </p:column>
-                    <p:column headerText="Asesor" width="15%" style="text-align: center;" filterBy="#{item.asesor}" filterMatchMode="contains">
-                        <h:outputText value="#{item.asesor}"/>
-                    </p:column>
-                    <p:column headerText="Calidad" width="15%" style="text-align: center;" filterBy="#{item.calidad}" filterMatchMode="contains">
-                        <h:outputText value="#{item.calidad}"/>
-                    </p:column>
-                    <p:column headerText="Tiempo" width="15%" style="text-align: center;" filterBy="#{item.tiempo}" filterMatchMode="contains">
-                        <h:outputText value="#{item.tiempo}"/>
-                    </p:column>
-                    <p:column headerText="N / F" width="15%" style="text-align: center;" filterBy="#{item.feriado}" filterMatchMode="contains">
-                        <h:outputText value="#{item.feriado}"/>
-                    </p:column>
-                </p:dataTable>        
-                
+                    <br/><br/>
+                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{totalLlamadasBean.showChart and totalLlamadasBean.reporteData.size() > 0}" style="border: 0px solid #FFFFFF;">
+                            <p:barChart value="#{totalLlamadasBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
+                                        title="Total Llamadas entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{totalLlamadasBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{totalLlamadasBean.exportarReporteXLS}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:panel>
+                </p:panel>
                 <h:panelGroup id="messageTotalLlamada" layout="block">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
