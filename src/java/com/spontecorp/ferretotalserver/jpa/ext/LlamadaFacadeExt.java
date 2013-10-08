@@ -47,9 +47,9 @@ public class LlamadaFacadeExt extends LlamadaFacade {
         String query = "";
         switch (tipo) {
             case ReporteHelper.LLAMADAS_TOTALES:
-                query = "SELECT ll.fechaClose, count(ll), t FROM Llamada ll, Tienda t "
+                query = "SELECT ll.fechaClose, count(ll) FROM Llamada ll "
                         + "WHERE ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
-                        + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose";
+                        + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose ORDER BY ll.fechaClose DESC";
                 break;
             case ReporteHelper.LLAMADAS_DISPOSITIVO:
                 query = "SELECT b, COUNT(ll) "

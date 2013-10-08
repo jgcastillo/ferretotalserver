@@ -49,17 +49,14 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
 
         //Si se selecciona el check todas las Tiendas
         if (getSelectedAllTiendas().size() > 0) {
-            System.out.println("Se seleccionaron todas las Tiendas");
             for (int i = 0; i < listTienda.size(); i++) {
                 listTiendaFinal.add(listTienda.get(i));
             }
             //Si se selecciona el check de cada Tienda
         } else if (selectedTiendas.size() > 0) {
-            System.out.println("Se selecciono la Tienda: ");
             for (int i = 0; i < selectedTiendas.size(); i++) {
                 int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
                 tienda = tiendaFacade.find(idTiendaSelected);
-                System.out.println(" *** Tienda: " + tienda.getNombre());
                 listTiendaFinal.add(tienda);
             }
             //Si no se selecciona el check de ninguna Tienda ni el check de Todas las Tiendas
@@ -68,19 +65,16 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         }
 
         if (listTiendaFinal.size() > 0) {
-            for (int i = 0; i < listTiendaFinal.size(); i++) {
-                List<Llamada> llamadasTienda = new ArrayList<>();
-                //Busco la Tienda seleccionada
-                tienda = listTiendaFinal.get(i);
-                if (tienda != null) {
+            for (Tienda tiendaActual : listTiendaFinal) {
+                //Recorro la lista de Tiendas Seleccionadas
+                if (tiendaActual != null) {
                     //Seteo la busqueda
-                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, tienda, fechaInicio, fechaFin));
-                    System.out.println("Para la Tienda: " + tienda.getNombre() + "el Total es: " +getResult().size());
+                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, tiendaActual, fechaInicio, fechaFin));
                     for (Object[] array : getResult()) {
                         ReporteHelper helper = new ReporteHelper();
                         helper.setRango(sdf.format((Date) array[0]));
                         helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-                        helper.setTienda(tienda);
+                        helper.setTienda(tiendaActual);
                         reporteData.add(helper);
                     }
                 }
