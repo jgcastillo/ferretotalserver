@@ -52,28 +52,46 @@
                         <h:outputText value="" />  
                     </f:facet>  
                 </p:ajaxStatus>
+                <h:panelGroup id="messageTotalLlamada" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <br/>
+                <p:dataTable id="reportTable" var="report" value="#{totalLlamadasBean.listReporteServer}"
+                             style="width: 79%;margin-left: 85px;" rendered="#{totalLlamadasBean.showTable}"
+                              paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
+                    <f:facet name="header">  
+                        <p  style="text-align: center">Total Llamadas entre Fechas<br/>
+                            (<h:outputText value="#{totalLlamadasBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                            - <h:outputText value="#{totalLlamadasBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                        </p>
+                    </f:facet>
+                    <p:columnGroup type="header">  
+                           <p:row>  
+                            <p:column headerText="Tienda" />  
+                            <p:column headerText="Cantidad" />  
+                        </p:row>  
+                    </p:columnGroup>  
+                    <p:subTable var="data" value="#{report.reporteHelper}">  
+                        <p:columnGroup type="header">  
+                            <p:row>  
+                                <p:column rowspan="2" headerText="Tienda" />  
+                                <p:column colspan="2" headerText="Cantidad" />  
+                            </p:row>  
+
+                        </p:columnGroup>  
+                        <f:facet name="header">  
+                            Fecha: #{report.fecha}   
+                        </f:facet>  
+                        <p:column style="text-align: center;">  
+                            #{data.tienda.nombre}  
+                        </p:column>  
+                        <p:column style="text-align: center;">  
+                            #{data.dominio}  
+                        </p:column>  
+                    </p:subTable>  
+                </p:dataTable>
                 <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
-                    <p:dataTable value="#{totalLlamadasBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{totalLlamadasBean.showTable}"
-                                 paginator="true" rows="10"  
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                 rowsPerPageTemplate="5,10,15"
-                                 paginatorPosition="bottom">
-                        <f:facet name="header">
-                            <p  style="text-align: center">Total Llamadas entre Fechas<br/>
-                                (<h:outputText value="#{totalLlamadasBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
-                                - <h:outputText value="#{totalLlamadasBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
-                            </p>
-                        </f:facet><br/>
-                        <p:column headerText="Fecha">
-                            <h:outputText value="#{llamada.rango}"/>
-                        </p:column>
-                        <p:column headerText="Tienda">
-                            <h:outputText value="#{llamada.tienda.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Cantidad" style="text-align: center; width: 30%">
-                            <h:outputText value="#{llamada.dominio}"/>
-                        </p:column>
-                    </p:dataTable>
                     <br/>
                     <p:commandButton value="Gráfico Barras" rendered="#{totalLlamadasBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
                                      actionListener="#{totalLlamadasBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
@@ -92,11 +110,7 @@
                         </p:panel>
                     </p:panel>
                 </p:panel>
-                <h:panelGroup id="messageTotalLlamada" layout="block">
-                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                </h:panelGroup>
             </h:form>
-
         </p:fieldset>
     </ui:define>
 

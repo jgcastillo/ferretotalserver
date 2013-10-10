@@ -21,6 +21,17 @@
                 <title>Título de la página</title>
             </ui:insert>
 
+            <script type="text/javascript">
+                function customExtender() {
+                    //this = chart widget instance
+                    //this.cfg = options
+                    this.cfg.seriesDefaults = {
+                        renderer: $.jqplot.BarRenderer,
+                        rendererOptions: {barWidth: 35}
+                    };
+                }
+            </script> 
+            
         </h:head>
 
         <h:body>

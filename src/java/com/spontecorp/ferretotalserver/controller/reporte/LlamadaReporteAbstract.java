@@ -46,6 +46,7 @@ public abstract class LlamadaReporteAbstract {
     protected List<Object[]> result;
     protected List<Llamada> resultLlamadas;
     protected List<ReporteHelper> reporteData;
+    protected List<ReporteServer> listReporteServer;
     protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     protected CartesianChartModel categoryModel;
     protected PieChartModel categoryModelPie;
@@ -162,6 +163,14 @@ public abstract class LlamadaReporteAbstract {
 
     public List<ReporteHelper> getReporteData() {
         return reporteData;
+    }
+
+    public List<ReporteServer> getListReporteServer() {
+        return listReporteServer;
+    }
+
+    public void setListReporteServer(List<ReporteServer> listReporteServer) {
+        this.listReporteServer = listReporteServer;
     }
 
     public CartesianChartModel getCategoryModel() {
