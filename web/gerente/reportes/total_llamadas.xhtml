@@ -81,7 +81,10 @@
 
                         </p:columnGroup>  
                         <f:facet name="header">  
-                            Fecha: #{report.fecha}   
+                            Fecha: 
+                            <h:outputText value="#{report.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
                         </f:facet>  
                         <p:column style="text-align: center;">  
                             #{data.tienda.nombre}  

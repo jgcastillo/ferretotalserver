@@ -6,11 +6,17 @@ import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
@@ -97,8 +103,8 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
                 }
             }
 
+            //Lleno el Mapa para agrupar por Fecha
             for (Object currentDate : fechas) {
-                
                 List<ReporteHelper> listData = new ArrayList<>();
                 for (ReporteHelper reporte : reporteData) {
                     if (reporte.getRango().toString().equals(currentDate)) {
@@ -108,12 +114,16 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
                 mapTiendaLlamadas.put(currentDate, listData);
             }
 
+            //Convierto el Mapa en una lista para mostrar la vista
             for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
                 ReporteServer reporteServer = new ReporteServer();
-                reporteServer.setFecha((String) mapa.getKey().toString());
+                reporteServer.setFecha(convertirFecha((String)mapa.getKey().toString()));
                 reporteServer.setReporteHelper(mapa.getValue());
                 listReporteServer.add(reporteServer);
             }
+            
+            //Oredno la lista por Fecha 
+            Collections.sort(listReporteServer);
             
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
@@ -125,8 +135,6 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         }
 
     }
-    
-    
 
     @Override
     public StreamedContent getChart() {

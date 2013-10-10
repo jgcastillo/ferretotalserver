@@ -5,6 +5,7 @@ import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -278,6 +281,25 @@ public abstract class LlamadaReporteAbstract {
             cal.set(yearActual, mesActual, 1);
             fechaInicio = new Date(cal.getTimeInMillis());
         }
+    }
+    
+    /**
+     * Método para recibir fecha String en formato dd-MM-yyyy y retornar un
+     * objeto tipo Date con la fecha dada
+     *
+     * @param fecha
+     * @return Fecha tipo "Date"
+     */
+    public Date convertirFecha(String fecha) {
+        Date date = null;
+        try {
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            date = formateador.parse(fecha);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(TotalLLamadasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return date;
     }
 
     /**

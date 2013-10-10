@@ -4,25 +4,26 @@
  */
 package com.spontecorp.ferretotalserver.controller.reporte;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  *
  * @author sponte03
  */
-public class ReporteServer {
+public class ReporteServer implements Comparable<ReporteServer>{
     
-    private String fecha;
+    private Date fecha;
     private List<ReporteHelper> reporteHelper;
 
     public ReporteServer() {
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -33,5 +34,15 @@ public class ReporteServer {
     public void setReporteHelper(List<ReporteHelper> reporteHelper) {
         this.reporteHelper = reporteHelper;
     }
-    
+
+    @Override
+    public int compareTo(ReporteServer o) {
+        if(this.getFecha().before(o.getFecha())){
+            return -1;
+        } else if(this.getFecha().equals(o.getFecha())) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 }
