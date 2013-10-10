@@ -101,7 +101,7 @@
 
                     <br/><br/>
                     <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
-                        <p:panel id="panelChart" rendered="#{totalLlamadasBean.showChart and totalLlamadasBean.reporteData.size() > 0}" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{totalLlamadasBean.showChart and totalLlamadasBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
                             <p:barChart value="#{totalLlamadasBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
                                         title="Total Llamadas entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
                             <br/>

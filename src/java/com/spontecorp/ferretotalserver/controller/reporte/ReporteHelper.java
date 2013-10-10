@@ -25,6 +25,7 @@ public class ReporteHelper {
     public static final int CALIDAD_X_FERREASESOR = 10;
     public static final int CALIDAD_X_TURNO = 11;
     public static final int CALIDAD_TOTAL = 12;
+    public static final int LLAMADAS_TOTALES_TIENDA = 13;
 
     public Object getRango() {
         return rango;

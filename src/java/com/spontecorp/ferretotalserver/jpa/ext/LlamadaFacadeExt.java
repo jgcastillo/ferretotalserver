@@ -51,6 +51,11 @@ public class LlamadaFacadeExt extends LlamadaFacade {
                         + "WHERE ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
                         + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose ORDER BY ll.fechaClose DESC";
                 break;
+            case ReporteHelper.LLAMADAS_TOTALES_TIENDA:
+                query = "SELECT ll.fechaClose, count(ll), ll.tiendaId FROM Llamada ll "
+                        + "WHERE ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
+                        + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose ORDER BY ll.fechaClose DESC";
+                break;
             case ReporteHelper.LLAMADAS_DISPOSITIVO:
                 query = "SELECT b, COUNT(ll) "
                         + "FROM Llamada ll, Distribucion d, Boton b "

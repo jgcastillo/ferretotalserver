@@ -79,23 +79,28 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
 
         if (listTiendaFinal.size() > 0) {
             for (Tienda tiendaActual : listTiendaFinal) {
+
                 //Recorro la lista de Tiendas Seleccionadas
                 if (tiendaActual != null) {
 
                     //Seteo la busqueda
-                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, tiendaActual, fechaInicio, fechaFin));
-                    for (Object[] array : getResult()) {
+                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES_TIENDA, tiendaActual, fechaInicio, fechaFin));
 
+                    System.out.println("Tienda 1: " + tiendaActual.getNombre());
+                    
+                    
+                    for (Object[] array : getResult()) {
+                        ReporteHelper helper = new ReporteHelper();
                         //Armo una lista de Fechas
                         String date = sdf.format((Date) array[0]);
                         if (!fechas.contains(date)) {
                             fechas.add(date);
                         }
 
-                        ReporteHelper helper = new ReporteHelper();
-                        helper.setRango(sdf.format((Date) array[0]));
+                        System.out.println("Tienda 2: " + ((Tienda)array[2]).getNombre() + " Dominio: " + String.valueOf(array[1]));
                         helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-                        helper.setTienda(tiendaActual);
+                        helper.setRango(sdf.format((Date) array[0]));
+                        helper.setTienda((Tienda)array[2]);
 
                         reporteData.add(helper);
                     }
@@ -117,14 +122,14 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             //Convierto el Mapa en una lista para mostrar la vista
             for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
                 ReporteServer reporteServer = new ReporteServer();
-                reporteServer.setFecha(convertirFecha((String)mapa.getKey().toString()));
+                reporteServer.setFecha(convertirFecha((String) mapa.getKey().toString()));
                 reporteServer.setReporteHelper(mapa.getValue());
                 listReporteServer.add(reporteServer);
             }
-            
-            //Oredno la lista por Fecha 
+
+            //Ordeno la Lista por Fecha 
             Collections.sort(listReporteServer);
-            
+
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
             setNombreRango(nombreRango);
@@ -177,21 +182,49 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             i++;
         }
 
-        int j = 0;
-        for (ReporteHelper data : reporteData) {
+        for (ReporteServer data : listReporteServer) {
+            // System.out.println("Fecha: " + sdf.format(data.getFecha()));
+            int z = 0;
 
-            for (Tienda store : listTiendaFinal) {
-                if (store.getNombre().equals(data.getTienda().getNombre())) {
-                    stores[j].setLabel(store.getNombre());
-                    stores[j].set(data.getRango(), data.getDominio());
+            //System.out.println("    Valor: " + z);
+
+            for (ReporteHelper report : data.getReporteHelper()) {
+                for (Tienda store : listTiendaFinal) {
+                    //   System.out.println("        Tienda: " + z + " " + store.getNombre());
+                    if (store.getNombre().equalsIgnoreCase(report.getTienda().getNombre())) {
+                        stores[z].set(report.getRango().toString(), report.getDominio());
+                    }
                 }
+                z++;
             }
+        }
+
+        int j = 0;
+        for (Tienda store : listTiendaFinal) {
+            stores[j].setLabel(store.getNombre());
             categoryModel.addSeries(stores[j]);
             j++;
         }
 
-    }
+//        ChartSeries stores1 = new ChartSeries("Boleíta Center"); 
+//        ChartSeries stores2 = new ChartSeries("Sambil"); 
+//        ChartSeries stores3 = new ChartSeries("Bello Monte");
+//        
+//        stores1.set("20/06/2013", 7);  
+//        stores1.set("21/06/2013", 0);  
+//        stores1.set("22/06/2013", 0);  
+//
+//        stores2.set("20/06/2013", 13);  
+//        stores2.set("21/06/2013", 22);  
+//        stores2.set("22/06/2013", 17); 
+//
+//        stores3.set("20/06/2013", 8);  
+//        stores3.set("21/06/2013", 22);  
+//        stores3.set("22/06/2013", 17); 
+//        
+//        categoryModel.addSeries(stores1);  
+//        categoryModel.addSeries(stores2);  
+//        categoryModel.addSeries(stores3); 
 
-   
-    
+    }
 }
