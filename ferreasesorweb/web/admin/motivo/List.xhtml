@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Motivos de Llamado
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel header="Configuración de Motivos de Llamado" style="width:90%; margin-left:15px;">
+                <p:dataTable value="#{motivoController.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                    <f:facet name="header" >
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-document" 
+                                         style="display:block;text-align: right;" action="#{motivoController.prepareCreate}"></p:commandButton>
+                    </f:facet>
+                    <p:column headerText="Nombre" width="50%">
+                        <h:outputText value=" #{fn:substring(item.nombre, 0, 60)}"/>
+                        <h:outputText value="(...)" rendered="#{fn:length(item.nombre) > 60 }" />
+                    </p:column>
+                    <p:column headerText="Categoría" width="25%" style="text-align: center;">
+                        <h:outputText value="#{item.categoriaId.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Status" width="15%" style="text-align: center;">
+                        <h:outputText value="ACTIVO" rendered="#{item.status==1}" />
+                        <h:outputText value="INACTIVO" rendered="#{item.status==0}" />
+                    </p:column>
+
+                    <p:column headerText="Acción" width="10%" style="text-align: center;">
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{motivoController.prepareEdit}"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{motivoController.prepareView}" rendered="#{item.status==0}" disabled="true"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{motivoController.prepareView}" rendered="#{item.status==1}" />
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

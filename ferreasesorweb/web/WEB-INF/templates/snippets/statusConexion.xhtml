@@ -1,0 +1,36 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <h:form id="formConex">
+            <h:panelGrid columns="12" style="margin-top: 10px;margin-bottom: 10px;">
+                <h:outputLabel value="Status: " style="font-weight: bold;"/>
+                <h:outputLabel value="El dispositivo Vellux está conectado" rendered="#{conexBeanController.connected}" style="font-size: 12px;font-weight: bold; color:#008000;"/>                
+                <h:outputLabel value="El dispositivo Vellux no está conectado" rendered="#{!conexBeanController.connected}" style="font-size: 12px;font-weight: bold; color:red;" />  
+                <p:spacer width="10"/>
+                <h:outputLabel value="Turno Actual: " style="font-weight: bold;"/>
+                <h:outputLabel value="#{conexBeanController.turnoActual.nombre}" style="font-size: 12px;font-weight: bold; color:#008000;" /> 
+                <p:spacer width="10"/>
+                <h:outputLabel value="Hora Inicio: " style="font-weight: bold;"/>
+                <h:outputLabel value="#{conexBeanController.turnoActual.horaStart}" style="font-size: 12px;font-weight: bold; color:#000000;">
+                    <f:convertDateTime pattern="HH:mm:ss a" />  
+                </h:outputLabel>  
+                <p:spacer width="10"/>
+                <h:outputLabel value="Hora Fin " style="font-weight: bold;"/>
+                <h:outputLabel value="#{conexBeanController.turnoActual.horaEnd}" style="font-size: 12px;font-weight: bold; color:#000000;">
+                    <f:convertDateTime pattern="HH:mm:ss a" />  
+                </h:outputLabel> 
+            </h:panelGrid> 
+            
+            <p:poll interval="15" listener="#{conexBeanController.updateTurnoActual}" update="formConex" />  
+            
+        </h:form>
+    </h:body>
+</ui:composition>
+
+
+

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        <title>Conexion a Vellux</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="conexForm">
+            <p:panel id="panel" header="Conectar Sistema al Controlador Vellux" style="width:65%; margin-left:15px;">
+                <p:panel id="panel1" style="width:75%; margin-left:25px;border-color: white;margin-top: 10px;">
+                    <h:outputLabel value="El dispositivo Vellux está conectado" rendered="#{conexBeanController.connected}" style="font-size: 13px;font-weight: bold; color:green; margin-left: 33%;"/>                
+                    <h:outputLabel value="El dispositivo Vellux no está conectado" rendered="#{!conexBeanController.connected}" style="font-size: 13px;font-weight: bold; color:red; margin-left: 33%;" />  
+                </p:panel>
+                <h:panelGrid columns="6" style="margin-top: 10px;margin-bottom: 10px;">
+                    <p:outputLabel style="font-weight: bold" value="Puertos disponibles:" for="puertosId" />
+                    <h:selectOneMenu id="puertosId" value="#{conexBeanController.portSelected}" 
+                                     required="true" requiredMessage="Debe seleccionar un puerto" style="width: 200px">
+                        <f:selectItems value="#{conexBeanController.items}"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="10"/>
+                    
+                    <p:commandButton  value="Conectar" title="Conectar" icon="ui-icon-disk" rendered="#{!conexBeanController.connected}" 
+                                      actionListener="#{conexBeanController.connectButtonActionPerformed}"
+                                      disabled="false" ajax="true" update="panel"/>
+                    <p:commandButton  value="Conectar" title="Conectar" icon="ui-icon-disk" rendered="#{conexBeanController.connected}" 
+                                      actionListener="#{conexBeanController.connectButtonActionPerformed}"
+                                      disabled="true" ajax="true" update="panel"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="Desconectar" title="Desconectar" icon="ui-icon-disk" rendered="#{conexBeanController.connected}"  
+                                     disabled="false" actionListener="#{conexBeanController.disconnect}"
+                                     ajax="true" update="panel"/>
+                    <p:commandButton value="Desconectar" title="Desconectar" icon="ui-icon-disk" rendered="#{!conexBeanController.connected}"
+                                     actionListener="#{conexBeanController.disconnect}" disabled="true"
+                                     ajax="true" update="panel"/>
+                </h:panelGrid>
+
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+<!--   <ui:define name="statusConexion">
+      
+    </ui:define>-->
+
+</ui:composition>

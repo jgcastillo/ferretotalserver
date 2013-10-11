@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewTiendaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewTiendaLabel_id}"/>
+                    <h:outputText value="#{tiendaController.selected.id}" title="#{bundle.ViewTiendaTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewTiendaLabel_sucursal}"/>
+                    <h:outputText value="#{tiendaController.selected.sucursal}" title="#{bundle.ViewTiendaTitle_sucursal}"/>
+                    <h:outputText value="#{bundle.ViewTiendaLabel_nombre}"/>
+                    <h:outputText value="#{tiendaController.selected.nombre}" title="#{bundle.ViewTiendaTitle_nombre}"/>
+                    <h:outputText value="#{bundle.ViewTiendaLabel_direccion}"/>
+                    <h:outputText value="#{tiendaController.selected.direccion}" title="#{bundle.ViewTiendaTitle_direccion}"/>
+                    <h:outputText value="#{bundle.ViewTiendaLabel_telefono}"/>
+                    <h:outputText value="#{tiendaController.selected.telefono}" title="#{bundle.ViewTiendaTitle_telefono}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{tiendaController.destroyAndView}" value="#{bundle.ViewTiendaDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewTiendaEditLink}"/>
+                <br />
+                <h:commandLink action="#{tiendaController.prepareCreate}" value="#{bundle.ViewTiendaCreateLink}" />
+                <br />
+                <h:commandLink action="#{tiendaController.prepareList}" value="#{bundle.ViewTiendaShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewTiendaIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

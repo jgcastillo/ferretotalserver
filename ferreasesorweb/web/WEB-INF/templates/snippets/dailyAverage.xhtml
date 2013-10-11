@@ -1,0 +1,32 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:form id="formAverage">  
+        
+        <h:panelGrid id="promedio1" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+            <h:outputLabel value="Promedio de Atención:" style="margin-left:0%; font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+            <br/><h:outputLabel value="#{dailyAverage.promedioTiempo}" style="margin-left:10%; font-size: 20px; font-weight: bold"></h:outputLabel>
+            <br/><br/>
+        </h:panelGrid>
+
+        <h:panelGrid id="promedio2" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+            <h:outputLabel value="Total Llamadas:" style=" font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+            <br/><h:outputLabel value="#{dailyAverage.totalLlamadas}" style="margin-left:0%; font-size: 20px; font-weight: bold"></h:outputLabel>
+            <br/><br/>
+        </h:panelGrid>
+
+        <h:panelGrid id="promedio3" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+            <h:outputLabel value="Cntd. Mala Atención:" style="font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+            <br/><h:outputLabel value="#{dailyAverage.calidadAtencion}" style="margin-left:0%; font-size: 20px; font-weight: bold"></h:outputLabel>
+            <br/><br/>
+        </h:panelGrid>
+
+        <p:poll interval="5" listener="#{dailyAverage.updateEstatistics}" update="formAverage" />  
+
+    </h:form> 
+
+</ui:composition>

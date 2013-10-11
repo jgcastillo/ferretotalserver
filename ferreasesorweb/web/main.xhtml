@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./WEB-INF/templates/layout.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="title">
+        <title>Sistema FerreAsesor</title>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="formEncuestaNull" rendered="#{fillEncuestaBean.encuestaActiva == null}">
+            <h:outputText value="No hay Encuesta activa"/>
+        </h:form>
+        <h:form id="formEncuesta" rendered="#{fillEncuestaBean.encuestaActiva != null}">
+            <p:panel id="panel" header="#{fillEncuestaBean.encuestaActiva.nombre}" style="width:80%; margin-left:15px;">
+                <ui:repeat value="#{fillEncuestaBean.preguntaList}" var="question" varStatus="status">
+
+                    <h:outputText value="#{question.pregunta}" style="font-size: 15px; font-weight: bold; margin-left:25px;"/><br/>
+
+                    <p:fieldset style="width: 81%; margin-left:25px;" rendered="#{question.tipo == 1}">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="#{question.respuestaConfList[0]}: "/>
+                            <p:inputTextarea id="opinionTextBox#{status.index}" rows="6" cols="85" counter="counter" maxlength="150"  value="#{fillEncuestaBean.respuestaList[status.index]}"      
+                                             counterTemplate="{0} caracteres restantes." /><br/> 
+
+                            <h:outputText id="counter" /><br/> 
+                            <p:message for="opinionTextBox"/>
+
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset style="width: 81%; margin-left:25px;" rendered="#{question.tipo == 2}">
+                        <h:panelGrid columns="3">
+                            <h:outputText value="#{question.respuestaConfList[0]}: "/>
+                            <p:inputText id="respuesta" value="#{fillEncuestaBean.respuestaList[status.index]}" style="width: 60px;" required="false">
+                                <f:convertNumber integerOnly="true" maxIntegerDigits="2"/>
+                            </p:inputText>
+                            <p:message for="respuesta"/>
+                        </h:panelGrid>             
+                    </p:fieldset>
+
+                    <p:fieldset style="width: 81%; margin-left:25px;" rendered="#{question.tipo == 3}">
+                        <h:panelGrid columns="2" style="margin-top:-20px;">
+                            <h:outputLabel for="opciones" value="Opciones: "/>
+                            <h:selectOneRadio id="opciones#{status.index}" value="#{fillEncuestaBean.respuestaList[status.index]}" layout="pageDirection">
+                                <f:selectItems value="#{question.respuestaConfList}" var="option" 
+                                               itemLabel="#{option.opcion}" itemValue="#{option.id}" /> <br/>
+                            </h:selectOneRadio>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <p:fieldset style="width: 81%; margin-left:25px;" rendered="#{question.tipo == 4}">
+                        <h:panelGrid columns="3">
+                            <h:outputText value="En una escala del 1 al 10, siendo 1 la más baja y 10 la más alta, ¿Cómo lo califica?: "/>
+                            <p:inputText id="ratingTextBox" value="#{fillEncuestaBean.respuestaList[status.index]}" style="width: 60px;">
+                                 <f:validateLongRange minimum="0" maximum="10"/>
+                            </p:inputText>
+                            <p:message for="ratingTextBox"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <h:outputText value="Coloque cero (0) si no obtiene respuesta." style="color:red"/>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+<!--                   <ez:textualQuestion preguntaBody="#{fillEncuestaBean.preguntaTexto}"
+                                        preguntaPrompt="#{fillEncuestaBean.promptPreguntaTextual}"
+                                        fillEncuestaBean="#{fillEncuestaBean}"
+                                        rendered="#{question.tipo == 1}"/>
+
+                    <ez:numericQuestion preguntaBody="#{fillEncuestaBean.preguntaTexto}"
+                                        preguntaPrompt="Opciones: "
+                                        fillEncuestaBean="#{fillEncuestaBean}"
+                                        rendered="#{question.tipo == 2}"/>
+
+                    <ez:selectionQuestion preguntaBody="#{fillEncuestaBean.preguntaTexto}"
+                                          preguntaPrompt="#{fillEncuestaBean.promptPreguntaTextual}"
+                                          fillEncuestaBean="#{fillEncuestaBean}"
+                                          rendered="#{question.tipo == 3}"/>
+
+                    <ez:ratingQuestion preguntaBody="#{fillEncuestaBean.preguntaTexto}"
+                                       preguntaPrompt="#{fillEncuestaBean.promptPreguntaTextual}" 
+                                       fillEncuestaBean="#{fillEncuestaBean}"
+                                       rendered="#{question.tipo == 4}"/>-->
+
+                    <br/><br/>
+                </ui:repeat>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:outputLabel style="color:red" value="Debe contestar al menos una Pregunta"></h:outputLabel>
+                </h:panelGroup>
+
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="margin-left: 60%">
+                        <p:commandButton value="Guardar" title="Enviar Encuesta" icon="ui-icon-disk" 
+                                         action="#{fillEncuestaBean.guardaRespuesta}" ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="/main1.xhtml"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

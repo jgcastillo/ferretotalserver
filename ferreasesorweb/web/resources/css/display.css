@@ -1,0 +1,391 @@
+/* 
+    Document   : display
+    Created on : 29/05/2013, 05:08:54 PM
+    Author     : jgcastillo
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+/*Estilos Boton 1*/
+.display11 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display12 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display13 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 2*/
+.display21 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display22 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display23 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 3*/
+.display31 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display32 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display33 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 4*/
+.display41 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display42 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display43 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 5*/
+.display51 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display52 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display53 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 6*/
+.display61 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display62 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display63 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 7*/
+.display71 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display72 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display73 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 8*/
+.display81 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display82 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display83 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 9*/
+.display91 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display92 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display93 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}
+
+/*Estilos Boton 10*/
+.display101 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #52D737; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/green.png)
+}
+.display102 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: black;
+    background: #F5E663; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/yellow.png)
+}
+.display103 {
+    font-size: 28px !important;
+    font-weight: bold;
+    font-family: arial black;
+    text-align: center;
+    color: white;
+    background: #F93F40; 
+    width:800px; 
+    height: 90px;
+    margin-left:10px;
+    background-image: url(./../resources/images/blue.png)
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        <title>Cantidad de Llamadas por Calidad</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:fieldset>
+            <f:facet name="legend">
+                <h3>
+                    <h:outputText value="Cantidad de Llamadas por Calidad"/>
+                </h3>
+            </f:facet>
+
+            <h:form id="formTotalLlamada"><br/>
+                <h:panelGrid columns="8">
+                    <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
+                    <p:calendar id="fechaInicio" value="#{calidadTotalBean.fechaInicio}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <h:outputLabel value="Fecha fin: " for="fechaFin"/>
+                    <p:calendar id="fechaFin" value="#{calidadTotalBean.fechaFin}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="15"/>
+                    <p:commandButton value="Ver Data" actionListener="#{calidadTotalBean.populateLlamadas}" title="Ver Data" ajax="true" update="formTotalLlamada"/>
+                    <p:spacer style="width: 10px;"/>
+
+                </h:panelGrid>
+                <br/><br/>
+
+                <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
+                    <p:dataTable value="#{calidadTotalBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{calidadTotalBean.showTable}"
+                                 paginator="true" rows="10"  
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <p  style="text-align: center">Total Tiempo de Atención entre fechas<br/>
+                                (<h:outputText value="#{calidadTotalBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                                - <h:outputText value="#{calidadTotalBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                            </p>
+                        </f:facet><br/>
+                        <p:column headerText="Atención Buena" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.propiedadObj[0]}"/>
+                        </p:column>
+                        <p:column headerText="Atención Regular" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.propiedadObj[1]}"/>
+                        </p:column>
+                        <p:column headerText="Atención Mala" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.propiedadObj[2]}"/>
+                        </p:column>
+                        <p:column headerText="Cierres Automáticos" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.propiedadObj[3]}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Gráfico Barras" rendered="#{calidadTotalBean.reporteData.size() > 0}" ajax="true" update="formTotalLlamada"
+                                     actionListener="#{calidadTotalBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
+                   <br/><br/>
+                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{calidadTotalBean.showChart and calidadTotalBean.reporteData.size() > 0}" style="border: 0px solid #FFFFFF;">
+                            <p:barChart value="#{calidadTotalBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
+                                        title="Cantidad de Llamadas por Calidad" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{calidadTotalBean.exportarReportePDFCalidad}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{calidadTotalBean.exportarReporteXLSCalidad}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:panel>
+                </p:panel>
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>

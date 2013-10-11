@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h:outputText value="#{bundle.EditFeriadoTitle}"></h:outputText>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGroup id="messagePanel" layout="block">
+            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+        </h:panelGroup>
+        <h:form>
+            <p:panel id="panel" header="Editar Feriado" style="width:60%; margin-left:15px;">
+                <h:panelGrid columns="3">                   
+                    <p:outputLabel value="#{bundle.EditFeriadoLabel_dia}" for="dia" />
+                    <h:selectOneMenu id="dia" value="#{feriadoController.selected.dia}" style="width: 130px;"
+                                     required="true" requiredMessage="#{bundle.EditFeriadoRequiredMessage_dia}">
+                        <f:selectItem itemLabel="Seleccione un día" itemValue=""/>
+                        <f:selectItems value="#{feriadoControllerExt.dias}"/>
+                    </h:selectOneMenu>
+                    <p:message for="dia"/>
+                    <p:outputLabel value="#{bundle.EditFeriadoLabel_mes}" for="mes" />
+                    <h:selectOneMenu id="mes" value="#{feriadoController.selected.mes}" style="width: 130px;"
+                                     required="true" requiredMessage="bundle.EditFeriadoRequiredMessage_mes">
+                        <f:selectItem itemLabel="Seleccione un mes" itemValue=""/>
+                        <f:selectItems value="#{feriadoControllerExt.meses}"/>
+                    </h:selectOneMenu>
+                    <p:message for="mes"/>
+<!--                    <p:outputLabel value="#{bundle.EditFeriadoLabel_year}" for="year" />
+                    <p:inputText id="year" value="#{feriadoController.selected.year}" 
+                                 title="#{bundle.EditFeriadoTitle_year}" />
+                    <p:message for="year"/>-->
+                    <p:outputLabel value="#{bundle.EditFeriadoLabel_descripcion}" for="descripcion" />
+                    <p:inputText id="descripcion" value="#{feriadoController.selected.descripcion}" 
+                                 title="#{bundle.EditFeriadoTitle_descripcion}" required="true" 
+                                 requiredMessage="#{bundle.EditFeriadoRequiredMessage_descripcion}"/>
+                    <p:message for="descripcion"/>
+<!--                    <p:outputLabel value="#{bundle.EditFeriadoLabel_tiendaId}" for="tiendaId" />
+                    <p:selectOneMenu id="tiendaId" value="#{feriadoController.selected.tiendaId}" style="width: 130px;"
+                                     title="#{bundle.EditFeriadoTitle_tiendaId}" required="true" 
+                                     requiredMessage="#{bundle.EditFeriadoRequiredMessage_tiendaId}">
+                        <f:selectItems value="#{tiendaController.itemsAvailableSelectOne}"/>
+                    </p:selectOneMenu>-->
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Guardar" title="Guardar" icon="ui-icon-disk" 
+                                         action="#{feriadoController.update}"
+                                         ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{feriadoController.prepareList}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <p:ajaxStatus style="margin-left: 15%;">  
+            <f:facet name="start">  
+                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+            </f:facet>  
+            <f:facet name="complete">  
+                <h:outputText value="" />  
+            </f:facet>  
+        </p:ajaxStatus>
+    </ui:define>
+</ui:composition>
+

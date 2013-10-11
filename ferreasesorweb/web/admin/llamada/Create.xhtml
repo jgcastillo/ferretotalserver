@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateLlamadaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{llamadaController.selected.id}" title="#{bundle.CreateLlamadaTitle_id}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_accion}" for="accion" />
+                    <h:inputText id="accion" value="#{llamadaController.selected.accion}" title="#{bundle.CreateLlamadaTitle_accion}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_accion}"/>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_fechaOpen}" for="fechaOpen" />
+                    <h:inputText id="fechaOpen" value="#{llamadaController.selected.fechaOpen}" title="#{bundle.CreateLlamadaTitle_fechaOpen}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_fechaOpen}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_horaOpen}" for="horaOpen" />
+                    <h:inputText id="horaOpen" value="#{llamadaController.selected.horaOpen}" title="#{bundle.CreateLlamadaTitle_horaOpen}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_horaOpen}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_fechaClose}" for="fechaClose" />
+                    <h:inputText id="fechaClose" value="#{llamadaController.selected.fechaClose}" title="#{bundle.CreateLlamadaTitle_fechaClose}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_horaClose}" for="horaClose" />
+                    <h:inputText id="horaClose" value="#{llamadaController.selected.horaClose}" title="#{bundle.CreateLlamadaTitle_horaClose}" >
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_tiendaId}" for="tiendaId" />
+                    <h:selectOneMenu id="tiendaId" value="#{llamadaController.selected.tiendaId}" title="#{bundle.CreateLlamadaTitle_tiendaId}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_tiendaId}">
+                        <f:selectItems value="#{tiendaController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateLlamadaLabel_distribucionId}" for="distribucionId" />
+                    <h:selectOneMenu id="distribucionId" value="#{llamadaController.selected.distribucionId}" title="#{bundle.CreateLlamadaTitle_distribucionId}" required="true" requiredMessage="#{bundle.CreateLlamadaRequiredMessage_distribucionId}">
+                        <f:selectItems value="#{distribucionController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{llamadaController.create}" value="#{bundle.CreateLlamadaSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{llamadaController.prepareList}" value="#{bundle.CreateLlamadaShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateLlamadaIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

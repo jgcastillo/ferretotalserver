@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditRespuestaMotivoTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditRespuestaMotivoLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{respuestaMotivoController.selected.id}" title="#{bundle.EditRespuestaMotivoTitle_id}" required="true" requiredMessage="#{bundle.EditRespuestaMotivoRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditRespuestaMotivoLabel_fecha}" for="fecha" />
+                    <h:inputText id="fecha" value="#{respuestaMotivoController.selected.fecha}" title="#{bundle.EditRespuestaMotivoTitle_fecha}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditRespuestaMotivoLabel_usuarioId}" for="usuarioId" />
+                    <h:selectOneMenu id="usuarioId" value="#{respuestaMotivoController.selected.usuarioId}" title="#{bundle.EditRespuestaMotivoTitle_usuarioId}" required="true" requiredMessage="#{bundle.EditRespuestaMotivoRequiredMessage_usuarioId}">
+                        <f:selectItems value="#{usuarioController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditRespuestaMotivoLabel_motivoId}" for="motivoId" />
+                    <h:selectOneMenu id="motivoId" value="#{respuestaMotivoController.selected.motivoId}" title="#{bundle.EditRespuestaMotivoTitle_motivoId}" required="true" requiredMessage="#{bundle.EditRespuestaMotivoRequiredMessage_motivoId}">
+                        <f:selectItems value="#{motivoController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{respuestaMotivoController.update}" value="#{bundle.EditRespuestaMotivoSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditRespuestaMotivoViewLink}"/>
+                <br />
+                <h:commandLink action="#{respuestaMotivoController.prepareList}" value="#{bundle.EditRespuestaMotivoShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditRespuestaMotivoIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

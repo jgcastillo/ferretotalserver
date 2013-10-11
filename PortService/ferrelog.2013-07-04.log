@@ -1,0 +1,46 @@
+2013-07-04 09:56:53,592 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 09:58:10,865 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 09:58:51,152 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NumberFormatException: For input string: "�"
+2013-07-04 09:58:51,225 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 10:03:36,459 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: java.lang.NullPointerException
+2013-07-04 10:16:20,988 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 10:19:25,365 [SwingWorker-pool-2-thread-1] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: java.lang.NullPointerException
+2013-07-04 10:26:15,506 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 10:28:04,506 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: java.lang.NullPointerException
+2013-07-04 10:29:14,497 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 10:32:41,331 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 10:44:03,733 [SwingWorker-pool-2-thread-7] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 10:44:03,737 [SwingWorker-pool-2-thread-7] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: java.lang.NullPointerException
+2013-07-04 10:44:03,757 [Thread-2] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 10:44:03,768 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: javax.persistence.RollbackException: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.3.2.v20111125-r10461): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'distribucion_id' cannot be null
+Error Code: 1048
+Call: INSERT INTO llamada (accion, fecha_Close, fecha_Open, hora_Close, hora_Open, distribucion_id, tienda_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+	bind => [7 parameters bound]
+Query: InsertObjectQuery(com.ferretotal.serialservice.entity.Llamada[ id=null ])
+2013-07-04 10:46:18,847 [SwingWorker-pool-2-thread-8] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 10:46:18,849 [SwingWorker-pool-2-thread-8] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: java.lang.NullPointerException
+2013-07-04 10:46:18,872 [Thread-2] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-04 10:46:18,878 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:409] Error guardando/actualizando la llamada: javax.persistence.RollbackException: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.3.2.v20111125-r10461): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'distribucion_id' cannot be null
+Error Code: 1048
+Call: INSERT INTO llamada (accion, fecha_Close, fecha_Open, hora_Close, hora_Open, distribucion_id, tienda_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+	bind => [7 parameters bound]
+Query: InsertObjectQuery(com.ferretotal.serialservice.entity.Llamada[ id=null ])
+2013-07-04 11:23:51,721 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 11:27:06,579 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 11:36:31,167 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 11:41:14,373 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 11:48:59,357 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:04:02,253 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:07:04,997 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:11:19,783 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:17:43,973 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:25:54,907 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-04 12:29:02,027 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-04 12:29:03,881 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-04 12:29:52,498 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-04 12:30:29,531 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-04 12:31:57,713 [AWT-EventQueue-0] ERROR  c.f.serialservice.SerialService [SerialService.java:155] COM4 está en uso. (javax.comm.PortInUseException: Could not open COM4 COM4: SerOpenPort failed: Port is in use)
+2013-07-04 12:32:02,636 [AWT-EventQueue-0] ERROR  c.f.serialservice.SerialService [SerialService.java:155] COM4 está en uso. (javax.comm.PortInUseException: Could not open COM4 COM4: SerOpenPort failed: Port is in use)
+2013-07-04 12:32:17,629 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado

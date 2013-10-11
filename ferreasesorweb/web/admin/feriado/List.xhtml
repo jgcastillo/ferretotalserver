@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle.FeriadoTitle}"></h:outputText>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Configuración de Feriados" style="width: 70%; margin-left: 15px;">
+                <p:dataTable value="#{feriadoController.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                <f:facet name="header">
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-document" 
+                                         action="#{feriadoController.prepareCreate}"
+                                         style="display: block; text-align: right;"/>
+                    </f:facet>
+                    <p:column headerText="día" width="25%" style="text-align: center;">
+                        <h:outputText value="#{item.dia}"/>
+                    </p:column>
+                    <p:column headerText="mes" width="25%">
+                        <h:outputText value="#{item.mesString}"/>
+                    </p:column>
+                    <p:column headerText="descripción" width="40%">
+                        <h:outputText value="#{item.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Acción" width="10%">
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{feriadoController.prepareEdit}"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" action="#{feriadoController.prepareView}"
+                                         style="margin-left: 10px;"/>
+    <!--                    <p:commandButton update=":#{p:component('display')}" icon="ui-icon-pencil" 
+                                         title="Editar" oncomplete="dialog.show()">
+                            <f:setPropertyActionListener target="#{feriadoController.current}" value="#{item}"/>
+                        </p:commandButton>-->
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <!--            <p:dialog header="Prueba" dynamic="true" widgetVar="dialog">
+                            <p:outputPanel id="display">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Mes: " for="mes"/>
+                                    <p:selectOneMenu id="mes" value="#{feriadoController.current.mes}">
+                                        <f:selectItem itemLabel="Enero" itemValue="0"/>
+                                        <f:selectItem itemLabel="Febrero" itemValue="1"/>
+                                        <f:selectItem itemLabel="Marzo" itemValue="2"/>
+                                        <f:selectItem itemLabel="Abril" itemValue="3"/>
+                                        <f:selectItem itemLabel="Mayo" itemValue="4"/>
+                                        <f:selectItem itemLabel="Junio" itemValue="5"/>
+                                        <f:selectItem itemLabel="Julio" itemValue="6"/>
+                                        <f:selectItem itemLabel="Agosto" itemValue="7"/>
+                                        <f:selectItem itemLabel="Septiembre" itemValue="8"/>
+                                        <f:selectItem itemLabel="Octubre" itemValue="9"/>
+                                        <f:selectItem itemLabel="Noviembre" itemValue="10"/>
+                                        <f:selectItem itemLabel="Diciembre" itemValue="11"/>
+                                    </p:selectOneMenu>
+                                    <h:outputLabel value="Día: " for="dia"/>
+                                    <p:selectOneMenu id="dia" value="#{feriadoController.current.dia}">
+                                        <f:selectItem itemLabel="1" itemValue="1"/>
+                                        <f:selectItem itemLabel="2" itemValue="2"/>
+                                        <f:selectItem itemLabel="3" itemValue="3"/>
+                                        <f:selectItem itemLabel="4" itemValue="4"/>
+                                        <f:selectItem itemLabel="5" itemValue="5"/>
+                                        <f:selectItem itemLabel="6" itemValue="6"/>
+                                        <f:selectItem itemLabel="7" itemValue="7"/>
+                                        <f:selectItem itemLabel="8" itemValue="8"/>
+                                        <f:selectItem itemLabel="9" itemValue="9"/>
+                                        <f:selectItem itemLabel="10" itemValue="10"/>
+                                        <f:selectItem itemLabel="11" itemValue="11"/>
+                                        <f:selectItem itemLabel="12" itemValue="12"/>
+                                        <f:selectItem itemLabel="13" itemValue="13"/>
+                                        <f:selectItem itemLabel="14" itemValue="14"/>
+                                        <f:selectItem itemLabel="15" itemValue="15"/>
+                                        <f:selectItem itemLabel="16" itemValue="16"/>
+                                        <f:selectItem itemLabel="17" itemValue="17"/>
+                                        <f:selectItem itemLabel="18" itemValue="18"/>
+                                        <f:selectItem itemLabel="19" itemValue="19"/>
+                                        <f:selectItem itemLabel="20" itemValue="20"/>
+                                        <f:selectItem itemLabel="21" itemValue="21"/>
+                                        <f:selectItem itemLabel="22" itemValue="22"/>
+                                        <f:selectItem itemLabel="23" itemValue="23"/>
+                                        <f:selectItem itemLabel="24" itemValue="24"/>
+                                        <f:selectItem itemLabel="25" itemValue="25"/>
+                                        <f:selectItem itemLabel="26" itemValue="26"/>
+                                        <f:selectItem itemLabel="27" itemValue="27"/>
+                                        <f:selectItem itemLabel="28" itemValue="28"/>
+                                        <f:selectItem itemLabel="29" itemValue="29"/>
+                                        <f:selectItem itemLabel="30" itemValue="30"/>
+                                        <f:selectItem itemLabel="31" itemValue="31"/>
+                                    </p:selectOneMenu>
+                                    <h:outputLabel value="Descripción" for="desc"/>
+                                    <h:outputText id="desc" value="#{feriadoController.current.descripcion}"/>
+                                    <p:commandButton value="OK" actionListener="#{feriadoController.update}" 
+                                                     oncomplete="dialog.hide();"/>
+                                    <p:commandButton value="Cerrar" oncomplete="dialog.hide();"/>
+                                </h:panelGrid>
+                            </p:outputPanel>                
+                        </p:dialog>-->
+
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h:outputText value="#{bundle.EditTiendaTitle}"></h:outputText>
+    </ui:define>
+    <ui:define name="content">
+
+        <!--        jgcastillop@gmail.com-->
+        <h:form>
+            <p:panel id="panel" header="Editar Tienda" style="width:60%; margin-left:15px;">
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="#{bundle.EditTiendaLabel_sucursal}" for="sucursal" />
+                    <p:inputText id="sucursal" value="#{tiendaController.selected.sucursal}" 
+                                 title="#{bundle.EditTiendaTitle_sucursal}" required="true" 
+                                 requiredMessage="#{bundle.EditTiendaRequiredMessage_sucursal}"/>
+                    <p:message for="sucursal"/>
+                    <p:outputLabel value="#{bundle.EditTiendaLabel_nombre}" for="nombre" />
+                    <p:inputText id="nombre" value="#{tiendaController.selected.nombre}" 
+                                 title="#{bundle.EditTiendaTitle_nombre}" required="true" 
+                                 requiredMessage="#{bundle.EditTiendaRequiredMessage_nombre}"/>
+                    <p:message for="nombre"/>
+                    <p:outputLabel value="#{bundle.EditTiendaLabel_direccion}" for="direccion" />
+                    <p:inputTextarea rows="4" cols="30" id="direccion" value="#{tiendaController.selected.direccion}" 
+                                     title="#{bundle.EditTiendaTitle_direccion}" />
+                    <p:message for="direccion"/>
+                    <p:outputLabel value="#{bundle.EditTiendaLabel_telefono}" for="telefono" />
+                    <p:inputText id="telefono" value="#{tiendaController.selected.telefono}" 
+                                 title="#{bundle.EditTiendaTitle_telefono}" />
+                    <p:message for="telefono"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Guardar" title="Guardar" icon="ui-icon-disk" 
+                                         action="#{tiendaController.update}"
+                                         ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{tiendaController.prepareList}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <p:ajaxStatus style="right:45%; left:45%">  
+            <f:facet name="start">  
+                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+            </f:facet>  
+            <f:facet name="complete">  
+                <h:outputText value="" />  
+            </f:facet>  
+        </p:ajaxStatus>
+    </ui:define>
+</ui:composition>
+

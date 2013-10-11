@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="preguntaBody"/>
+        <cc:attribute name="preguntaPrompt" default="En una escala del 1 al 10, siendo 1 la más baja y 10 la más alta, ¿cómo lo califica?"/>
+        <cc:attribute name="preguntaBean"/>
+        <cc:editableValueHolder name="questionVal" targets="myform:cantTextBox"/>
+    </cc:interface>
+    
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="myform">
+            <p:fieldset style="width: 70%; margin-left:25px;">
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{cc.attrs.preguntaBean.preguntaTexto}"/>
+                    <h:outputText value="&nbsp;"/>
+                    <h:outputLabel for="cantTextBox"  value="#{cc.attrs.preguntaPrompt}: " style="float: right;"/>
+                    <p:inputText id="cantTextBox" value="#{cc.attrs.preguntaBean.respuestaNumeric}" style="width: 60px;">
+                        <f:convertNumber integerOnly="true" />
+                    </p:inputText>
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </cc:implementation>
+</html>

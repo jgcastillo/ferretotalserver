@@ -1,0 +1,36 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:outputStylesheet library="css" name="display.css"/>
+    <h:outputScript library="js" name="handleMessage.js"/>
+
+    <h:outputText value="Status Dispositivos"/>
+    <h:form id="statusDispositivos">
+        <p:fieldset>
+            <h:panelGrid id="principal">
+
+                <c:forEach begin="1" end="6" varStatus="status">
+                    <h:panelGrid id="panel_11" styleClass="ui-widget display#{status.index}1" style="display: none;">
+                        <h:outputText id="out11" value="#{status.index}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="panel_12" styleClass="ui-widget display#{status.index}2" style="display: none;">
+                        <h:outputText id="out12" value="#{status.index}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="panel_13" styleClass="ui-widget display#{status.index}3" style="display: none;">
+                        <h:outputText id="out13" value="#{status.index}"/>
+                    </h:panelGrid>
+                </c:forEach>
+            </h:panelGrid>
+        </p:fieldset>
+
+    </h:form>  
+
+    <ui:repeat value="#{alarmaBean.botones}" var="boton" varStatus="status">
+        <p:socket onMessage="handleMessage#{status.index+1}" channel="/channel#{boton.id}"/>
+    </ui:repeat>
+
+</ui:composition>

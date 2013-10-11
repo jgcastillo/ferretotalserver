@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./WEB-INF/templates/layout.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        <title>Sistema FerreAsesor</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="mainFor" rendered="#{loginBean.admin || loginBean.gerente}">
+            <p:fieldset>
+                <p:dataTable value="#{mainBean.llamadaList}" var="item" paginator="true"
+                             rows="15" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="bottom"
+                             resizableColumns="true">
+                    <f:facet name="header">
+                        <p  style="text-align: center">Lista de Llamadas</p>
+                    </f:facet><br/>
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{item.llamada.fechaClose}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Hora Llamada" style="text-align: center">
+                        <h:outputText value="#{item.llamada.horaOpen}">
+                            <f:convertDateTime pattern="hh:mm:ss"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Hora Cierre" style="text-align: center">
+                        <h:outputText value="#{item.llamada.horaClose}">
+                            <f:convertDateTime pattern="hh:mm:ss"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Pasillo">
+                        <h:outputText value="#{item.boton.ubicacion}"/>
+                    </p:column>
+                    <p:column headerText="Asesor">
+                        <h:outputText value="#{item.asesor.nombre} #{item.asesor.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Turno">
+                        <h:outputText value="#{item.turno.nombre}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+        <h:form id="mainForAsesor" rendered="#{loginBean.asesor}">
+            <p:panel id="panelOptions" header="Opciones:" style="width:50%; margin-right:25%; margin-left:25%;margin-top:80px;">
+                <h:panelGrid style="text-align: center; width:100%;">
+                    <p:commandButton value="Recolector Información" title="Ver Recolector Información" icon="ui-icon-search" 
+                                     action="/recolectorInformacion.xhtml" ajax="true" style="margin-top: 10px"/>
+
+                    <p:commandButton value="Ver Encuesta Activa" title="Ver Encuesta" icon="ui-icon-search" style="margin-top: 10px; margin-bottom: 10px;"
+                                     action="/main.xhtml" ajax="true"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+    <!--    <ui:define name="status">
+            <h:form id="form">  
+                <h:panelGrid id="promedio1" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+                    <h:outputLabel value="Promedio de Tiempo:" style="margin-left:10%; font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+                    <br/><h:outputLabel value="#{dailyAverage.promedioTiempo}" style="margin-left:10%; font-size: 20px; font-weight: bold"></h:outputLabel>
+                    <br/><br/>
+                </h:panelGrid>
+    
+                <h:panelGrid id="promedio2" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+                    <h:outputLabel value="Promedio de Llamadas:" style=" font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+                    <br/><h:outputLabel value="#{dailyAverage.promedioTiempo}" style="margin-left:10%; font-size: 20px; font-weight: bold"></h:outputLabel>
+                    <br/><br/>
+                </h:panelGrid>
+    
+                <h:panelGrid id="promedio3" styleClass="ui-widget promedio" style="margin-bottom: 25px">
+                    <h:outputLabel value="Calidad Atención mala:" style="font-size: 13px; font-weight: bold; color:#F24040"></h:outputLabel>
+                    <br/><h:outputLabel value="#{dailyAverage.promedioTiempo}" style="margin-left:10%; font-size: 20px; font-weight: bold"></h:outputLabel>
+                    <br/><br/>
+                </h:panelGrid>
+                
+                <p:poll interval="5"   
+                        listener="#{dailyAverage.updateEstatistics}" update="form" />  
+            </h:form>  
+        </ui:define>-->
+
+</ui:composition>
+

@@ -1,0 +1,10 @@
+2013-07-03 16:24:03,190 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:170] Equipo desconectado
+2013-07-03 16:52:39,129 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:170] Equipo desconectado
+2013-07-03 16:55:35,568 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado
+2013-07-03 17:06:23,311 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado
+2013-07-03 17:22:46,106 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado
+2013-07-03 17:30:14,089 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado
+2013-07-03 17:35:03,492 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:216] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-03 17:36:20,102 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:216] Ha ocurrido un error capturando la llamada: java.lang.NullPointerException
+2013-07-03 17:42:38,323 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado
+2013-07-03 17:54:23,760 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:173] Equipo desconectado

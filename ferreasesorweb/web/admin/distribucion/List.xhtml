@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Definición de Atención
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formAtencion">
+            <p:growl id="growls"/>
+            <p:panel header="Configuración de Atención" style="width:60%; margin-left:15px;">
+                <p:dataTable value="#{distribucionController.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                    <p:column headerText="Asesor" width="25%">
+                        <h:outputText value="#{item.asesorNombre}"/>
+                    </p:column>
+                    <p:column headerText="Dispositivo" width="25%">
+                        <h:outputText value="#{item.botonNombre}"/>
+                    </p:column>
+                    <p:column headerText="Turno" width="25%">
+                        <h:outputText value="#{item.turnoNombre}"/>
+                    </p:column>
+                    <p:column headerText="Estado" width="10%">
+                        <p:commandButton title="Activo" icon="ui-icon-check" style="margin-left: 10px;" 
+                                         actionListener="#{distribucionController.updateInhabilitar}" 
+                                         rendered="#{item.status==1}" disabled="false" 
+                                         ajax="true" update=":formAtencion, :formAtencion:growls"/>
+                        <p:commandButton title="Inactivo" icon="ui-icon-cancel" style="margin-left: 10px;" 
+                                         actionListener="#{distribucionController.updateHabilitar}" 
+                                         rendered="#{item.status==0}" disabled="false"
+                                         ajax="true" update=":formAtencion, :formAtencion:growls"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

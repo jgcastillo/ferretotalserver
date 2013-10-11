@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <link rel="shortcut icon" type="image/x-icon"  href="#{request.contextPath}/resources/images/ferretotalfavicon.ico" />
+    <link rel="icon" type="image/x-icon" href="#{request.contextPath}/resources/images/hferretotalfavicon.ico" />
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="encabezado">
+                <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                <!--meta HTTP-EQUIV="refresh" CONTENT="15"/-->
+                <h:outputStylesheet library="css" name="default.css"/>
+                <!--script language="javaScript" src="resources/js/handleMessage.js"/-->
+                <!--<h:outputStylesheet library="css" name="jsfcrud"/>-->
+                <!--<link href="./../resources/css/cssLayout.css" rel="stylesheet" type="text/css" />-->
+
+
+            </f:facet>
+            <ui:insert name="title">
+                <title>Título de la página</title>
+            </ui:insert>
+            <script type="text/javascript">
+                function customExtender() {
+                    //this = chart widget instance
+                    //this.cfg = options
+                    this.cfg.seriesDefaults = {
+                        renderer: $.jqplot.BarRenderer,
+                        rendererOptions: {barWidth: 35}
+                    };
+                }
+            </script> 
+
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="115" resizable="false" 
+                              closable="false" collapsible="false">
+                    <ui:include src="./snippets/header.xhtml"/>
+                </p:layoutUnit>
+
+                <c:if test="#{loginBean.loggedIn}">
+                    <p:layoutUnit position="south" size="70" header="Status de Conexión" resizable="false" 
+                                  closable="false" collapsible="true">
+                        <ui:insert name="statusDispositivo"> 
+                             <ui:include src="./snippets/statusConexion.xhtml" />
+                        </ui:insert>
+                    </p:layoutUnit>
+                </c:if>
+
+                <c:if test="#{loginBean.loggedIn}">
+                    <p:layoutUnit position="west" size="200" header=" Menú Tienda: #{loginBean.tienda.nombre}" resizable="false" 
+                                  closable="false" collapsible="true">
+                        <ui:include src="./snippets/menu.xhtml" />
+                    </p:layoutUnit>
+                </c:if>
+
+                <p:layoutUnit position="center" resizable="false" 
+                              closable="false" collapsible="false">
+                    <ui:insert name="content">Put default content here, if any.</ui:insert>
+                </p:layoutUnit>
+
+                <c:if test="#{loginBean.loggedIn}">
+                    <p:layoutUnit position="east" size="200" header="Estado Actual: #{loginBean.fechaActual}" resizable="false"
+                                  closable="false" collapsible="true">
+                        <ui:insert name="status"> 
+                            <ui:include src="./snippets/dailyAverage.xhtml" />
+                        </ui:insert>
+                    </p:layoutUnit>
+                </c:if>   
+            </p:layout>
+
+            <!--Ventana para mostrar Análisis de Encuestas, se llama desde surveyAnalisysDetails.xhtml -->
+            <p:dialog widgetVar="composeDlg" modal="true" header="Análisis de la Pregunta"  width="1050" showEffect="fade" hideEffect="fade">
+                <h:form id="grafico" style="width: 1000px;height:800px;">  
+                    <p:panelGrid>  
+                        <p:row>  
+                            <p:column rowspan="2" style="width: 50%">
+                                <p:panel header="#{preguntaBean.selectedQuestion.pregunta}">
+                                    <!--Preguntas de Tipo NUMERICAS-->
+                                    <p:dataTable id="respTableNumeric" var="respuesta" value="#{preguntaBean.selectedQuestion.listaNumericas}" rowIndexVar="status"
+                                                 style="margin-top:20px; margin-bottom: 20px; margin-left:5%; margin-right: 5%; width: 90%"
+                                                 rendered="#{preguntaBean.selectedQuestion.tipo == 2}">
+                                        <p:column id="number" headerText="N°" style="width:5%;">
+                                            <h:outputText value="#{status+1}"/>
+                                        </p:column>
+                                        <p:column id="nombre" headerText="Valores Obtenidos" style="width:95%;">
+                                            <h:outputText value="#{respuesta.nombre}"/>  
+                                        </p:column>   
+                                        <p:column id="total" headerText="Total por Valor" style="width:10%;text-align: center">
+                                            <h:outputText value="#{respuesta.cantidad}"/>  
+                                        </p:column>
+                                        <f:facet name="footer" >
+                                            Total Respuestas Obtenidas: #{preguntaBean.selectedQuestion.totalRespuestas}
+                                        </f:facet>
+                                    </p:dataTable>
+
+                                    <!--Preguntas de Tipo SELECCION-->
+                                    <p:dataTable id="respTableSelect" var="respuesta" value="#{preguntaBean.selectedQuestion.respuestaConfList}" 
+                                                 rowIndexVar="status"
+                                                 style="margin-top:20px; margin-bottom: 20px; margin-left:5%; margin-right: 5%; width: 80%"
+                                                 rendered="#{preguntaBean.selectedQuestion.tipo == 3}">
+                                        <p:column id="number" headerText="N°" style="width:5%;">
+                                            <h:outputText value="#{status+1}"/>
+                                        </p:column>
+                                        <p:column id="nombre" headerText="Opciones" style="width:95%;">
+                                            <h:outputText value="#{respuesta.opcion}"/>  
+                                        </p:column>   
+                                        <p:column id="total" headerText="Total por Opción" style="width:10%;text-align: center">
+                                            <h:outputText value="#{respuesta.totalOptions}"/>  
+                                        </p:column>
+                                        <f:facet name="footer" >
+                                            Total Respuestas Obtenidas: #{preguntaBean.selectedQuestion.totalRespuestas}
+                                        </f:facet>
+                                    </p:dataTable>
+
+                                    <!--Preguntas de Tipo CALIFICACION-->
+                                    <p:dataTable id="respTableCalific" var="respuesta" value="#{preguntaBean.selectedQuestion.listRespObtenidas}" rowIndexVar="status"
+                                                 style="margin-top:20px; margin-bottom: 20px; margin-left:5%; margin-right: 5%; width: 90%"
+                                                 rendered="#{preguntaBean.selectedQuestion.tipo == 4}">
+                                        <p:column id="number" headerText="N°" style="width:5%;">
+                                            <h:outputText value="#{status+1}"/>
+                                        </p:column>
+                                        <p:column id="nombre" headerText="Valores del 1 al 10" style="width:95%;">
+                                            <h:outputText value="#{status+1}"/>  
+                                        </p:column>   
+                                        <p:column id="total" headerText="Total por Valor" style="width:10%;text-align: center">
+                                            <h:outputText value="#{respuesta}"/>  
+                                        </p:column>
+                                        <f:facet name="footer" >
+                                            Total Respuestas Obtenidas: #{preguntaBean.selectedQuestion.totalRespuestas}
+                                        </f:facet>
+                                    </p:dataTable>  
+                                </p:panel>
+                            </p:column>  
+                            <p:column>
+                                <p:panel id="panelChart" style="border: 0px solid #FFFFFF;" rendered="#{preguntaBean.selectedQuestion.categoryModel != null}">
+                                    <p:barChart value="#{preguntaBean.selectedQuestion.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
+                                                title="Gráfico 1" extender="customExtender" style="width:550px;height:320px;"/>
+                                    <br/>
+                                </p:panel>
+                            </p:column>  
+                        </p:row>  
+                        <p:row>   
+                            <p:column>
+                                <p:panel id="panelPie" style="border: 0px solid #FFFFFF;" rendered="#{preguntaBean.selectedQuestion.categoryModelPie != null}">
+                                    <p:pieChart id="custom" value="#{preguntaBean.selectedQuestion.categoryModelPie}" legendPosition="e" fill="true" sliceMargin="5" showDataLabels="true"  
+                                                title="Gráfico 2" style="width:500px;height:370px; margin-left: 34px;" />  
+                                </p:panel>
+                            </p:column>  
+                        </p:row>  
+                    </p:panelGrid>  
+                    <h:commandButton value="Cancel" onclick="composeDlg.hide()" type="button" title="Cancelar" style="margin-left: 55%;margin-top: 10px;margin-right: 10px;"/>
+                    <h:commandButton value="Exportar PDF Bar" actionListener="#{preguntaBean.exportarReportePDFBar}" title="Exportar a PDF Gráfico Barras" style="margin-top: 10px;margin-right: 10px;"/>
+                    <h:commandButton value="Exportar PDF Pie" actionListener="#{preguntaBean.exportarReportePDFPie}" title="Exportar a PDF Gráfico Pie" style="margin-top: 10px;margin-right: 10px;"/>
+                    <h:commandButton value="Exportar Excel" actionListener="#{preguntaBean.exportarReporteXLS}" title="Exportar a Excel" style="margin-top: 10px;margin-right: 10px;"/>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog widgetVar="composeDlgText" modal="true" header="Respuestas Obtenidas"  width="850" showEffect="fade" hideEffect="fade">
+                <h:form id="textual" style="width: 800px;height:auto;">   
+                    <p:panel header="#{preguntaBean.selectedQuestionTextual.pregunta}" footer="Total Respuestas Obtenidas: #{preguntaBean.selectedQuestionTextual.totalRespuestas}">  
+                        <p:separator id="separator" style="margin-bottom: 15px; border: 0px solid gray"/> 
+                        <ui:repeat value="#{preguntaBean.selectedQuestionTextual.respuestaObtenidaList}" var="respuesta" varStatus="status">
+                            <h:outputText value="#{status.index+1}.- " style="font-weight: bold"/> <h:outputText value="#{respuesta.respuesta}"/> 
+                            <p:separator id="separator" style="margin-top: 15px;margin-bottom: 15px;"/> 
+                        </ui:repeat>
+                    </p:panel>  
+                    <h:commandButton value="Cancel" onclick="composeDlgText.hide()" type="button" style="margin-left:63%;margin-top: 10px;margin-right: 10px;"/>
+                    <h:commandButton value="Exportar PDF" actionListener="#{preguntaBean.exportarReportePDFTextual}" title="Exportar a PDF" style="margin-top: 10px;margin-right: 10px;"/>
+                    <h:commandButton value="Exportar Excel" actionListener="#{preguntaBean.exportarReporteXLSTextual}" title="Exportar a Excel" style="margin-top: 10px;margin-right: 10px;"/>
+                </h:form>
+            </p:dialog>    
+        </h:body>
+    </f:view>
+</html>

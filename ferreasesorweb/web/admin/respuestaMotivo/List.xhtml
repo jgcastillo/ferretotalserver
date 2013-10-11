@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Respuestas Obtenidas Recolector de información
+    </ui:define>
+
+    <ui:define name="content">
+        <p:fieldset>
+            <f:facet name="legend">
+                <h3>
+                    <h:outputText value="Respuestas Obtenidas Recolector de Información"/>
+                </h3>
+            </f:facet>
+
+            <h:form id="formTotalRespuestas"><br/>
+                <h:panelGrid columns="8">
+                    <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
+                    <p:calendar id="fechaInicio" value="#{respuestaMotivoController.fechaInicio}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <h:outputLabel value="Fecha fin: " for="fechaFin"/>
+                    <p:calendar id="fechaFin" value="#{respuestaMotivoController.fechaFin}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="15"/>
+                    <p:commandButton value="Ver Data" actionListener="#{respuestaMotivoController.showRespuestaMotivo}" title="Ver Data" ajax="true" update="formTotalRespuestas"/>
+                    <p:spacer style="width: 10px;"/>
+                </h:panelGrid>
+                <br/><br/> 
+                <p:dataTable value="#{respuestaMotivoController.listaRespuestas}" var="item" paginator="true" rendered="#{respuestaMotivoController.showTable}"
+                             rows="15" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                    <f:facet name="header">
+                        <p  style="text-align: center">Respuestas Obtenidas Recolector de Información<br/>
+                            (<h:outputText value="#{respuestaMotivoController.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                            - <h:outputText value="#{respuestaMotivoController.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                        </p>
+                    </f:facet><br/>
+                    <p:column headerText="Fecha" style="text-align: center; width: 20%">
+                        <h:outputText value="#{item.fecha}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Hora" style="text-align: center; width: 20%">
+                        <h:outputText value="#{item.fecha}">
+                            <f:convertDateTime pattern="HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Motivo de Llamado">
+                        <h:outputText value="#{item.motivoId.nombre}"/>
+                    </p:column>
+
+                </p:dataTable>
+                <h:commandButton value="Exportar PDF" actionListener="#{respuestaMotivoController.exportarReportePDFMotivos}" title="Exportar a PDF" style="margin-top: 15px;margin-left: 70%;"/>
+                <h:commandButton value="Exportar Excel" actionListener="#{respuestaMotivoController.exportarReporteXLSMotivos}" title="Exportar a Excel" style="margin-top: 15px; margin-left: 10px;"/>
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>

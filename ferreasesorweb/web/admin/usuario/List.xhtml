@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Usuarios
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel header="Configuración de Usuarios" style="width:60%; margin-left:15px;">
+                <p:dataTable value="#{usuarioControllerExt.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                <f:facet name="header" >
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-document" 
+                                         style="display:block;text-align: right;" action="#{usuarioController.prepareCreate}"></p:commandButton>
+                    </f:facet>
+                    <p:column headerText="Nombre" width="25%">
+                        <h:outputText value="#{item.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido" width="25%">
+                        <h:outputText value="#{item.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" width="40%">
+                        <h:outputText value="#{item.user}"/>
+                    </p:column>
+                    <p:column headerText="Perfil" width="15%" style="text-align: center;">
+                        <h:outputText value="#{item.perfilId.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Status" width="15%" style="text-align: center;">
+                        <h:outputText value="HABILITADO" rendered="#{item.status==1}" />
+                        <h:outputText value="INHABILITADO" rendered="#{item.status==0}" />
+                    </p:column>
+                    <p:column headerText="Acción" width="10%">
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{usuarioControllerExt.prepareEdit}"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{usuarioControllerExt.prepareView}" rendered="#{item.status==0}" disabled="true"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{usuarioControllerExt.prepareView}" rendered="#{item.status==1}" />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

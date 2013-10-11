@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Categorías
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel header="Configuración de Categorías" style="width:60%; margin-left:15px;">
+                <p:dataTable value="#{categoriaController.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                <f:facet name="header" >
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-document" 
+                                         style="display:block;text-align: right;" action="#{categoriaController.prepareCreate}"></p:commandButton>
+                    </f:facet>
+                    <p:column headerText="Nombre" width="25%">
+                        <h:outputText value="#{item.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Status" width="15%" style="text-align: center;">
+                        <h:outputText value="ACTIVO" rendered="#{item.status==1}" />
+                        <h:outputText value="INACTIVO" rendered="#{item.status==0}" />
+                    </p:column>
+
+                    <p:column headerText="Acción" width="10%" style="text-align: center;">
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{categoriaController.prepareEdit}"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{categoriaController.prepareView}" rendered="#{item.status==0}" disabled="true"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{categoriaController.prepareView}" rendered="#{item.status==1}" />
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

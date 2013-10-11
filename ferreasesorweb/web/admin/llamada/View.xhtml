@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewLlamadaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_id}"/>
+                    <h:outputText value="#{llamadaController.selected.id}" title="#{bundle.ViewLlamadaTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_accion}"/>
+                    <h:outputText value="#{llamadaController.selected.accion}" title="#{bundle.ViewLlamadaTitle_accion}"/>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_fechaOpen}"/>
+                    <h:outputText value="#{llamadaController.selected.fechaOpen}" title="#{bundle.ViewLlamadaTitle_fechaOpen}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_horaOpen}"/>
+                    <h:outputText value="#{llamadaController.selected.horaOpen}" title="#{bundle.ViewLlamadaTitle_horaOpen}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_fechaClose}"/>
+                    <h:outputText value="#{llamadaController.selected.fechaClose}" title="#{bundle.ViewLlamadaTitle_fechaClose}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_horaClose}"/>
+                    <h:outputText value="#{llamadaController.selected.horaClose}" title="#{bundle.ViewLlamadaTitle_horaClose}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_tiendaId}"/>
+                    <h:outputText value="#{llamadaController.selected.tiendaId}" title="#{bundle.ViewLlamadaTitle_tiendaId}"/>
+                    <h:outputText value="#{bundle.ViewLlamadaLabel_distribucionId}"/>
+                    <h:outputText value="#{llamadaController.selected.distribucionId}" title="#{bundle.ViewLlamadaTitle_distribucionId}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{llamadaController.destroyAndView}" value="#{bundle.ViewLlamadaDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewLlamadaEditLink}"/>
+                <br />
+                <h:commandLink action="#{llamadaController.prepareCreate}" value="#{bundle.ViewLlamadaCreateLink}" />
+                <br />
+                <h:commandLink action="#{llamadaController.prepareList}" value="#{bundle.ViewLlamadaShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewLlamadaIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

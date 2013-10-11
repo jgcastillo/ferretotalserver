@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h:outputText value="#{bundle.EditBotonTitle}"></h:outputText>
+    </ui:define>
+    <ui:define name="content">
+
+        <h:form> 
+            <p:panel id="panel" header="¿Está seguro que desea eliminar este Dispositivo?" style="width:60%; margin-left:15px;">
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewBotonLabel_address}"/>
+                    <h:outputText value="#{botonController.selected.address}" title="#{bundle.ViewBotonTitle_address}"/>
+                    <h:outputText value="#{bundle.ViewBotonLabel_display}"/>
+                    <h:outputText value="#{botonController.selected.display}" title="#{bundle.ViewBotonTitle_display}"/>
+                    <h:outputText value="#{bundle.ViewBotonLabel_ubicacion}"/>
+                    <h:outputText value="#{botonController.selected.ubicacion}" title="#{bundle.ViewBotonTitle_ubicacion}"/>
+                    <h:outputText value="#{bundle.ViewBotonLabel_status}"/>
+                    <h:outputText value="HABILITADO" rendered="#{botonController.selected.status==1}" />
+                    <h:outputText value="INHABILITADO" rendered="#{botonController.selected.status==0}" />
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Aceptar" title="Aceptar" icon="ui-icon-disk" 
+                                         action="#{botonController.updateStatus}"
+                                         ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{botonController.prepareList}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <p:ajaxStatus style="right:45%; left:45%">  
+            <f:facet name="start">  
+                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+            </f:facet>  
+            <f:facet name="complete">  
+                <h:outputText value="" />  
+            </f:facet>  
+        </p:ajaxStatus>
+    </ui:define>
+</ui:composition>
+

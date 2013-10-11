@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListLlamadaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListLlamadaEmpty}" rendered="#{llamadaController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{llamadaController.items.rowCount > 0}">
+                    <h:outputText value="#{llamadaController.pagination.pageFirstItem + 1}..#{llamadaController.pagination.pageLastItem + 1}/#{llamadaController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{llamadaController.previous}" value="#{bundle.Previous} #{llamadaController.pagination.pageSize}" rendered="#{llamadaController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{llamadaController.next}" value="#{bundle.Next} #{llamadaController.pagination.pageSize}" rendered="#{llamadaController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{llamadaController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_accion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.accion}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_fechaOpen}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaOpen}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_horaOpen}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.horaOpen}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_fechaClose}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaClose}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_horaClose}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.horaClose}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_tiendaId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tiendaId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListLlamadaTitle_distribucionId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.distribucionId}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{llamadaController.prepareView}" value="#{bundle.ListLlamadaViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{llamadaController.prepareEdit}" value="#{bundle.ListLlamadaEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{llamadaController.destroy}" value="#{bundle.ListLlamadaDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{llamadaController.prepareCreate}" value="#{bundle.ListLlamadaCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListLlamadaIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

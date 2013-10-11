@@ -1,0 +1,5 @@
+2013-07-09 16:14:21,510 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-09 16:14:35,435 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-09 16:14:43,270 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-09 16:18:05,432 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-09 17:01:06,493 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado

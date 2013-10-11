@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h:outputText value="#{bundle.CreateTiempoTitle}"></h:outputText>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <p:panel id="panel" header="Crear Tiempos de Atención" style="width:60%; margin-left:15px;">
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="#{bundle.CreateTiempoLabel_turnoId}" for="turnoId" />
+                    <h:selectOneMenu id="turnoId" value="#{tiempoController.selected.turnoId}" style="width: 130px;" 
+                                     title="#{bundle.CreateTiempoTitle_turnoId}" required="true" 
+                                     requiredMessage="#{bundle.CreateTiempoRequiredMessage_turnoId}">
+                        <f:selectItems value="#{turnoController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <p:message for="turnoId"/>
+                    <p:outputLabel value="Criterio de Buena Atención:" for="atencionBuena" />
+                    <h:inputText id="atencionBuena" value="#{tiempoController.selected.atencionBuena}" 
+                                 title="#{bundle.CreateTiempoTitle_atencionBuena}" required="true" 
+                                 requiredMessage="#{bundle.CreateTiempoRequiredMessage_atencionBuena}"/>
+                    <p:message for="atencionBuena"/>
+                    <p:outputLabel value="Criterio de Atención Regular:" for="atencionRegular" />
+                    <h:inputText id="atencionRegular" value="#{tiempoController.selected.atencionRegular}" 
+                                 title="#{bundle.CreateTiempoTitle_atencionRegular}" required="true" 
+                                 requiredMessage="#{bundle.CreateTiempoRequiredMessage_atencionRegular}"/>
+                    <p:message for="atencionRegular"/>
+                    <p:outputLabel value="Cerrar Llamada:" for="cerrarLlamada" />
+                    <h:inputText id="cerrarLlamada" value="#{tiempoController.selected.cerrarLlamada}" 
+                                 title="Cerrar llamada" required="true" 
+                                 requiredMessage="El campo Cerrar Llamada es requerido"/>
+                    <p:message for="cerrarLlamada"/>
+                    <p:outputLabel value="#{bundle.CreateTiempoLabel_status}" for="status" />
+                    <h:selectOneMenu id="status" value="#{tiempoController.selected.status}" required="true" 
+                                     requiredMessage="#{bundle.CreateTiempoRequiredMessage_status}" style="width: 130px;">   
+                        <f:selectItem itemLabel="Habilitado" itemValue="1" />
+                        <f:selectItem itemLabel="Inhabilitado" itemValue="0" />
+                    </h:selectOneMenu>
+                    <p:message for="status"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Guardar" title="Guardar" icon="ui-icon-disk" 
+                                         action="#{tiempoController.create}"
+                                         ajax="true" update="panel"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="#{tiempoController.prepareList}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <p:ajaxStatus style="right:45%; left:45%">  
+            <f:facet name="start">  
+                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+            </f:facet>  
+            <f:facet name="complete">  
+                <h:outputText value="" />  
+            </f:facet>  
+        </p:ajaxStatus>
+    </ui:define>
+</ui:composition>
+

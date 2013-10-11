@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="title">
+        <title>Total llamadas por Turno</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:fieldset>
+            <f:facet name="legend">
+                <h3>
+                    <h:outputText value="Cantidad de Llamadas por Turno entre Fechas"/>
+                </h3>
+            </f:facet>
+
+            <h:form id="formLlamadasXTurno"><br/>
+                <h:panelGrid columns="8">
+                    <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
+                    <p:calendar id="fechaInicio" value="#{llamadasXturnoBean.fechaInicio}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <h:outputLabel value="Fecha fin: " for="fechaFin"/>
+                    <p:calendar id="fechaFin" value="#{llamadasXturnoBean.fechaFin}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="15"/>
+                    <p:commandButton value="Ver Data" actionListener="#{llamadasXturnoBean.populateLlamadas}" title="Ver Data" ajax="true" update="formLlamadasXTurno"/>
+                    <p:spacer style="width: 20px;"/>
+
+                </h:panelGrid>
+                <br/><br/>
+                <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
+                    <p:dataTable value="#{llamadasXturnoBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{llamadasXturnoBean.showTable}"
+                                 paginator="true" rows="10"  
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <p  style="text-align: center">Llamadas por Turno entre Fechas<br/>
+                                (<h:outputText value="#{llamadasXturnoBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                                - <h:outputText value="#{llamadasXturnoBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                            </p>
+                        </f:facet>
+                        <p:column headerText="Turno">
+                            <h:outputText value="#{llamada.rango}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center; width: 30%">
+                            <h:outputText value="#{llamada.dominio}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Gráfico Barras" rendered="#{llamadasXturnoBean.reporteData.size() > 0}" ajax="true" update="formLlamadasXTurno"
+                                     actionListener="#{llamadasXturnoBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
+                    <p:spacer style="width: 10px;"/>
+                    <p:commandButton value="Gráfico Pie" rendered="#{llamadasXturnoBean.reporteData.size() > 0}" ajax="true" update="formLlamadasXTurno"   
+                                     actionListener="#{llamadasXturnoBean.muestraStackedGrafico}" title="Gráfico Pie" style="float: right;margin-right:10px;"/>
+
+                    <br/><br/>
+                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{llamadasXturnoBean.showChart and llamadasXturnoBean.reporteData.size() > 0}" style="border: 0px solid #FFFFFF;">
+                            <p:barChart value="#{llamadasXturnoBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
+                                        title="Llamadas por Turno entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXturnoBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{llamadasXturnoBean.exportarReporteXLS}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:panel>
+                    <p:panel id="panelGraficoStacked" style="border: 0px solid #FFFFFF;">
+                        <h:panelGroup id="panelStackedChart" rendered="#{llamadasXturnoBean.showStackedChart}">
+                            <p:pieChart id="sample" value="#{llamadasXturnoBean.categoryModelPie}" legendPosition="e" showDataLabels="true" 
+                                        title="Llamadas por Turno entre Fechas" style="width: 80%; margin-left: 85px;" /> 
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXturnoBean.exportarReportePDFPie}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{llamadasXturnoBean.exportarReporteXLS}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </p:panel>
+                </p:panel>
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>

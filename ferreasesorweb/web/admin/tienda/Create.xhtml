@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateTiendaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateTiendaLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{tiendaController.selected.id}" title="#{bundle.CreateTiendaTitle_id}" required="true" requiredMessage="#{bundle.CreateTiendaRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateTiendaLabel_sucursal}" for="sucursal" />
+                    <h:inputText id="sucursal" value="#{tiendaController.selected.sucursal}" title="#{bundle.CreateTiendaTitle_sucursal}" required="true" requiredMessage="#{bundle.CreateTiendaRequiredMessage_sucursal}"/>
+                    <h:outputLabel value="#{bundle.CreateTiendaLabel_nombre}" for="nombre" />
+                    <h:inputText id="nombre" value="#{tiendaController.selected.nombre}" title="#{bundle.CreateTiendaTitle_nombre}" required="true" requiredMessage="#{bundle.CreateTiendaRequiredMessage_nombre}"/>
+                    <h:outputLabel value="#{bundle.CreateTiendaLabel_direccion}" for="direccion" />
+                    <h:inputTextarea rows="4" cols="30" id="direccion" value="#{tiendaController.selected.direccion}" title="#{bundle.CreateTiendaTitle_direccion}" />
+                    <h:outputLabel value="#{bundle.CreateTiendaLabel_telefono}" for="telefono" />
+                    <h:inputText id="telefono" value="#{tiendaController.selected.telefono}" title="#{bundle.CreateTiendaTitle_telefono}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{tiendaController.create}" value="#{bundle.CreateTiendaSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{tiendaController.prepareList}" value="#{bundle.CreateTiendaShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateTiendaIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

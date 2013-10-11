@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Configura Pregunta
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel id="panel" header="Agregar preguntas para la Encuesta: #{preguntaBean.encuesta.nombre}" style="width:75%; margin-left:15px;">
+                <c:if test="#{preguntaBean.tipoPregunta == 1}">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="sugerencia" value="Indique el apuntador que desea usar:"/>
+                        <p:inputText id="sugerencia" value="#{preguntaBean.promptPreguntaTextual}"/>
+                    </h:panelGrid>
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 2}">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="sugerencia" value="Indique el apuntador que desea usar:"/>
+                        <p:inputText id="sugerencia" value="#{preguntaBean.promptPreguntaTextual}"/>
+                    </h:panelGrid>
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 3}">
+                    <p:panel id="panelOptions" header="Opciones" style="width:95%; margin-left:15px;">
+                        <h:panelGrid columns="3">
+                            <h:outputLabel for="opcion" value="Opcion: "/>
+                            <p:inputText id="opcion" value="#{preguntaBean.preguntaSeleccionItem}" 
+                                         required="true" requiredMessage="Escriba la Opción que desea Agregar o Eliminar"/>
+                            <p:message for="opcion"/>
+                        </h:panelGrid>
+                        <h:panelGrid style="width:60%; margin-left: 20%; margin-right: 20%; margin-top: 20px;">
+                            <p:dataTable value="#{preguntaBean.preguntaSeleccionValores}" var="opcion" id="tableOptions">
+                                <p:column headerText="Opciones">
+                                    <h:outputText value="#{opcion}"/>
+                                </p:column>                           
+                            </p:dataTable> 
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                                <p:commandButton value="- Opción" title="Eliminar Opción" icon="ui-icon-trash" 
+                                                 actionListener="#{preguntaBean.removeItemFromSeleccion}"
+                                                 ajax="true" update="panelOptions"/>
+                                <p:spacer width="10"/>
+                                <p:commandButton value="+ Opción" title="Agregar Opción" icon="ui-icon-disk" 
+                                                 actionListener="#{preguntaBean.addItemToSeleccion}"
+                                                 ajax="true" update="panelOptions"/>
+                            </h:panelGrid>
+                        </f:facet>
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+
+                    </p:panel>
+
+                </c:if>
+                <c:if test="#{preguntaBean.tipoPregunta == 4}">
+                    <h:outputText value="El apuntador a usar será: 'En una escala del 1 al 10, siendo el 1 la más baja y 10 la mas alta, ¿cómo lo califica?'"/>
+                    <p>
+                        <h:outputText value="Use el botón continuar"/>
+                    </p>
+                </c:if>
+                <br/><br/>
+
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Regresar" title="Regresar" icon="ui-icon-arrowthick-1-w" immediate="true"
+                                         action="/encuestaMain?faces-redirect=true"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Continuar" title="Continuar" icon="ui-icon-arrowthick-1-e" immediate="true"
+                                         action="#{preguntaBean.muestraPregunta}"/>
+                    </h:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

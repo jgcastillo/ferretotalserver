@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Configuración de Dispositivos
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Configuración de Dispositivos" style="width:60%; margin-left:15px;">
+                <p:dataTable value="#{botonController.items}" var="item" paginator="true"
+                             rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="top"
+                             resizableColumns="false">
+                <f:facet name="header" >
+                        <p:commandButton value="Agregar" title="Agregar" icon="ui-icon-document" 
+                                         style="display:block;" action="#{botonController.prepareCreate}"></p:commandButton>
+                    </f:facet>
+                    <p:column headerText="Dirección" width="15%" style="text-align: center;">
+                        <h:outputText value="#{item.address}"/>
+                    </p:column>
+                    <p:column headerText="Display" width="15%" style="text-align: center;">
+                        <h:outputText value="#{item.display}"/>
+                    </p:column>
+                    <p:column headerText="Ubicación">
+                        <h:outputText value="#{item.ubicacion}"/>
+                    </p:column>
+                    <p:column headerText="Status" width="15%" style="text-align: center;">
+                        <h:outputText value="HABILITADO" rendered="#{item.status==1}" />
+                        <h:outputText value="INHABILITADO" rendered="#{item.status==0}" />
+                    </p:column> 
+                    <p:column headerText="Acción" width="10%">
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{botonController.prepareEdit}"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{botonController.prepareView}" rendered="#{item.status==0}" disabled="true"/>
+                        <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{botonController.prepareView}" rendered="#{item.status==1}" />
+                        
+<!--                        <p:commandButton id="showDialogButton" onclick="confirmation.show()" title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;"/>
+                        <p:growl id="messages" />
+                        <p:confirmDialog id="confirmDialog" message="¿Está seguro que desea eliminar este Dispositivo?"  
+                                         header="Eliminado Dispositivo" severity="alert" widgetVar="confirmation">  
+                            <p:commandButton id="confirm" value="Aceptar" update="messages" oncomplete="confirmation.hide()"  
+                                             actionListener="#{botonControllerExt.destroyWorld}" />  
+                            <p:commandButton id="decline" value="Cancelar" onclick="confirmation.hide()" type="button" />   
+                        </p:confirmDialog>  -->
+                    </p:column>
+                </p:dataTable>
+                
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            </p:panel>  
+        </h:form>
+    </ui:define>
+
+</ui:composition>

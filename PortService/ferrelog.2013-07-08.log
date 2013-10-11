@@ -1,0 +1,18 @@
+2013-07-08 14:32:50,436 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-08 14:34:16,276 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-08 14:34:23,556 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-08 14:34:31,624 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-08 14:34:37,726 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: javax.persistence.NoResultException: getSingleResult() did not retrieve any entities.
+2013-07-08 14:34:44,786 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:215] Ha ocurrido un error capturando la llamada: java.lang.NumberFormatException: For input string: "�"
+2013-07-08 14:34:44,859 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-08 14:41:28,265 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-08 14:52:37,942 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado
+2013-07-08 15:02:46,331 [Thread-2] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NonUniqueResultException: More than one result was returned from Query.getSingleResult()
+2013-07-08 15:02:46,393 [Thread-2] ERROR  c.f.serialservice.SerialService [SerialService.java:413] Error guardando/actualizando la llamada: javax.persistence.RollbackException: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.3.2.v20111125-r10461): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'distribucion_id' cannot be null
+Error Code: 1048
+Call: INSERT INTO llamada (accion, fecha_Close, fecha_Open, hora_Close, hora_Open, distribucion_id, tienda_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+	bind => [7 parameters bound]
+Query: InsertObjectQuery(com.ferretotal.serialservice.entity.Llamada[ id=null ])
+2013-07-08 15:03:00,782 [Thread-2] ERROR  c.f.s.c.e.DistribucionJpaControllerExt [DistribucionJpaControllerExt.java:97] Error encontrando distribución: javax.persistence.NonUniqueResultException: More than one result was returned from Query.getSingleResult()
+2013-07-08 15:39:28,874 [AWT-EventQueue-0] INFO   c.f.serialservice.SerialService [SerialService.java:172] Equipo desconectado

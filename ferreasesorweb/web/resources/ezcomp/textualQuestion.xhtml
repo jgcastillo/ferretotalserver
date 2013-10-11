@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="preguntaBody"/>
+        <cc:attribute name="preguntaPrompt"/>
+        <cc:attribute name="preguntaBean"/>
+        <cc:editableValueHolder name="questionVal" targets="myform:opinionTextBox"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="myform">
+            <p:fieldset style="width: 70%;">
+                <h:outputText value="#{cc.attrs.preguntaBean.preguntaTexto}"/>
+                    <h:outputText value="&nbsp;"/>
+                <h:panelGrid columns="2">
+                    
+                    <h:outputLabel for="opinionTextBox"  value="#{cc.attrs.preguntaBean.promptPreguntaTextual}: " 
+                                   style="float: right;"/>
+                    <p:inputTextarea id="opinionTextBox" value="#{cc.attrs.preguntaBean.respuestaTexto}"
+                                     rows="6" cols="85" style="width: 300px;"/>
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </cc:implementation>
+</html>
