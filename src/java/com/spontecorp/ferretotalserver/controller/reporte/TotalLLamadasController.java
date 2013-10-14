@@ -139,7 +139,7 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
                 Collections.sort(listData, new Comparator<ReporteHelper>() {
                     @Override
                     public int compare(ReporteHelper f1, ReporteHelper f2) {
-                        return f1.getTienda().getNombre().toString().compareTo(f2.getTienda().getNombre().toString());
+                        return f1.getTienda().getNombre().compareTo(f2.getTienda().getNombre());
                     }
                 });
 
@@ -203,7 +203,7 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         Collections.sort(listTiendaFinal, new Comparator<Tienda>() {
             @Override
             public int compare(Tienda f1, Tienda f2) {
-                return f1.getNombre().toString().compareTo(f2.getNombre().toString());
+                return f1.getNombre().compareTo(f2.getNombre());
             }
         });
 
