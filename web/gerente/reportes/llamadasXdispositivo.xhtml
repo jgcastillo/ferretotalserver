@@ -1,25 +1,37 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../../WEB-INF/templates/layout.xhtml"
-                xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
-        <title>Total llamadas por Dispositivo</title>
+        <title>Cantidad Total de Llamadas por Tienda por Dispositivo</title>
     </ui:define>
 
     <ui:define name="content">
         <p:fieldset>
             <f:facet name="legend">
                 <h3>
-                    <h:outputText value="Cantidad de Llamadas por Dispositivo en un Período"/>
+                    <h:outputText value="Cantidad Total de Llamadas por Tienda por Dispositivo"/>
                 </h3>
             </f:facet>
 
-            <h:form id="formLlamadasXDispositivo"><br/>
+            <h:form id="formLlamadaDispositivo"><br/>               
+                <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{llamadasXdispBean.selectedTiendas}" >  
+                        <f:selectItems value="#{llamadasXdispBean.tiendas}" /> 
+                    </p:selectManyCheckbox> 
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="margin-bottom: 10px;">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{llamadasXdispBean.selectedAllTiendas}">  
+                        <f:selectItems value="#{llamadasXdispBean.allTiendas}" /> 
+                    </p:selectManyCheckbox> 
+                </h:panelGrid>
                 <h:panelGrid columns="8">
                     <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
                     <p:calendar id="fechaInicio" value="#{llamadasXdispBean.fechaInicio}" 
@@ -28,43 +40,68 @@
                     <p:calendar id="fechaFin" value="#{llamadasXdispBean.fechaFin}" 
                                 showOn="button" pattern="dd/MM/yyyy"/>
                     <p:spacer height="15"/>
-                    <p:commandButton value="Ver Data" actionListener="#{llamadasXdispBean.populateLlamadas}" title="Ver Data" ajax="true" update="formLlamadasXDispositivo"/>
+                    <p:commandButton value="Obtener Datos"  actionListener="#{llamadasXdispBean.populateLlamadas}" ajax="true" update="formLlamadaDispositivo"/>
                     <p:spacer style="width: 10px;"/>
-
                 </h:panelGrid>
-                <br/><br/>
-                <p:spacer height="10"/>
+                <br/>
+                <p:ajaxStatus style="right:45%; left:45%">  
+                    <f:facet name="start">  
+                        <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+                    </f:facet>  
+                    <f:facet name="complete">  
+                        <h:outputText value="" />  
+                    </f:facet>  
+                </p:ajaxStatus>
+                <h:panelGroup id="messageTotalLlamada" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <br/>
+                <p:dataTable id="reportTable" var="report" value="#{llamadasXdispBean.listReporteServer}"
+                             style="width: 79%;margin-left: 85px;" rendered="#{llamadasXdispBean.showTable}"
+                              paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
+                    <f:facet name="header">  
+                        <p  style="text-align: center">Total Llamadas por Dispositivos<br/>
+                            (<h:outputText value="#{llamadasXdispBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                            - <h:outputText value="#{llamadasXdispBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                        </p>
+                    </f:facet>
+                    <p:columnGroup type="header">  
+                           <p:row>  
+                            <p:column headerText="Tienda" />  
+                            <p:column headerText="Cantidad Llamadas" />  
+                        </p:row>  
+                    </p:columnGroup>  
+                    <p:subTable var="data" value="#{report.reporteHelper}">  
+                        <p:columnGroup type="header">  
+                            <p:row>  
+                                <p:column rowspan="2" headerText="Tienda" />  
+                                <p:column colspan="2" headerText="Cantidad" />  
+                            </p:row>  
+
+                        </p:columnGroup>  
+                        <f:facet name="header">  
+                            Dispositivo: 
+                            <h:outputText value="#{report.current}" />   
+                        </f:facet>  
+                        <p:column style="text-align: center;">  
+                            #{data.tienda.nombre}  
+                        </p:column>  
+                        <p:column style="text-align: center;">  
+                            #{data.dominio}  
+                        </p:column>  
+                    </p:subTable>  
+                </p:dataTable>
                 <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
-                    <p:dataTable value="#{llamadasXdispBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{llamadasXdispBean.showTable}"
-                                 paginator="true" rows="10"  
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                 rowsPerPageTemplate="5,10,15"
-                                 paginatorPosition="bottom">
-                        <f:facet name="header">
-                            <p  style="text-align: center">Llamadas por Dispositivo entre Fechas<br/>
-                                (<h:outputText value="#{llamadasXdispBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
-                                - <h:outputText value="#{llamadasXdispBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
-                            </p>
-                        </f:facet>
-                        <p:column headerText="Botón">
-                            <h:outputText value="#{llamada.rango}"/>
-                        </p:column>
-                        <p:column headerText="Cantidad" style="text-align: center; width: 30%">
-                            <h:outputText value="#{llamada.dominio}"/>
-                        </p:column>
-                    </p:dataTable>
                     <br/>
-                    <p:commandButton value="Gráfico Barras" rendered="#{llamadasXdispBean.reporteData.size() > 0}" ajax="true" update="formLlamadasXDispositivo"
+                    <p:commandButton value="Gráfico Barras" rendered="#{llamadasXdispBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
                                      actionListener="#{llamadasXdispBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
-                    <p:spacer style="width: 10px;"/>
-                    <p:commandButton value="Gráfico Pie" rendered="#{llamadasXdispBean.reporteData.size() > 0}" ajax="true" update="formLlamadasXDispositivo"   
-                                     actionListener="#{llamadasXdispBean.muestraStackedGrafico}" title="Gráfico Pie" style="float: right;margin-right:10px;"/>
 
                     <br/><br/>
                     <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
-                        <p:panel id="panelChart" rendered="#{llamadasXdispBean.showChart and llamadasXdispBean.reporteData.size() > 0}" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{llamadasXdispBean.showChart and llamadasXdispBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
                             <p:barChart value="#{llamadasXdispBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
-                                        title="Llamadas por Dispositivo entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                                        title="Total Llamadas entre Fechas por Dispositivo" style="width: 80%; margin-left: 85px;" extender="customExtender" />
                             <br/>
                             <h:panelGrid columns="3">
                                 <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXdispBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
@@ -73,21 +110,8 @@
                             </h:panelGrid>
                         </p:panel>
                     </p:panel>
-                    <p:panel id="panelGraficoStacked" style="border: 0px solid #FFFFFF;">
-                        <h:panelGroup id="panelStackedChart" rendered="#{llamadasXdispBean.showStackedChart}">
-                            <p:pieChart id="sample" value="#{llamadasXdispBean.categoryModelPie}" legendPosition="e" showDataLabels="true" 
-                                        title="Total Llamadas entre Fechas" style="width: 80%; margin-left: 85px;" /> 
-                            <br/>
-                            <h:panelGrid columns="3">
-                                <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXdispBean.exportarReportePDFPie}" style="margin-left:485px" title="Exportar a PDF"/>
-                                <p:spacer style="width: 10px;"/>
-                                <h:commandButton value="Exportar Excel"  actionListener="#{llamadasXdispBean.exportarReporteXLS}" title="Exportar a Excel"/>
-                            </h:panelGrid>
-                        </h:panelGroup>
-                    </p:panel>
                 </p:panel>
             </h:form>
         </p:fieldset>
     </ui:define>
-
 </ui:composition>

@@ -14,6 +14,7 @@ import java.util.List;
 public class ReporteServer implements Comparable<ReporteServer>{
     
     private Date fecha;
+    private String current;
     private List<ReporteHelper> reporteHelper;
 
     public ReporteServer() {
@@ -33,6 +34,14 @@ public class ReporteServer implements Comparable<ReporteServer>{
 
     public void setReporteHelper(List<ReporteHelper> reporteHelper) {
         this.reporteHelper = reporteHelper;
+    }
+
+    public String getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(String current) {
+        this.current = current;
     }
 
     @Override
