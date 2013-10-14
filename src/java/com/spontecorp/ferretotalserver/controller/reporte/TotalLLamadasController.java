@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,44 +79,70 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         Map<Object, List<ReporteHelper>> mapTiendaLlamadas = new HashMap<>();
 
         if (listTiendaFinal.size() > 0) {
+            //Recorro la lista de Tiendas Seleccionadas
             for (Tienda tiendaActual : listTiendaFinal) {
 
-                //Recorro la lista de Tiendas Seleccionadas
-                if (tiendaActual != null) {
+                //Busco la lista de Llamadas para la Tienda seleccionada
+                setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES_TIENDA, tiendaActual, fechaInicio, fechaFin));
 
-                    //Seteo la busqueda
-                    setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES_TIENDA, tiendaActual, fechaInicio, fechaFin));
-
-                    System.out.println("Tienda 1: " + tiendaActual.getNombre());
-                    
-                    
-                    for (Object[] array : getResult()) {
-                        ReporteHelper helper = new ReporteHelper();
-                        //Armo una lista de Fechas
-                        String date = sdf.format((Date) array[0]);
-                        if (!fechas.contains(date)) {
-                            fechas.add(date);
-                        }
-
-                        System.out.println("Tienda 2: " + ((Tienda)array[2]).getNombre() + " Dominio: " + String.valueOf(array[1]));
-                        helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-                        helper.setRango(sdf.format((Date) array[0]));
-                        helper.setTienda((Tienda)array[2]);
-
-                        reporteData.add(helper);
+                for (Object[] array : getResult()) {
+                    ReporteHelper helper = new ReporteHelper();
+                    //Armo una lista de Fechas
+                    String date = sdf.format((Date) array[0]);
+                    if (!fechas.contains(date)) {
+                        fechas.add(date);
                     }
+                    helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
+                    helper.setRango(sdf.format((Date) array[0]));
+                    helper.setTienda((Tienda) array[2]);
 
+                    reporteData.add(helper);
                 }
+                
             }
 
             //Lleno el Mapa para agrupar por Fecha
             for (Object currentDate : fechas) {
                 List<ReporteHelper> listData = new ArrayList<>();
+                List<Tienda> listTiendaNew = new ArrayList<>();
+                List<Tienda> listTiendaNew2 = new ArrayList<>();
                 for (ReporteHelper reporte : reporteData) {
+                    List<Tienda> totalTiendas = listTiendaFinal;
                     if (reporte.getRango().toString().equals(currentDate)) {
-                        listData.add(reporte);
+                        for (Tienda tiendaActual : totalTiendas) {
+                            if (tiendaActual.getId() == reporte.getTienda().getId()) {
+                                listData.add(reporte);
+                                listTiendaNew2.add(tiendaActual);
+                                if (listTiendaNew.contains(tiendaActual)) {
+                                    listTiendaNew.remove(tiendaActual);
+                                }
+                            } else {
+                                if (!listTiendaNew.contains(tiendaActual) && !listTiendaNew2.contains(tiendaActual)) {
+                                    listTiendaNew.add(tiendaActual);
+                                }
+                            }
+                        }
                     }
                 }
+
+                //Lleno con cero(0) la cantidad de Llamadas en las fechas,
+                //dónde no hubo Llamadas en la Tienda 
+                for (Tienda store : listTiendaNew) {
+                    ReporteHelper helper = new ReporteHelper();
+                    helper.setRango(currentDate);
+                    helper.setTienda(store);
+                    helper.setDominio(0);
+                    listData.add(helper);
+                }
+
+                //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
+                Collections.sort(listData, new Comparator<ReporteHelper>() {
+                    @Override
+                    public int compare(ReporteHelper f1, ReporteHelper f2) {
+                        return f1.getTienda().getNombre().toString().compareTo(f2.getTienda().getNombre().toString());
+                    }
+                });
+
                 mapTiendaLlamadas.put(currentDate, listData);
             }
 
@@ -144,7 +171,6 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
     @Override
     public StreamedContent getChart() {
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
-        //result = facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES, fechaInicio, fechaFin);
         BarChart barChart = new BarChart(nombreReporte, nombreRango, nombreDominio);
         barChart.setResult(getResult());
         barChart.createDataset();
@@ -173,6 +199,14 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             }
         }
 
+        //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
+        Collections.sort(listTiendaFinal, new Comparator<Tienda>() {
+            @Override
+            public int compare(Tienda f1, Tienda f2) {
+                return f1.getNombre().toString().compareTo(f2.getNombre().toString());
+            }
+        });
+
         categoryModel = new CartesianChartModel();
 
         ChartSeries[] stores = new ChartSeries[listTiendaFinal.size()];
@@ -183,14 +217,9 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         }
 
         for (ReporteServer data : listReporteServer) {
-            // System.out.println("Fecha: " + sdf.format(data.getFecha()));
             int z = 0;
-
-            //System.out.println("    Valor: " + z);
-
             for (ReporteHelper report : data.getReporteHelper()) {
                 for (Tienda store : listTiendaFinal) {
-                    //   System.out.println("        Tienda: " + z + " " + store.getNombre());
                     if (store.getNombre().equalsIgnoreCase(report.getTienda().getNombre())) {
                         stores[z].set(report.getRango().toString(), report.getDominio());
                     }
@@ -205,26 +234,6 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             categoryModel.addSeries(stores[j]);
             j++;
         }
-
-//        ChartSeries stores1 = new ChartSeries("Boleíta Center"); 
-//        ChartSeries stores2 = new ChartSeries("Sambil"); 
-//        ChartSeries stores3 = new ChartSeries("Bello Monte");
-//        
-//        stores1.set("20/06/2013", 7);  
-//        stores1.set("21/06/2013", 0);  
-//        stores1.set("22/06/2013", 0);  
-//
-//        stores2.set("20/06/2013", 13);  
-//        stores2.set("21/06/2013", 22);  
-//        stores2.set("22/06/2013", 17); 
-//
-//        stores3.set("20/06/2013", 8);  
-//        stores3.set("21/06/2013", 22);  
-//        stores3.set("22/06/2013", 17); 
-//        
-//        categoryModel.addSeries(stores1);  
-//        categoryModel.addSeries(stores2);  
-//        categoryModel.addSeries(stores3); 
 
     }
 }
