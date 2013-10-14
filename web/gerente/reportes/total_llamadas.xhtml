@@ -100,6 +100,7 @@
                                      actionListener="#{totalLlamadasBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
 
                     <br/><br/>
+<!--                    Estoy trabajando para obtener los Graficos correctamente -->
                     <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
                         <p:panel id="panelChart" rendered="#{totalLlamadasBean.showChart and totalLlamadasBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
                             <p:barChart value="#{totalLlamadasBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
@@ -116,5 +117,4 @@
             </h:form>
         </p:fieldset>
     </ui:define>
-
 </ui:composition>
