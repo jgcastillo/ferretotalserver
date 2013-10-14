@@ -2,6 +2,7 @@ package com.spontecorp.ferretotalserver.jpa.ext;
 
 import com.spontecorp.ferretotalserver.controller.reporte.ReporteHelper;
 import com.spontecorp.ferretotalserver.entity.Llamada;
+import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.LlamadaFacade;
 import java.util.Date;
 import java.util.List;
@@ -42,13 +43,18 @@ public class LlamadaFacadeExt extends LlamadaFacade {
      * @param fechaFin
      * @return
      */
-    public List<Object[]> findLlamadas(int tipo, Date fechaInicio, Date fechaFin) {
+    public List<Object[]> findLlamadas(int tipo, Tienda tienda, Date fechaInicio, Date fechaFin) {
         String query = "";
         switch (tipo) {
             case ReporteHelper.LLAMADAS_TOTALES:
                 query = "SELECT ll.fechaClose, count(ll) FROM Llamada ll "
-                        + "WHERE ll.accion = '0' AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
-                        + "GROUP BY ll.fechaClose";
+                        + "WHERE ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
+                        + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose ORDER BY ll.fechaClose DESC";
+                break;
+            case ReporteHelper.LLAMADAS_TOTALES_TIENDA:
+                query = "SELECT ll.fechaClose, count(ll), ll.tiendaId FROM Llamada ll "
+                        + "WHERE ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
+                        + "AND ll.tiendaId = :tienda GROUP BY ll.fechaClose ORDER BY ll.fechaClose DESC";
                 break;
             case ReporteHelper.LLAMADAS_DISPOSITIVO:
                 query = "SELECT b, COUNT(ll) "
@@ -120,6 +126,7 @@ public class LlamadaFacadeExt extends LlamadaFacade {
             Query q = em.createQuery(query);
             q.setParameter("fechaInicio", fechaInicio);
             q.setParameter("fechaFin", fechaFin);
+            q.setParameter("tienda", tienda);
             result = q.getResultList();
         } catch (Exception e) {
             logger.error("Error generando los datos: " + e);

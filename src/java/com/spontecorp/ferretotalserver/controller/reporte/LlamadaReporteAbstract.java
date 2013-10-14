@@ -5,6 +5,7 @@ import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -34,8 +37,10 @@ public abstract class LlamadaReporteAbstract {
     protected Tienda tienda;
     protected List<Tienda> listTienda;
     protected List<Llamada> totalLlamadas;
-    protected List<Tienda> selectedTiendas;  
-    protected Map<String,Integer> tiendas;  
+    protected List<String> selectedTiendas;  
+    protected List<String> selectedAllTiendas;
+    protected Map<String,Integer> tiendas; 
+    private Map<String, String> allTiendas;
     protected boolean showTable = false;
     protected boolean showChart = false;
     protected boolean showStackedChart = false;
@@ -44,6 +49,7 @@ public abstract class LlamadaReporteAbstract {
     protected List<Object[]> result;
     protected List<Llamada> resultLlamadas;
     protected List<ReporteHelper> reporteData;
+    protected List<ReporteServer> listReporteServer;
     protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     protected CartesianChartModel categoryModel;
     protected PieChartModel categoryModelPie;
@@ -89,12 +95,20 @@ public abstract class LlamadaReporteAbstract {
         return listTienda;
     }
 
-    public List<Tienda> getSelectedTiendas() {
+    public List<String> getSelectedTiendas() {
         return selectedTiendas;
     }
 
-    public void setSelectedTiendas(List<Tienda> selectedTiendas) {
+    public void setSelectedTiendas(List<String> selectedTiendas) {
         this.selectedTiendas = selectedTiendas;
+    }
+    
+    public List<String> getSelectedAllTiendas() {
+        return selectedAllTiendas;
+    }
+
+    public void setSelectedAllTiendas(List<String> selectedAllTiendas) {
+        this.selectedAllTiendas = selectedAllTiendas;
     }
 
     public Map<String, Integer> getTiendas() {
@@ -110,6 +124,16 @@ public abstract class LlamadaReporteAbstract {
 
     public void setTiendas(Map<String, Integer> tiendas) {
         this.tiendas = tiendas;
+    }
+    
+    public Map<String, String> getAllTiendas() {
+        allTiendas = new HashMap<String, String>();
+        allTiendas.put("Todas las Tiendas", "0");
+        return allTiendas;
+    }
+
+    public void setAllTiendas(Map<String, String> allTiendas) {
+        this.allTiendas = allTiendas;
     }
 
     public void setListTienda(List<Tienda> listTienda) {
@@ -142,6 +166,14 @@ public abstract class LlamadaReporteAbstract {
 
     public List<ReporteHelper> getReporteData() {
         return reporteData;
+    }
+
+    public List<ReporteServer> getListReporteServer() {
+        return listReporteServer;
+    }
+
+    public void setListReporteServer(List<ReporteServer> listReporteServer) {
+        this.listReporteServer = listReporteServer;
     }
 
     public CartesianChartModel getCategoryModel() {
@@ -249,6 +281,25 @@ public abstract class LlamadaReporteAbstract {
             cal.set(yearActual, mesActual, 1);
             fechaInicio = new Date(cal.getTimeInMillis());
         }
+    }
+    
+    /**
+     * Método para recibir fecha String en formato dd-MM-yyyy y retornar un
+     * objeto tipo Date con la fecha dada
+     *
+     * @param fecha
+     * @return Fecha tipo "Date"
+     */
+    public Date convertirFecha(String fecha) {
+        Date date = null;
+        try {
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            date = formateador.parse(fecha);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(TotalLLamadasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return date;
     }
 
     /**

@@ -1,11 +1,14 @@
 package com.spontecorp.ferretotalserver.controller.reporte;
 
+import com.spontecorp.ferretotalserver.entity.Tienda;
+
 /**
  *
  * @author jgcastillo
  */
 public class ReporteHelper {
     
+    private Tienda tienda;
     private Object rango;
     private Number dominio;
     private Object nombreObj;
@@ -22,6 +25,7 @@ public class ReporteHelper {
     public static final int CALIDAD_X_FERREASESOR = 10;
     public static final int CALIDAD_X_TURNO = 11;
     public static final int CALIDAD_TOTAL = 12;
+    public static final int LLAMADAS_TOTALES_TIENDA = 13;
 
     public Object getRango() {
         return rango;
@@ -53,6 +57,14 @@ public class ReporteHelper {
 
     public void setPropiedadObj(Object[] propiedadObj) {
         this.propiedadObj = propiedadObj;
+    }
+
+    public Tienda getTienda() {
+        return tienda;
+    }
+
+    public void setTienda(Tienda tienda) {
+        this.tienda = tienda;
     }
 
 }
