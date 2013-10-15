@@ -126,20 +126,22 @@ public class TiempoXTiendaController extends LlamadaReporteAbstract implements S
 
     @Override
     public void createCategoryModel() {
+        
         categoryModel = new CartesianChartModel();
+        ChartSeries min = new ChartSeries("min");
+        ChartSeries prom = new ChartSeries("prom");
+        ChartSeries max = new ChartSeries("max");
 
-        ChartSeries llamada = new ChartSeries("Llamadas");
+        for (ReporteHelper data : reporteData) {
+            Object[] valor = data.getPropiedadObj();
+            min.set(data.getNombreObj().toString(), Double.valueOf((valor[0].toString())));
+            prom.set(data.getNombreObj().toString(), Double.valueOf(valor[1].toString()));
+            max.set(data.getNombreObj().toString(), Double.valueOf(valor[2].toString()));
+        }
 
-        ReporteHelper helper = reporteData.get(0);
-        Object[] valor = helper.getPropiedadObj();
-
-        llamada.set("min.", Double.valueOf(valor[0].toString()));
-        llamada.set("prom.", Double.valueOf(valor[1].toString()));
-        llamada.set("max.", Double.valueOf(valor[2].toString()));
-
-        
-        
-        categoryModel.addSeries(llamada);
+        categoryModel.addSeries(min);
+        categoryModel.addSeries(prom);
+        categoryModel.addSeries(max);
 
     }
 }
