@@ -1,30 +1,20 @@
 package com.spontecorp.ferretotalserver.controller.reporte;
 
 import com.spontecorp.ferretotalserver.controller.chart.BarChart;
-import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
-import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.PieChartModel;
 
 /**
  *
@@ -49,6 +39,8 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
         listReporteServer = new ArrayList<>();
+        //Se Ordena por Fecha
+        int caso = 1;
 
         //Obtengo las Tiendas Seleccionadas
         getSelectedAllTiendas();
@@ -56,26 +48,11 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         //Verifico las fechas
         getFechasVacias();
 
-        List<Tienda> listTiendaFinal = new ArrayList<>();
-
-        //Si se selecciona el check todas las Tiendas
-        if (getSelectedAllTiendas().size() > 0) {
-            for (int i = 0; i < listTienda.size(); i++) {
-                listTiendaFinal.add(listTienda.get(i));
-            }
-            //Si se selecciona el check de cada Tienda
-        } else if (selectedTiendas.size() > 0) {
-            for (int i = 0; i < selectedTiendas.size(); i++) {
-                int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
-                tienda = tiendaFacade.find(idTiendaSelected);
-                listTiendaFinal.add(tienda);
-            }
-            //Si no se selecciona el check de ninguna Tienda ni el check de Todas las Tiendas
-        } else {
-            JsfUtil.addErrorMessage("Seleccione la Tienda que desea consultar.");
-        }
-
+        //Obtengo la Lista de Tiendas seleccionadas
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
+        //Lista de Fechas 
         List<Object> fechas = new ArrayList<>();
+        
         Map<Object, List<ReporteHelper>> mapTiendaLlamadas = new HashMap<>();
 
         if (listTiendaFinal.size() > 0) {
@@ -101,61 +78,8 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
                 
             }
 
-            //Lleno el Mapa para agrupar por Fecha
-            for (Object currentDate : fechas) {
-                List<ReporteHelper> listData = new ArrayList<>();
-                List<Tienda> listTiendaNew = new ArrayList<>();
-                List<Tienda> listTiendaNew2 = new ArrayList<>();
-                for (ReporteHelper reporte : reporteData) {
-                    List<Tienda> totalTiendas = listTiendaFinal;
-                    if (reporte.getRango().toString().equals(currentDate)) {
-                        for (Tienda tiendaActual : totalTiendas) {
-                            if (tiendaActual.getId() == reporte.getTienda().getId()) {
-                                listData.add(reporte);
-                                listTiendaNew2.add(tiendaActual);
-                                if (listTiendaNew.contains(tiendaActual)) {
-                                    listTiendaNew.remove(tiendaActual);
-                                }
-                            } else {
-                                if (!listTiendaNew.contains(tiendaActual) && !listTiendaNew2.contains(tiendaActual)) {
-                                    listTiendaNew.add(tiendaActual);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //Lleno con cero(0) la cantidad de Llamadas en las fechas,
-                //dónde no hubo Llamadas en la Tienda 
-                for (Tienda store : listTiendaNew) {
-                    ReporteHelper helper = new ReporteHelper();
-                    helper.setRango(currentDate);
-                    helper.setTienda(store);
-                    helper.setDominio(0);
-                    listData.add(helper);
-                }
-
-                //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
-                Collections.sort(listData, new Comparator<ReporteHelper>() {
-                    @Override
-                    public int compare(ReporteHelper f1, ReporteHelper f2) {
-                        return f1.getTienda().getNombre().compareTo(f2.getTienda().getNombre());
-                    }
-                });
-
-                mapTiendaLlamadas.put(currentDate, listData);
-            }
-
-            //Convierto el Mapa en una lista para mostrar la vista
-            for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
-                ReporteServer reporteServer = new ReporteServer();
-                reporteServer.setFecha(convertirFecha((String) mapa.getKey().toString()));
-                reporteServer.setReporteHelper(mapa.getValue());
-                listReporteServer.add(reporteServer);
-            }
-
-            //Ordeno la Lista por Fecha 
-            Collections.sort(listReporteServer);
+            //Se obtiene la lista de Datos procesados
+            listReporteServer = procesoDatos(listTiendaFinal, fechas, reporteData, caso);
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
@@ -183,29 +107,8 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
     @Override
     public void createCategoryModel() {
 
-        List<Tienda> listTiendaFinal = new ArrayList<>();
-
-        //Si se selecciona el check todas las Tiendas
-        if (getSelectedAllTiendas().size() > 0) {
-            for (int i = 0; i < listTienda.size(); i++) {
-                listTiendaFinal.add(listTienda.get(i));
-            }
-            //Si se selecciona el check de cada Tienda
-        } else if (selectedTiendas.size() > 0) {
-            for (int i = 0; i < selectedTiendas.size(); i++) {
-                int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
-                tienda = tiendaFacade.find(idTiendaSelected);
-                listTiendaFinal.add(tienda);
-            }
-        }
-
-        //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
-        Collections.sort(listTiendaFinal, new Comparator<Tienda>() {
-            @Override
-            public int compare(Tienda f1, Tienda f2) {
-                return f1.getNombre().compareTo(f2.getNombre());
-            }
-        });
+        //Obtengo la Lista de Tiendas seleccionadas
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
 
         categoryModel = new CartesianChartModel();
 
@@ -216,6 +119,7 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             i++;
         }
 
+        //Se recorre la Lista de Datos
         for (ReporteServer data : listReporteServer) {
             int z = 0;
             for (ReporteHelper report : data.getReporteHelper()) {
@@ -228,6 +132,7 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             }
         }
 
+        //Se agregan las SEries al CategoryModel
         int j = 0;
         for (Tienda store : listTiendaFinal) {
             stores[j].setLabel(store.getNombre());

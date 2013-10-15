@@ -1,5 +1,6 @@
 package com.spontecorp.ferretotalserver.controller.reporte;
 
+import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
 import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
@@ -7,7 +8,10 @@ import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -37,9 +41,9 @@ public abstract class LlamadaReporteAbstract {
     protected Tienda tienda;
     protected List<Tienda> listTienda;
     protected List<Llamada> totalLlamadas;
-    protected List<String> selectedTiendas;  
+    protected List<String> selectedTiendas;
     protected List<String> selectedAllTiendas;
-    protected Map<String,Integer> tiendas; 
+    protected Map<String, Integer> tiendas;
     private Map<String, String> allTiendas;
     protected boolean showTable = false;
     protected boolean showChart = false;
@@ -62,7 +66,7 @@ public abstract class LlamadaReporteAbstract {
     private Long totalCalls;
     private Long diasEntreFechas;
     private boolean tiempos;
-  
+
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -102,7 +106,7 @@ public abstract class LlamadaReporteAbstract {
     public void setSelectedTiendas(List<String> selectedTiendas) {
         this.selectedTiendas = selectedTiendas;
     }
-    
+
     public List<String> getSelectedAllTiendas() {
         return selectedAllTiendas;
     }
@@ -113,19 +117,19 @@ public abstract class LlamadaReporteAbstract {
 
     public Map<String, Integer> getTiendas() {
         List<Tienda> allTiendas = getListTienda();
-        tiendas = new HashMap<String, Integer>();  
-        
-        for(Tienda tiendaItem : allTiendas){
-            tiendas.put(tiendaItem.getNombre(), tiendaItem.getId());  
+        tiendas = new HashMap<String, Integer>();
+
+        for (Tienda tiendaItem : allTiendas) {
+            tiendas.put(tiendaItem.getNombre(), tiendaItem.getId());
         }
-        
+
         return tiendas;
     }
 
     public void setTiendas(Map<String, Integer> tiendas) {
         this.tiendas = tiendas;
     }
-    
+
     public Map<String, String> getAllTiendas() {
         allTiendas = new HashMap<String, String>();
         allTiendas.put("Todas las Tiendas", "0");
@@ -282,7 +286,141 @@ public abstract class LlamadaReporteAbstract {
             fechaInicio = new Date(cal.getTimeInMillis());
         }
     }
-    
+
+    /**
+     * Obtengo la Lista de Tiendas seleccionadas
+     *
+     * @return
+     */
+    public List<Tienda> obtenerListTiendaSeleccionadas() {
+
+        List<Tienda> listTiendaFinal = new ArrayList<>();
+
+        //Si se selecciona el check todas las Tiendas
+        if (getSelectedAllTiendas().size() > 0) {
+            for (int i = 0; i < listTienda.size(); i++) {
+                listTiendaFinal.add(listTienda.get(i));
+            }
+            //Si se selecciona el check de cada Tienda
+        } else if (selectedTiendas.size() > 0) {
+            for (int i = 0; i < selectedTiendas.size(); i++) {
+                int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
+                tienda = tiendaFacade.find(idTiendaSelected);
+                listTiendaFinal.add(tienda);
+            }
+            //Si no se selecciona el check de ninguna Tienda ni el check de Todas las Tiendas
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda que desea consultar.");
+        }
+
+        //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
+        if (listTiendaFinal.size() > 0) {
+            Collections.sort(listTiendaFinal, new Comparator<Tienda>() {
+                @Override
+                public int compare(Tienda f1, Tienda f2) {
+                    return f1.getNombre().compareTo(f2.getNombre());
+                }
+            });
+        }
+
+        return listTiendaFinal;
+
+    }
+
+    /**
+     * Se procesan los Datos para generar la lista de Reporte Server
+     *
+     * @param listTiendaFinal
+     * @param dispositivos
+     * @param reporteData
+     * @return
+     */
+    public List<ReporteServer> procesoDatos(List<Tienda> listTiendaFinal, List<Object> criterio, List<ReporteHelper> reporteData, int caso) {
+
+        Map<Object, List<ReporteHelper>> mapTiendaLlamadas = new HashMap<>();
+
+        //Lleno el Mapa para agrupar por Criterio (Fecha, Dispositivo o Asesor)
+        for (Object currentDisp : criterio) {
+            List<ReporteHelper> listData = new ArrayList<>();
+            List<Tienda> listaTiendaSinData = new ArrayList<>();
+            List<Tienda> listaTiendaConData = new ArrayList<>();
+            for (ReporteHelper reporte : reporteData) {
+                List<Tienda> totalTiendas = listTiendaFinal;
+                if (reporte.getRango().equals(currentDisp)) {
+                    for (Tienda tiendaActual : totalTiendas) {
+                        if (tiendaActual.getId() == reporte.getTienda().getId()) {
+                            listData.add(reporte);
+                            listaTiendaConData.add(tiendaActual);
+                            if (listaTiendaSinData.contains(tiendaActual)) {
+                                listaTiendaSinData.remove(tiendaActual);
+                            }
+                        } else {
+                            if (!listaTiendaSinData.contains(tiendaActual) && !listaTiendaConData.contains(tiendaActual)) {
+                                listaTiendaSinData.add(tiendaActual);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Lleno con cero(0) la cantidad de Llamadas en las Dispositivos,
+            //dónde no hubo Llamadas en la Tienda para una fecha determinada
+            for (Tienda store : listaTiendaSinData) {
+                ReporteHelper helper = new ReporteHelper();
+                helper.setRango(currentDisp);
+                helper.setTienda(store);
+                helper.setDominio(0);
+                listData.add(helper);
+            }
+
+            //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
+            Collections.sort(listData, new Comparator<ReporteHelper>() {
+                @Override
+                public int compare(ReporteHelper f1, ReporteHelper f2) {
+                    return f1.getTienda().getNombre().compareTo(f2.getTienda().getNombre());
+                }
+            });
+
+            mapTiendaLlamadas.put(currentDisp, listData);
+        }
+
+        //Si el Criterio es la Fecha 
+        if (caso == 1) {
+            //Convierto el Mapa en una lista para mostrar la vista
+            for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
+                ReporteServer reporteServer = new ReporteServer();
+                reporteServer.setFecha(convertirFecha((String) mapa.getKey().toString()));
+                reporteServer.setReporteHelper(mapa.getValue());
+                listReporteServer.add(reporteServer);
+            }
+            if (listReporteServer.size() > 0) {
+                //Ordeno la Lista por Criterio (Fecha)
+                Collections.sort(listReporteServer);
+            }
+            //Si el Criterio es Deispositio o Asesor
+        } else {
+            //Convierto el Mapa en una lista para mostrar la vista
+            for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
+                ReporteServer reporteServer = new ReporteServer();
+                reporteServer.setCurrent(mapa.getKey().toString());
+                reporteServer.setReporteHelper(mapa.getValue());
+                listReporteServer.add(reporteServer);
+            }
+            if (listReporteServer.size() > 0) {
+                //Ordeno la Lista por Criterio (Dispositivo o Asesor)
+                Collections.sort(listReporteServer, new Comparator<ReporteServer>() {
+                    @Override
+                    public int compare(ReporteServer f1, ReporteServer f2) {
+                        return f1.getCurrent().compareTo(f2.getCurrent());
+                    }
+                });
+            }
+        }
+
+        return listReporteServer;
+
+    }
+
     /**
      * Método para recibir fecha String en formato dd-MM-yyyy y retornar un
      * objeto tipo Date con la fecha dada
