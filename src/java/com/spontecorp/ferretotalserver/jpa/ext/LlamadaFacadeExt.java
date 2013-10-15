@@ -80,6 +80,11 @@ public class LlamadaFacadeExt extends LlamadaFacade {
                         + "WHERE ll.tiendaId = :tienda AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
                         + "GROUP BY ll.asesor";
                 break;
+            case ReporteHelper.CALIDAD_TOTAL_TIENDA:
+                query = "SELECT ll.calidad, COUNT(ll), ll.tiendaId FROM Llamada ll "
+                        + "WHERE ll.tiendaId = :tienda AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
+                        + "GROUP BY ll.calidad";
+                break;
             case ReporteHelper.LLAMADAS_TURNO:
                 query = "SELECT t, COUNT(ll) "
                         + "FROM Llamada ll, Distribucion d, Turno t "

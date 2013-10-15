@@ -50,7 +50,8 @@ public class JpaUtilities {
     // Tipo de reporte a mostrar
     public static final int REPORTE_POR_FECHA = 1;
     public static final int REPORTE_POR_DISPOSITIVO = 2;
-    public static final int REPORTE_POR_FERREASESOR = 2;
+    public static final int REPORTE_POR_FERREASESOR = 3;
+    public static final int REPORTE_POR_CALIDAD = 4;
 
     public JpaUtilities(){
     }

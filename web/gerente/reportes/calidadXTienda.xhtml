@@ -81,10 +81,8 @@
 
                         </p:columnGroup>  
                         <f:facet name="header">  
-                            Fecha: 
-                            <h:outputText value="#{report.fecha}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </h:outputText>
+                            Calidad: 
+                            <h:outputText value="#{report.current}" /> 
                         </f:facet>  
                         <p:column style="text-align: center;">  
                             #{data.tienda.nombre}  
@@ -104,7 +102,7 @@
                     <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
                         <p:panel id="panelChart" rendered="#{calidadXTiendaBean.showChart and calidadXTiendaBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
                             <p:barChart value="#{calidadXTiendaBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
-                                        title="Total Llamadas entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                                        title="Calidad de Llamadas por Tienda en un Período" style="width: 80%; margin-left: 85px;" extender="customExtender" />
                             <br/>
                             <h:panelGrid columns="3">
                                 <h:commandButton value="Exportar PDF"  actionListener="#{calidadXTiendaBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>

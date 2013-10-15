@@ -49,36 +49,33 @@ public class CalidadXTiendaController extends LlamadaReporteAbstract implements 
 
         //Obtengo la Lista de Tiendas seleccionadas
         List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
-        //Lista de Fechas 
-        List<Object> fechas = new ArrayList<>();
-        
-        Map<Object, List<ReporteHelper>> mapTiendaLlamadas = new HashMap<>();
+        //Lista de Calidad 
+        List<Object> calidadList = new ArrayList<>();
 
         if (listTiendaFinal.size() > 0) {
             //Recorro la lista de Tiendas Seleccionadas
             for (Tienda tiendaActual : listTiendaFinal) {
 
                 //Busco la lista de Llamadas para la Tienda seleccionada
-                setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_TOTALES_TIENDA, tiendaActual, fechaInicio, fechaFin));
+                setResult(facade.findLlamadas(ReporteHelper.CALIDAD_TOTAL_TIENDA, tiendaActual, fechaInicio, fechaFin));
 
-                for (Object[] array : getResult()) {
+                for (Object[] array : result) {
                     ReporteHelper helper = new ReporteHelper();
-                    //Armo una lista de Fechas
-                    String date = sdf.format((Date) array[0]);
-                    if (!fechas.contains(date)) {
-                        fechas.add(date);
+                    //Armo una lista de Calidad
+                    String calidad = (String) array[0];
+                    if (!calidadList.contains(calidad)) {
+                        calidadList.add(calidad);
                     }
+                    helper.setRango(((String) array[0]));
                     helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-                    helper.setRango(sdf.format((Date) array[0]));
                     helper.setTienda((Tienda) array[2]);
-
                     reporteData.add(helper);
                 }
                 
             }
 
             //Se obtiene la lista de Datos procesados
-            listReporteServer = procesoDatos(listTiendaFinal, fechas, reporteData, JpaUtilities.REPORTE_POR_FECHA);
+            listReporteServer = procesoDatos(listTiendaFinal, calidadList, reporteData, JpaUtilities.REPORTE_POR_CALIDAD);
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);

@@ -51,8 +51,6 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
         //Lista de Fechas 
         List<Object> fechas = new ArrayList<>();
-        
-        Map<Object, List<ReporteHelper>> mapTiendaLlamadas = new HashMap<>();
 
         if (listTiendaFinal.size() > 0) {
             //Recorro la lista de Tiendas Seleccionadas

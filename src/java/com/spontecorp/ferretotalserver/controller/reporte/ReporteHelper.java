@@ -28,6 +28,7 @@ public class ReporteHelper {
     public static final int LLAMADAS_TOTALES_TIENDA = 13;
     public static final int LLAMADAS_DISPOSITIVO_TIENDA = 14;
     public static final int LLAMADAS_ASESOR_TIENDA = 15;
+    public static final int CALIDAD_TOTAL_TIENDA = 16;
 
     public Object getRango() {
         return rango;
