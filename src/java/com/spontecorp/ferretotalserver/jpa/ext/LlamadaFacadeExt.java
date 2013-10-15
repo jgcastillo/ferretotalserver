@@ -24,24 +24,14 @@ public class LlamadaFacadeExt extends LlamadaFacade {
     private EntityManager em = emf.createEntityManager();
     private static final Logger logger = LoggerFactory.getLogger(LlamadaFacadeExt.class);
 
-    public List<Object[]> findLlamadas(Date fechaInicio, Date fechaFin) {
-        String q = "SELECT ll.fechaClose, count(ll) FROM Llamada ll "
-                + "WHERE ll.accion = '0' AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin "
-                + "GROUP BY ll.fechaClose";
-        Query query = em.createQuery(q);
-        query.setParameter("fechaInicio", fechaInicio);
-        query.setParameter("fechaFin", fechaFin);
-        return query.getResultList();
-    }
-
     /**
      * Devuelve una lista de llamadas entre dos fechas, dependiendo del query
      * que reciba
-     *
-     * @param tipo de reporte
+     * @param tipo
+     * @param tienda
      * @param fechaInicio
      * @param fechaFin
-     * @return
+     * @return 
      */
     public List<Object[]> findLlamadas(int tipo, Tienda tienda, Date fechaInicio, Date fechaFin) {
         String query = "";
@@ -86,60 +76,27 @@ public class LlamadaFacadeExt extends LlamadaFacade {
     }
 
     /**
-     * Devuelve una lista de llamadas entre dos fechas
-     *
+     * Devuelve una lista de llamadas entre dos fechas 
+     * Para la Tienda seleccionada
+     * @param tienda
      * @param fechaInicio
      * @param fechaFin
-     * @return
+     * @return 
      */
-    public List<Llamada> findLlamadasList(Date fechaInicio, Date fechaFin) {
+    public List<Llamada> findLlamadasList(Tienda tienda, Date fechaInicio, Date fechaFin) {
         List<Llamada> result = null;
-        String query = "SELECT ll "
-                + "FROM Llamada ll , Distribucion d, Tiempo t WHERE ll.distribucionId.id = d.id AND ll.tiempoId.id = t.id "
-                + "AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin AND ll.accion = '0'"
-                + "ORDER BY ll.id";
+        String query = "SELECT ll FROM Llamada ll WHERE ll.tiendaId = :tienda AND "
+                + "ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin ORDER BY ll.id";
         try {
             Query q = em.createQuery(query);
             q.setParameter("fechaInicio", fechaInicio);
             q.setParameter("fechaFin", fechaFin);
+            q.setParameter("tienda", tienda);
             result = q.getResultList();
         } catch (Exception e) {
             logger.error("Error generando los datos: " + e);
         }
         return result;
-
-
     }
 
-    /**
-     * Cuenta las llamdas entre dos fechas
-     *
-     * @param fechaInicial
-     * @param fechaFin
-     * @return la cantidad de llamadas
-     */
-    public Long getLlamadaCount(Date fechaInicio, Date fechaFin) {
-        String query = "SELECT COUNT(ll) FROM Llamada ll "
-                + "WHERE ll.accion = '0' AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin ";
-        Query q = em.createQuery(query);
-        q.setParameter("fechaInicio", fechaInicio);
-        q.setParameter("fechaFin", fechaFin);
-        return (Long) q.getSingleResult();
-    }
-
-    /**
-     * Cuenta la cantidad de llamdas cerradas entre dos fechas
-     *
-     * @param fechaInicial
-     * @param fechaFin
-     * @return
-     */
-    public Long getDiasEntreFechasCount(Date fechaInicial, Date fechaFin) {
-        String query = "SELECT COUNT(DISTINCT ll.fechaClose) FROM Llamada ll "
-                + "WHERE ll.accion = '0' AND ll.fechaClose >= :fechaInicio AND ll.fechaClose <= :fechaFin ";
-        Query q = em.createQuery(query);
-        q.setParameter("fechaInicio", fechaInicial);
-        q.setParameter("fechaFin", fechaFin);
-        return (Long) q.getSingleResult();
-    }
 }
