@@ -46,6 +46,11 @@ public class JpaUtilities {
     public static final int PREGUNTA_NUMERICA = 2;
     public static final int PREGUNTA_SELECCION = 3;
     public static final int PREGUNTA_CALIFICACION = 4;
+    
+    // Tipo de reporte a mostrar
+    public static final int REPORTE_POR_FECHA = 1;
+    public static final int REPORTE_POR_DISPOSITIVO = 2;
+    public static final int REPORTE_POR_FERREASESOR = 2;
 
     public JpaUtilities(){
     }

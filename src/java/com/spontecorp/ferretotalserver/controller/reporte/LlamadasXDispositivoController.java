@@ -3,6 +3,7 @@ package com.spontecorp.ferretotalserver.controller.reporte;
 import com.spontecorp.ferretotalserver.controller.chart.BarChart;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
+import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,6 @@ public class LlamadasXDispositivoController extends LlamadaReporteAbstract imple
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
         listReporteServer = new ArrayList<>();
-        //Se Ordena por Dispositivo
-        int caso = 2;
 
         //Obtengo las Tiendas Seleccionadas
         getSelectedAllTiendas();
@@ -71,7 +70,8 @@ public class LlamadasXDispositivoController extends LlamadaReporteAbstract imple
             }
 
             //Se obtiene la lista de Datos procesados
-            listReporteServer = procesoDatos(listTiendaFinal, dispositivos, reporteData, caso);
+            listReporteServer = procesoDatos(listTiendaFinal, dispositivos, 
+                            reporteData, JpaUtilities.REPORTE_POR_DISPOSITIVO);
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);

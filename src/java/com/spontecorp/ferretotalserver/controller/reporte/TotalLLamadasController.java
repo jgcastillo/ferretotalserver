@@ -3,6 +3,7 @@ package com.spontecorp.ferretotalserver.controller.reporte;
 import com.spontecorp.ferretotalserver.controller.chart.BarChart;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
+import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,8 +40,6 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
         listReporteServer = new ArrayList<>();
-        //Se Ordena por Fecha
-        int caso = 1;
 
         //Obtengo las Tiendas Seleccionadas
         getSelectedAllTiendas();
@@ -79,7 +78,7 @@ public class TotalLLamadasController extends LlamadaReporteAbstract implements S
             }
 
             //Se obtiene la lista de Datos procesados
-            listReporteServer = procesoDatos(listTiendaFinal, fechas, reporteData, caso);
+            listReporteServer = procesoDatos(listTiendaFinal, fechas, reporteData, JpaUtilities.REPORTE_POR_FECHA);
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
