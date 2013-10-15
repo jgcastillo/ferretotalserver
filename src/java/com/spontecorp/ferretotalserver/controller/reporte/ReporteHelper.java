@@ -13,22 +13,12 @@ public class ReporteHelper {
     private Number dominio;
     private Object nombreObj;
     private Object[] propiedadObj;
-    public static final int LLAMADAS_TOTALES = 1;
-    public static final int LLAMADAS_DISPOSITIVO = 2;
-    public static final int LLAMADAS_ASESOR = 3;
-    public static final int LLAMADAS_TURNO = 4;
-    public static final int PROMEDIO_PULSACIONES = 5;
-    public static final int TIEMPOS_X_DISPOSITIVO = 6;
-    public static final int TIEMPOS_X_FERREASESOR = 7;
-    public static final int TIEMPOS_X_TURNO = 8;
-    public static final int CALIDAD_X_DISPOSITIVO = 9;
-    public static final int CALIDAD_X_FERREASESOR = 10;
-    public static final int CALIDAD_X_TURNO = 11;
-    public static final int CALIDAD_TOTAL = 12;
-    public static final int LLAMADAS_TOTALES_TIENDA = 13;
-    public static final int LLAMADAS_DISPOSITIVO_TIENDA = 14;
-    public static final int LLAMADAS_ASESOR_TIENDA = 15;
-    public static final int CALIDAD_TOTAL_TIENDA = 16;
+    
+    public static final int LLAMADAS_TOTALES_TIENDA = 1;
+    public static final int LLAMADAS_DISPOSITIVO_TIENDA = 2;
+    public static final int LLAMADAS_ASESOR_TIENDA = 3;
+    public static final int CALIDAD_TOTAL_TIENDA = 4;
+    public static final int TIEMPO_TOTAL_TIENDA = 5;
 
     public Object getRango() {
         return rango;
