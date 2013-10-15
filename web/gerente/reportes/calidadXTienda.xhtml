@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/templates/layout.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        <title>Calidad Total de Llamadas por Tienda en un Período</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:fieldset>
+            <f:facet name="legend">
+                <h3>
+                    <h:outputText value="Calidad Total de Llamadas por Tienda en un Período"/>
+                </h3>
+            </f:facet>
+
+            <h:form id="formTotalLlamada"><br/>               
+                <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{calidadXTiendaBean.selectedTiendas}" >  
+                        <f:selectItems value="#{calidadXTiendaBean.tiendas}" /> 
+                    </p:selectManyCheckbox> 
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="margin-bottom: 10px;">
+                    <h:outputText value="Consultar: " />  
+                    <p:selectManyCheckbox value="#{calidadXTiendaBean.selectedAllTiendas}">  
+                        <f:selectItems value="#{calidadXTiendaBean.allTiendas}" /> 
+                    </p:selectManyCheckbox> 
+                </h:panelGrid>
+                <h:panelGrid columns="8">
+                    <h:outputLabel value="Fecha inicio: " for="fechaInicio"/>
+                    <p:calendar id="fechaInicio" value="#{calidadXTiendaBean.fechaInicio}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <h:outputLabel value="Fecha fin: " for="fechaFin"/>
+                    <p:calendar id="fechaFin" value="#{calidadXTiendaBean.fechaFin}" 
+                                showOn="button" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="15"/>
+                    <p:commandButton value="Obtener Datos"  actionListener="#{calidadXTiendaBean.populateLlamadas}" ajax="true" update="formTotalLlamada"/>
+                    <p:spacer style="width: 10px;"/>
+                </h:panelGrid>
+                <br/>
+                <p:ajaxStatus style="right:45%; left:45%">  
+                    <f:facet name="start">  
+                        <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+                    </f:facet>  
+                    <f:facet name="complete">  
+                        <h:outputText value="" />  
+                    </f:facet>  
+                </p:ajaxStatus>
+                <h:panelGroup id="messageTotalLlamada" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <br/>
+                <p:dataTable id="reportTable" var="report" value="#{calidadXTiendaBean.listReporteServer}"
+                             style="width: 79%;margin-left: 85px;" rendered="#{calidadXTiendaBean.showTable}"
+                              paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
+                    <f:facet name="header">  
+                        <p  style="text-align: center">Total Llamadas entre Fechas<br/>
+                            (<h:outputText value="#{calidadXTiendaBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
+                            - <h:outputText value="#{calidadXTiendaBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
+                        </p>
+                    </f:facet>
+                    <p:columnGroup type="header">  
+                           <p:row>  
+                            <p:column headerText="Tienda" />  
+                            <p:column headerText="Cantidad Llamadas" />  
+                        </p:row>  
+                    </p:columnGroup>  
+                    <p:subTable var="data" value="#{report.reporteHelper}">  
+                        <p:columnGroup type="header">  
+                            <p:row>  
+                                <p:column rowspan="2" headerText="Tienda" />  
+                                <p:column colspan="2" headerText="Cantidad" />  
+                            </p:row>  
+
+                        </p:columnGroup>  
+                        <f:facet name="header">  
+                            Fecha: 
+                            <h:outputText value="#{report.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </f:facet>  
+                        <p:column style="text-align: center;">  
+                            #{data.tienda.nombre}  
+                        </p:column>  
+                        <p:column style="text-align: center;">  
+                            #{data.dominio}  
+                        </p:column>  
+                    </p:subTable>  
+                </p:dataTable>
+                <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
+                    <br/>
+                    <p:commandButton value="Gráfico Barras" rendered="#{calidadXTiendaBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
+                                     actionListener="#{calidadXTiendaBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
+
+                    <br/><br/>
+<!--                    Estoy trabajando para obtener los Graficos correctamente -->
+                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
+                        <p:panel id="panelChart" rendered="#{calidadXTiendaBean.showChart and calidadXTiendaBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
+                            <p:barChart value="#{calidadXTiendaBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
+                                        title="Total Llamadas entre Fechas" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{calidadXTiendaBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{calidadXTiendaBean.exportarReporteXLS}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:panel>
+                </p:panel>
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+</ui:composition>

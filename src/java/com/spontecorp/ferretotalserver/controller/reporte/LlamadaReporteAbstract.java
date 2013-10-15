@@ -5,6 +5,7 @@ import com.spontecorp.ferretotalserver.entity.Llamada;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
+import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -385,7 +386,7 @@ public abstract class LlamadaReporteAbstract {
         }
 
         //Si el Criterio es la Fecha 
-        if (caso == 1) {
+        if (caso == JpaUtilities.REPORTE_POR_FECHA) {
             //Convierto el Mapa en una lista para mostrar la vista
             for (Map.Entry<Object, List<ReporteHelper>> mapa : mapTiendaLlamadas.entrySet()) {
                 ReporteServer reporteServer = new ReporteServer();
