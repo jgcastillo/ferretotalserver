@@ -56,7 +56,7 @@
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
                 <br/>
-                <p:dataTable id="reportTable" var="report" value="#{llamadasXasesorBean.listReporteServer}"
+                <p:dataTable id="reportTable" var="tienda" value="#{llamadasXasesorBean.listTiendaXAsesor}"
                              style="width: 79%;margin-left: 85px;" rendered="#{llamadasXasesorBean.showTable}"
                               paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                               rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
@@ -68,11 +68,11 @@
                     </f:facet>
                     <p:columnGroup type="header">  
                            <p:row>  
-                            <p:column headerText="Tienda" />  
+                            <p:column headerText="FerreAsesor" />  
                             <p:column headerText="Cantidad Llamadas" />  
                         </p:row>  
                     </p:columnGroup>  
-                    <p:subTable var="data" value="#{report.reporteHelper}">  
+                    <p:subTable var="data" value="#{tienda.reporteHelperList}">  
                         <p:columnGroup type="header">  
                             <p:row>  
                                 <p:column rowspan="2" headerText="Tienda" />  
@@ -81,36 +81,18 @@
 
                         </p:columnGroup>  
                         <f:facet name="header">  
-                            FerreAsesor: 
-                            <h:outputText value="#{report.current}" />   
+                            Tienda: 
+                            <h:outputText value="#{tienda.nombre}" />   
                         </f:facet>  
                         <p:column style="text-align: center;">  
-                            #{data.tienda.nombre}  
+                            #{data.rango}  
                         </p:column>  
                         <p:column style="text-align: center;">  
                             #{data.dominio}  
                         </p:column>  
                     </p:subTable>  
                 </p:dataTable>
-                <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
-                    <br/>
-                    <p:commandButton value="Gráfico Barras" rendered="#{llamadasXasesorBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
-                                     actionListener="#{llamadasXasesorBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
 
-                    <br/><br/>
-                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
-                        <p:panel id="panelChart" rendered="#{llamadasXasesorBean.showChart and llamadasXasesorBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
-                            <p:barChart value="#{llamadasXasesorBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
-                                        title="Total Llamadas entre Fechas por Asesor" style="width: 80%; margin-left: 85px;" extender="customExtender" />
-                            <br/>
-                            <h:panelGrid columns="3">
-                                <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXasesorBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
-                                <p:spacer style="width: 10px;"/>
-                                <h:commandButton value="Exportar Excel"  actionListener="#{llamadasXasesorBean.exportarReporteXLS}" title="Exportar a Excel"/>
-                            </h:panelGrid>
-                        </p:panel>
-                    </p:panel>
-                </p:panel>
             </h:form>
         </p:fieldset>
     </ui:define>

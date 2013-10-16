@@ -3,7 +3,6 @@ package com.spontecorp.ferretotalserver.controller.reporte;
 import com.spontecorp.ferretotalserver.controller.chart.BarChart;
 import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.ext.LlamadaFacadeExt;
-import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.PieChartModel;
 
 /**
  *
@@ -37,6 +33,7 @@ public class LlamadasXAsesorController extends LlamadaReporteAbstract implements
         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
         listReporteServer = new ArrayList<>();
+        listTiendaXAsesor = new ArrayList<>();
 
         //Obtengo las Tiendas Seleccionadas
         getSelectedAllTiendas();
@@ -54,7 +51,7 @@ public class LlamadasXAsesorController extends LlamadaReporteAbstract implements
             for (Tienda tiendaActual : listTiendaFinal) {
                 //Seteo la busqueda
                 setResult(facade.findLlamadas(ReporteHelper.LLAMADAS_ASESOR_TIENDA, tiendaActual, fechaInicio, fechaFin));
-
+                List<ReporteHelper> reporteDataTienda = new ArrayList<>();
                 for (Object[] array : result) {
                     ReporteHelper helper = new ReporteHelper();
                     //Armo una lista de FerreAsesores
@@ -65,13 +62,18 @@ public class LlamadasXAsesorController extends LlamadaReporteAbstract implements
                     helper.setRango(((String) array[0]));
                     helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
                     helper.setTienda((Tienda) array[2]);
-                    reporteData.add(helper);
+                    reporteDataTienda.add(helper);
                 }
+                if(result.isEmpty()){
+                    ReporteHelper helper = new ReporteHelper();
+                    helper.setRango(("No hay FerreAsesores disponibles para la fecha."));
+                    helper.setDominio(0);
+                    helper.setTienda(tiendaActual);
+                    reporteDataTienda.add(helper);
+                }
+                tiendaActual.setReporteHelperList(reporteDataTienda);
+                listTiendaXAsesor.add(tiendaActual);
             }
-
-            //Se obtiene la lista de Datos procesados
-            listReporteServer = procesoDatos(listTiendaFinal, ferreasesores,
-                    reporteData, JpaUtilities.REPORTE_POR_FERREASESOR);
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
@@ -79,7 +81,7 @@ public class LlamadasXAsesorController extends LlamadaReporteAbstract implements
             setNombreDominio(nombreDominio);
 
             showTable = true;
-            chartButtonDisable = false;
+
         }
     }
 
@@ -92,42 +94,13 @@ public class LlamadasXAsesorController extends LlamadaReporteAbstract implements
         return barChart.getBarChart();
     }
 
+    @Override
+    public void createCategoryModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * Metodo para Generar el Grafico en PrimeFaces
      */
-    @Override
-    public void createCategoryModel() {
-        //Obtengo la Lista de Tiendas seleccionadas
-        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
-
-        categoryModel = new CartesianChartModel();
-
-        ChartSeries[] stores = new ChartSeries[listTiendaFinal.size()];
-        int i = 0;
-        for (Tienda store : listTiendaFinal) {
-            stores[i] = new ChartSeries();
-            i++;
-        }
-
-        //Se recorre la Lista de Datos
-        for (ReporteServer data : listReporteServer) {
-            int z = 0;
-            for (ReporteHelper report : data.getReporteHelper()) {
-                for (Tienda store : listTiendaFinal) {
-                    if (store.getNombre().equalsIgnoreCase(report.getTienda().getNombre())) {
-                        stores[z].set(report.getRango().toString(), report.getDominio());
-                    }
-                }
-                z++;
-            }
-        }
-
-        int j = 0;
-        //Se agregan las Series al CategoryModel
-        for (Tienda store : listTiendaFinal) {
-            stores[j].setLabel(store.getNombre());
-            categoryModel.addSeries(stores[j]);
-            j++;
-        }
-    }
+    
 }

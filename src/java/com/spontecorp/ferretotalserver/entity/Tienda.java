@@ -4,6 +4,7 @@
  */
 package com.spontecorp.ferretotalserver.entity;
 
+import com.spontecorp.ferretotalserver.controller.reporte.ReporteHelper;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -18,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -67,6 +69,8 @@ public class Tienda implements Serializable {
     private String url;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tiendaId")
     private List<Llamada> llamadaList;
+    @Transient
+    private List<ReporteHelper> reporteHelperList;
 
     public Tienda() {
     }
@@ -138,6 +142,15 @@ public class Tienda implements Serializable {
     public void setLlamadaList(List<Llamada> llamadaList) {
         this.llamadaList = llamadaList;
     }
+
+    public List<ReporteHelper> getReporteHelperList() {
+        return reporteHelperList;
+    }
+
+    public void setReporteHelperList(List<ReporteHelper> reporteHelperList) {
+        this.reporteHelperList = reporteHelperList;
+    }
+
 
     @Override
     public int hashCode() {

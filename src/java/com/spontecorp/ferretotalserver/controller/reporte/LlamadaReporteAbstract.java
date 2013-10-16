@@ -41,6 +41,7 @@ public abstract class LlamadaReporteAbstract {
     protected Date fechaFin;
     protected Tienda tienda;
     protected List<Tienda> listTienda;
+    protected List<Tienda> listTiendaXAsesor;
     protected List<Llamada> totalLlamadas;
     protected List<String> selectedTiendas;
     protected List<String> selectedAllTiendas;
@@ -271,6 +272,14 @@ public abstract class LlamadaReporteAbstract {
 
     public void setCategoryModelPie(PieChartModel categoryModelPie) {
         this.categoryModelPie = categoryModelPie;
+    }
+
+    public List<Tienda> getListTiendaXAsesor() {
+        return listTiendaXAsesor;
+    }
+
+    public void setListTiendaXAsesor(List<Tienda> listTiendaXAsesor) {
+        this.listTiendaXAsesor = listTiendaXAsesor;
     }
 
     /**
