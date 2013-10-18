@@ -37,7 +37,6 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
     @EJB
     private EncuestaFacade ejbFacade;
     private Encuesta current;
-    private String hostname;
     private transient DataModel items = null;
     private static final int ACTIVO = 1;
     private static final int INACTIVO = 0;
@@ -46,8 +45,6 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
     private String nombreReporte;
     private List<Pregunta> preguntaList = null;
     private List<RespuestaConf> opcionsList = null;
-    private Date fechaInicio;
-    private Date fechaFin;
     private Logger logger = LoggerFactory.getLogger(EncuestaBeanController.class);
 
     public EncuestaBeanController() {
@@ -188,62 +185,22 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
      * @return
      */
     public String sendSurvey() {
-        try {
-            InitialContext context = new InitialContext();
-            HttpURLConnectionEncuestas httpURLConnection = (HttpURLConnectionEncuestas) context.lookup("java:module/HttpURLConnectionEncuestas");
 
-            //Verifico las Tiendas Seleccionadas
-            getSelectedAllTiendas();
-            getSelectedTiendas();
+        //Verifico las Tiendas Seleccionadas
+        getSelectedAllTiendas();
+        getSelectedTiendas();
 
-            //Obtengo la Lista de Tiendas seleccionadas Final
-            List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
+        //Obtengo la Lista de Tiendas seleccionadas Final
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
 
-            if (listTiendaFinal.size() > 0) {
-
-                for (Tienda tiendaActual : listTiendaFinal) {
-                    String url = null;
-
-                    //Seteo el URL de la Tienda
-                    hostname = tienda.getUrl();
-                    
-                    //Inicializo el Status de Conexión en False
-                    //Con esto se verifica la Conexión a la Tienda
-                    httpURLConnection.setStatusConnection(false);
-                    
-                    if (!hostname.equals("") && hostname != null) {
-
-                        //Construyo el URL
-                        url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.ENVIAR_ENCUESTA;
-                        setFechaInicio(current.getFechaInicio());
-                        setFechaFin(current.getFechaFin());
-                        current.setFechaInicioString(getFormatedFechaInicio());
-                        current.setFechaFinString(getFormatedFechaFin());
-
-                        //Llamo al método del WS para enviar la Encuesta
-                        //a la Tienda seleccionada
-                        httpURLConnection.sendSurveyWS(url, current);
-
-                    } else {
-                        JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: " + 
-                                tiendaActual.getNombre() + " Problemas al Conectarse. La Encuesta no se ha enviado.");
-                    }
-                    if (!httpURLConnection.getStatusConnection()) {
-                        JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre() + 
-                                " La Encuesta no se ha enviado.");
-                    } else {
-                        JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre() + 
-                                " La Encuesta fue enviada con éxito!");
-                    }
-                }
-
-            } else {
-                JsfUtil.addErrorMessage("Seleccione la Tienda a la que desea enviar la Encuesta.");
-            }
-            return prepareList();
-        } catch (Exception e) {
-            return null;
+        if (listTiendaFinal.size() > 0) {
+            //Acceder al WS para enviar la Encuesta a las Tienda(s) Seleccionada(s)
+            enviarEncuestaTiendaSeleccionadas(listTiendaFinal, current);
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda a la que desea enviar la Encuesta.");
         }
+        return prepareList();
+        
     }
 
     /**
@@ -265,7 +222,7 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
             if (selectedTiendas.size() > 0) {
                 for (int i = 0; i < selectedTiendas.size(); i++) {
                     String url = null;
-
+                    String hostname;
                     //Busco la Tienda seleccionada
                     int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
                     tienda = tiendaFacade.find(idTiendaSelected);
@@ -337,29 +294,5 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
 
         return preguntaList;
 
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public String getFormatedFechaInicio() {
-        return new SimpleDateFormat("dd-MM-yyyy").format(fechaInicio);
-    }
-
-    public String getFormatedFechaFin() {
-        return new SimpleDateFormat("dd-MM-yyyy").format(fechaFin);
     }
 }

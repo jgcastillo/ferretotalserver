@@ -5,15 +5,24 @@
 package com.spontecorp.ferretotalserver.controller.encuesta;
 
 import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
+import com.spontecorp.ferretotalserver.entity.Encuesta;
 import com.spontecorp.ferretotalserver.entity.Tienda;
+import com.spontecorp.ferretotalserver.jpa.HttpURLConnectionEncuestas;
 import com.spontecorp.ferretotalserver.jpa.TiendaFacade;
+import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -30,6 +39,9 @@ public class EncuestaAbstract {
     protected List<String> selectedAllTiendas;
     protected Map<String, Integer> tiendas;
     protected Map<String, String> allTiendas;
+    private String hostname;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     /**
      * Obtengo la Lista de Tiendas seleccionadas
@@ -53,8 +65,8 @@ public class EncuestaAbstract {
                 listTiendaFinal.add(tienda);
             }
             //Si no se selecciona el check de ninguna Tienda ni el check de Todas las Tiendas
-        } 
-        
+        }
+
         //Ordeno la Lista de Tiendas por Orden alfabético (Asc.)
         if (listTiendaFinal.size() > 0) {
             Collections.sort(listTiendaFinal, new Comparator<Tienda>() {
@@ -67,6 +79,58 @@ public class EncuestaAbstract {
 
         return listTiendaFinal;
 
+    }
+
+    /**
+     * Me conecto al WS para enviar la Encuesta a las Tienda(s) Seleccionada(s)
+     * @param listTiendaFinal
+     * @param current 
+     */
+    public void enviarEncuestaTiendaSeleccionadas(List<Tienda> listTiendaFinal, Encuesta current) {
+        try {
+            InitialContext context = new InitialContext();
+            HttpURLConnectionEncuestas httpURLConnection = (HttpURLConnectionEncuestas) context.lookup("java:module/HttpURLConnectionEncuestas");
+
+            for (Tienda tiendaActual : listTiendaFinal) {
+                String url = null;
+
+                //Seteo el URL de la Tienda
+                hostname = tiendaActual.getUrl();
+
+                //Inicializo el Status de Conexión en False
+                //Con esto se verifica la Conexión a la Tienda
+                httpURLConnection.setStatusConnection(false);
+
+                if (!hostname.equals("") && hostname != null) {
+
+                    //Construyo el URL
+                    url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.ENVIAR_ENCUESTA;
+                    setFechaInicio(current.getFechaInicio());
+                    setFechaFin(current.getFechaFin());
+                    current.setFechaInicioString(getFormatedFechaInicio());
+                    current.setFechaFinString(getFormatedFechaFin());
+
+                    //Llamo al método del WS para enviar la Encuesta
+                    //a la Tienda seleccionada
+                    httpURLConnection.sendSurveyWS(url, current);
+
+                } else {
+                    JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: "
+                            + tiendaActual.getNombre() + " Problemas al Conectarse. La Encuesta no se ha enviado.");
+                }
+                if (!httpURLConnection.getStatusConnection()) {
+                    JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre()
+                            + " La Encuesta no se ha enviado.");
+                } else {
+                    JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
+                            + " La Encuesta fue enviada con éxito!");
+                }
+            }
+        } catch (NamingException ex) {
+            Logger.getLogger(EncuestaAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(EncuestaAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Tienda getTienda() {
@@ -128,5 +192,29 @@ public class EncuestaAbstract {
 
     public void setListTienda(List<Tienda> listTienda) {
         this.listTienda = listTienda;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getFormatedFechaInicio() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(fechaInicio);
+    }
+
+    public String getFormatedFechaFin() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(fechaFin);
     }
 }
