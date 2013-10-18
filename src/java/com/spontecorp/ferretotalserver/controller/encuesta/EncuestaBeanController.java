@@ -14,13 +14,10 @@ import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -35,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 @ManagedBean(name = "encuestaBeanController")
 @SessionScoped
-public class EncuestaBeanController implements Serializable {
+public class EncuestaBeanController extends EncuestaAbstract implements Serializable {
 
     @EJB
     private EncuestaFacade ejbFacade;
@@ -49,12 +46,6 @@ public class EncuestaBeanController implements Serializable {
     private String nombreReporte;
     private List<Pregunta> preguntaList = null;
     private List<RespuestaConf> opcionsList = null;
-    private int tiendaId;
-    private Tienda tienda;
-    private List<Tienda> listTienda;
-    private List<String> selectedTiendas;
-    private List<String> selectedAll;
-    private Map<String, String> tiendas;
     private Date fechaInicio;
     private Date fechaFin;
     private Logger logger = LoggerFactory.getLogger(EncuestaBeanController.class);
@@ -199,59 +190,56 @@ public class EncuestaBeanController implements Serializable {
     public String sendSurvey() {
         try {
             InitialContext context = new InitialContext();
-            TiendaFacade tiendaFacade = (TiendaFacade) context.lookup("java:module/TiendaFacade");
             HttpURLConnectionEncuestas httpURLConnection = (HttpURLConnectionEncuestas) context.lookup("java:module/HttpURLConnectionEncuestas");
 
-            System.out.println("Tiendas seleccionadas: " + selectedTiendas.size());
-
-            //Obtengo las Tiendas Seleccionadas
+            //Verifico las Tiendas Seleccionadas
+            getSelectedAllTiendas();
             getSelectedTiendas();
 
-            if (selectedTiendas.size() > 0) {
+            //Obtengo la Lista de Tiendas seleccionadas Final
+            List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
 
-                for (int i = 0; i < selectedTiendas.size(); i++) {
+            if (listTiendaFinal.size() > 0) {
+
+                for (Tienda tiendaActual : listTiendaFinal) {
                     String url = null;
 
-                    //Busco la Tienda seleccionada
-                    int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
-                    tienda = tiendaFacade.find(idTiendaSelected);
+                    //Seteo el URL de la Tienda
+                    hostname = tienda.getUrl();
+                    
+                    //Inicializo el Status de Conexión en False
+                    //Con esto se verifica la Conexión a la Tienda
+                    httpURLConnection.setStatusConnection(false);
+                    
+                    if (!hostname.equals("") && hostname != null) {
 
-                    if (tienda != null) {
-                        System.out.println("La Tienda seleccionada es: "+tienda.getNombre());
-                        //Seteo el id de la Sucursal (Tienda)
-                        tiendaId = tienda.getSucursal();
-                        hostname = tienda.getUrl();
-                        if (!hostname.equals("") && hostname != null) {
-                            //Construyo el URL
-                            url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.ENVIAR_ENCUESTA;
+                        //Construyo el URL
+                        url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.ENVIAR_ENCUESTA;
+                        setFechaInicio(current.getFechaInicio());
+                        setFechaFin(current.getFechaFin());
+                        current.setFechaInicioString(getFormatedFechaInicio());
+                        current.setFechaFinString(getFormatedFechaFin());
 
-                            System.out.println("1.- URL: "+url);
-                            
-                            setFechaInicio(current.getFechaInicio());
-                            setFechaFin(current.getFechaFin());
-                            current.setFechaInicioString(getFormatedFechaInicio());
-                            current.setFechaFinString(getFormatedFechaFin());
+                        //Llamo al método del WS para enviar la Encuesta
+                        //a la Tienda seleccionada
+                        httpURLConnection.sendSurveyWS(url, current);
 
-                            //Llamo al método del WS para enviar la Encuesta
-                            //a la Tienda seleccionada
-                            httpURLConnection.sendSurveyWS(url, current);
-
-                        } else {
-                            JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: " + tienda.getNombre());
-                        }
+                    } else {
+                        JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: " + 
+                                tiendaActual.getNombre() + " Problemas al Conectarse. La Encuesta no se ha enviado.");
                     }
                     if (!httpURLConnection.getStatusConnection()) {
-                        JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tienda.getNombre());
+                        JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre() + 
+                                " La Encuesta no se ha enviado.");
                     } else {
-                        JsfUtil.addSuccessMessage("Encuesta enviada con éxito. Conexión exitosa con Tienda: " + tienda.getNombre() + " !");
+                        JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre() + 
+                                " La Encuesta fue enviada con éxito!");
                     }
                 }
 
-            }else{
-                JsfUtil.addErrorMessage("Seleccione una Tienda");
+            } else {
+                JsfUtil.addErrorMessage("Seleccione la Tienda a la que desea enviar la Encuesta.");
             }
-
-            //JsfUtil.addSuccessMessage("Encuesta enviada con éxito");
             return prepareList();
         } catch (Exception e) {
             return null;
@@ -349,73 +337,6 @@ public class EncuestaBeanController implements Serializable {
 
         return preguntaList;
 
-    }
-
-    public int getTiendaId() {
-        return tiendaId;
-    }
-
-    public void setTiendaId(int tiendaId) {
-        this.tiendaId = tiendaId;
-    }
-
-    public Tienda getTienda() {
-        return tienda;
-    }
-
-    public void setTienda(Tienda tienda) {
-        this.tienda = tienda;
-    }
-
-    /**
-     * Se obtiene la lista de Tiendas
-     *
-     * @return
-     */
-    public List<Tienda> getListTienda() throws NamingException {
-        InitialContext context = new InitialContext();
-        TiendaFacade tiendaFacade = (TiendaFacade) context.lookup("java:module/TiendaFacade");
-        listTienda = null;
-        if (listTienda == null) {
-            listTienda = tiendaFacade.findAll();
-        }
-        return listTienda;
-    }
-
-    public void setListTienda(List<Tienda> listTienda) {
-        this.listTienda = listTienda;
-    }
-
-    public List<String> getSelectedTiendas() {
-        return selectedTiendas;
-    }
-
-    public void setSelectedTiendas(List<String> selectedTiendas) {
-        this.selectedTiendas = selectedTiendas;
-    }
-
-    public List<String> getSelectedAll() {
-        return selectedAll;
-    }
-
-    public void setSelectedAll(List<String> selectedAll) {
-        this.selectedAll = selectedAll;
-    }
-
-    public Map<String, String> getTiendas() throws NamingException {
-        List<Tienda> allTiendas = getListTienda();
-        tiendas = new HashMap<String, String>();
-
-        for (Tienda tiendaItem : allTiendas) {
-            tiendas.put(tiendaItem.getNombre(), tiendaItem.getId().toString());
-        }
-        tiendas.put("Enviar a Todas las Tiendas", "0");
-
-        return tiendas;
-    }
-
-    public void setTiendas(Map<String, String> tiendas) {
-        this.tiendas = tiendas;
     }
 
     public Date getFechaInicio() {

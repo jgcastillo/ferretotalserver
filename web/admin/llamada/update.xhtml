@@ -12,13 +12,9 @@
     </ui:define>
 
     <ui:define name="content">
-        <p:fieldset>
-            <f:facet name="legend">
-                <h3>
-                    <h:outputText value="Actualizar Llamadas por Tiendas"/>
-                </h3>
-            </f:facet>
-            <h:form id="formTotalLlamada"><br/>
+
+        <h:form id="formTotalLlamada">
+            <p:panel header="Actualizar Llamadas. Seleccione la(s) Tienda(s) que desea actualizar." style="width:75%; margin-left:15px;">
                 <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
                     <h:outputText value="Actualizar: " />  
                     <p:selectManyCheckbox value="#{llamadasUpdateBean.selectedTiendas}" >  
@@ -31,14 +27,24 @@
                         <f:selectItems value="#{llamadasUpdateBean.allTiendas}" /> 
                     </p:selectManyCheckbox> 
                 </h:panelGrid>
-                <br/>
+<!--                <br/>
                 <p:commandButton value="Actualizar Datos"  actionListener="#{llamadasUpdateBean.updateLlamadasUsuario}"  ajax="true" update="formTotalLlamada"/>
                 <p:spacer style="width: 10px;"/>
-                <br/>
+                <br/>-->
                 <h:panelGroup id="messageTotalLlamada" layout="block">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
                 <br/>
+                <f:facet name="footer">
+                    <h:panelGrid columns="3" style="display:block;margin-left: 50%">
+                        <p:commandButton value="Actualizar Llamadas" title="Actualizar Llamadas" icon="ui-icon-signal-diag" 
+                                         actionListener="#{llamadasUpdateBean.updateLlamadasUsuario}"
+                                         ajax="true" update="formTotalLlamada"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
+                                         action="/main1.xhtml"/>
+                    </h:panelGrid>
+                </f:facet>
                 <p:ajaxStatus style="right:45%; left:45%">  
                     <f:facet name="start">  
                         <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
@@ -47,15 +53,17 @@
                         <h:outputText value="" />  
                     </f:facet>  
                 </p:ajaxStatus>
-            </h:form>
 
-            <!--Actualización Automática de Llamadas de Todas las Tiendas-->
-            <!--             <h:form id="formUpdate">
-                             <h:outputText value="Actualizando Llamadas"/>
-                             <p:poll interval="25" listener="#{llamadasUpdateBean.updateLlamadasAtomatica}" update="formUpdate" />  
-                         </h:form>-->
+            </p:panel>
+        </h:form>
 
-        </p:fieldset>
+        <!--Actualización Automática de Llamadas de Todas las Tiendas-->
+        <!--             <h:form id="formUpdate">
+                         <h:outputText value="Actualizando Llamadas"/>
+                         <p:poll interval="25" listener="#{llamadasUpdateBean.updateLlamadasAtomatica}" update="formUpdate" />  
+                     </h:form>-->
+
+
 
     </ui:define>
 
