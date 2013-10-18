@@ -52,6 +52,12 @@ public class JpaUtilities {
     public static final int REPORTE_POR_DISPOSITIVO = 2;
     public static final int REPORTE_POR_FERREASESOR = 3;
     public static final int REPORTE_POR_CALIDAD = 4;
+    
+    //Calidad de la Llamada
+    public static final String ATENCION_BUENA = "Buena";
+    public static final String ATENCION_REGULAR = "Regular";
+    public static final String ATENCION_MALA = "Mala";
+    public static final String CIERRE_AUTOMATICO = "Automatica";
 
     public JpaUtilities(){
     }

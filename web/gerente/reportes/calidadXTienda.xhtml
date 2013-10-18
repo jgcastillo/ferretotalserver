@@ -19,7 +19,7 @@
                 </h3>
             </f:facet>
 
-            <h:form id="formTotalLlamada"><br/>               
+            <h:form id="formCalidadXTienda"><br/>               
                 <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
                     <h:outputText value="Consultar: " />  
                     <p:selectManyCheckbox value="#{calidadXTiendaBean.selectedTiendas}" >  
@@ -40,7 +40,7 @@
                     <p:calendar id="fechaFin" value="#{calidadXTiendaBean.fechaFin}" 
                                 showOn="button" pattern="dd/MM/yyyy"/>
                     <p:spacer height="15"/>
-                    <p:commandButton value="Obtener Datos"  actionListener="#{calidadXTiendaBean.populateLlamadas}" ajax="true" update="formTotalLlamada"/>
+                    <p:commandButton value="Obtener Datos"  actionListener="#{calidadXTiendaBean.populateLlamadas}" ajax="true" update="formCalidadXTienda"/>
                     <p:spacer style="width: 10px;"/>
                 </h:panelGrid>
                 <br/>
@@ -56,61 +56,68 @@
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
                 <br/>
-                <p:dataTable id="reportTable" var="report" value="#{calidadXTiendaBean.listReporteServer}"
-                             style="width: 79%;margin-left: 85px;" rendered="#{calidadXTiendaBean.showTable}"
-                              paginator="true" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
-                    <f:facet name="header">  
-                        <p  style="text-align: center">Total Llamadas entre Fechas<br/>
+                <p:dataTable value="#{calidadXTiendaBean.reporteData}" var="llamada" style="width: 79%;margin-left: 85px;" rendered="#{calidadXTiendaBean.showTable}"
+                             paginator="true" rows="10"  
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <p  style="text-align: center">Calidad de Atención de Llamadas por Tienda entre fechas<br/>
                             (<h:outputText value="#{calidadXTiendaBean.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText> 
                             - <h:outputText value="#{calidadXTiendaBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
                         </p>
-                    </f:facet>
-                    <p:columnGroup type="header">  
-                           <p:row>  
-                            <p:column headerText="Tienda" />  
-                            <p:column headerText="Cantidad Llamadas" />  
-                        </p:row>  
-                    </p:columnGroup>  
-                    <p:subTable var="data" value="#{report.reporteHelper}">  
-                        <p:columnGroup type="header">  
-                            <p:row>  
-                                <p:column rowspan="2" headerText="Tienda" />  
-                                <p:column colspan="2" headerText="Cantidad" />  
-                            </p:row>  
-
-                        </p:columnGroup>  
-                        <f:facet name="header">  
-                            Calidad: 
-                            <h:outputText value="#{report.current}" /> 
-                        </f:facet>  
-                        <p:column style="text-align: center;">  
-                            #{data.tienda.nombre}  
-                        </p:column>  
-                        <p:column style="text-align: center;">  
-                            #{data.dominio}  
-                        </p:column>  
-                    </p:subTable>  
+                    </f:facet><br/>
+                    <p:column headerText="Tienda" style="text-align: center; width: 30%">
+                        <h:outputText value="#{llamada.nombreObj}"/>
+                    </p:column>
+                    <p:column headerText="Atención Buena" style="text-align: center; width: 15%">
+                        <h:outputText value="#{llamada.propiedadObj[0]}"/>
+                    </p:column>
+                    <p:column headerText="Atención Regular" style="text-align: center; width: 15%">
+                        <h:outputText value="#{llamada.propiedadObj[1]}"/>
+                    </p:column>
+                    <p:column headerText="Atención Mala" style="text-align: center; width: 15%">
+                        <h:outputText value="#{llamada.propiedadObj[2]}"/>
+                    </p:column>
+                    <p:column headerText="Cierre Automático" style="text-align: center; width: 15%">
+                        <h:outputText value="#{llamada.propiedadObj[3]}"/>
+                    </p:column>
                 </p:dataTable>
                 <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
                     <br/>
-                    <p:commandButton value="Gráfico Barras" rendered="#{calidadXTiendaBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
-                                     actionListener="#{calidadXTiendaBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
+                    <p:commandButton value="Gráfico Barras" rendered="#{calidadXTiendaBean.reporteData.size() > 0}" ajax="true" update="formCalidadXTienda"
+                                     actionListener="#{calidadXTiendaBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:120px;"/>
 
+                    <p:spacer style="width: 10px;"/>
+                    <p:commandButton value="Gráfico Stacked" rendered="#{calidadXTiendaBean.reporteData.size() > 0}" ajax="true" update="formCalidadXTienda"    
+                                     actionListener="#{calidadXTiendaBean.muestraStackedGrafico}" title="Gráfico Stacked" style="float: right;margin-right:10px;"/>
                     <br/><br/>
-<!--                    Estoy trabajando para obtener los Graficos correctamente -->
-                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
-                        <p:panel id="panelChart" rendered="#{calidadXTiendaBean.showChart and calidadXTiendaBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
+
+                    <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;margin-top: 60px">
+                        <h:panelGroup id="panelChart" rendered="#{calidadXTiendaBean.showChart}">
                             <p:barChart value="#{calidadXTiendaBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
-                                        title="Calidad de Llamadas por Tienda en un Período" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                                        title="Gráfico Barras - Calidad de Llamadas por Tienda en un Período" style="width: 90%; margin-left: 25px;" extender="customExtender" />
                             <br/>
                             <h:panelGrid columns="3">
-                                <h:commandButton value="Exportar PDF"  actionListener="#{calidadXTiendaBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>
+                                <h:commandButton value="Exportar PDF"  actionListener="#{calidadXTiendaBean.exportarReportePDFCalidad}" style="margin-left:650px" title="Exportar a PDF"/>
                                 <p:spacer style="width: 10px;"/>
-                                <h:commandButton value="Exportar Excel"  actionListener="#{calidadXTiendaBean.exportarReporteXLS}" title="Exportar a Excel"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{calidadXTiendaBean.exportarReporteXLSCalidad}" title="Exportar a Excel"/>
                             </h:panelGrid>
-                        </p:panel>
+                        </h:panelGroup>
                     </p:panel>
+                    <p:panel id="panelGraficoStacked" style="border: 0px solid #FFFFFF;">
+                        <h:panelGroup id="panelStackedChart" rendered="#{calidadXTiendaBean.showStackedChart}">
+                            <p:barChart value="#{calidadXTiendaBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="stackedChart" stacked="true"
+                                        title="Gráfico Stacked - Calidad de Llamadas por Tienda en un Período" style="width: 90%; margin-left: 25px;" extender="customExtender" />
+                            <br/>
+                            <h:panelGrid columns="3">
+                                <h:commandButton value="Exportar PDF"  actionListener="#{calidadXTiendaBean.exportarReportePDFCalidadStacked}" style="margin-left:650px" title="Exportar a PDF"/>
+                                <p:spacer style="width: 10px;"/>
+                                <h:commandButton value="Exportar Excel"  actionListener="#{calidadXTiendaBean.exportarReporteXLSCalidad}" title="Exportar a Excel"/>
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </p:panel>
+
                 </p:panel>
             </h:form>
         </p:fieldset>

@@ -95,13 +95,13 @@
                 <p:panel id="panelTable" style="border: 0px solid #FFFFFF;">
                     <br/>
                     <p:commandButton value="Gráfico Barras" rendered="#{llamadasXdispBean.reporteData.size() > 0}" ajax="true" update="panelGrafico"
-                                     actionListener="#{llamadasXdispBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:80px;"/>
+                                     actionListener="#{llamadasXdispBean.muestraGrafico}" title="Gráfico Barras" style="float: right;margin-right:120px;"/>
 
                     <br/><br/>
                     <p:panel id="panelGrafico" style="border: 0px solid #FFFFFF;">
                         <p:panel id="panelChart" rendered="#{llamadasXdispBean.showChart and llamadasXdispBean.listReporteServer.size() > 0}" style="border: 0px solid #FFFFFF;">
                             <p:barChart value="#{llamadasXdispBean.categoryModel}" legendPosition="ne" xaxisAngle="45" widgetVar="chart"
-                                        title="Total Llamadas entre Fechas por Dispositivo" style="width: 80%; margin-left: 85px;" extender="customExtender" />
+                                        title="Total Llamadas entre Fechas por Dispositivo" style="width: 90%; margin-left: 25px;" extender="customExtender" />
                             <br/>
                             <h:panelGrid columns="3">
                                 <h:commandButton value="Exportar PDF"  actionListener="#{llamadasXdispBean.exportarReportePDF}" style="margin-left:485px" title="Exportar a PDF"/>

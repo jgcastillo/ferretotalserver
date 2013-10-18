@@ -477,7 +477,7 @@ public abstract class LlamadaReporteAbstract {
     public abstract void createCategoryModel();
 
     /**
-     * Exportar Reporte Tiempo .PDF
+     * Exportar Reporte Tiempo Gráfico Barras .PDF
      *
      * @param actionEvent
      * @throws JRException
@@ -487,6 +487,21 @@ public abstract class LlamadaReporteAbstract {
         String extension = "PDF";
         String jasperFileAddress;
         jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportepdftiempo.jasper");
+        setTiempos(true);
+        exportarReporteTiempoCalidad(extension, jasperFileAddress);
+    }
+    
+    /**
+     * Exportar Reporte Tiempo Gráfico Stacked .PDF
+     *
+     * @param actionEvent
+     * @throws JRException
+     * @throws IOException
+     */
+    public void exportarReportePDFTiempoStacked(ActionEvent actionEvent) throws JRException, IOException {
+        String extension = "PDF";
+        String jasperFileAddress;
+        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportepdftiempostacked.jasper");
         setTiempos(true);
         exportarReporteTiempoCalidad(extension, jasperFileAddress);
     }
@@ -507,7 +522,7 @@ public abstract class LlamadaReporteAbstract {
     }
     
     /**
-     * Exportar Reporte Calidad .PDF
+     * Exportar Reporte Calidad Gráfico Barras .PDF
      *
      * @param actionEvent
      * @throws JRException
@@ -516,7 +531,22 @@ public abstract class LlamadaReporteAbstract {
     public void exportarReportePDFCalidad(ActionEvent actionEvent) throws JRException, IOException {
         String extension = "PDF";
         String jasperFileAddress;
-        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportepdftiempo.jasper");
+        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportepdfcalidad.jasper");
+        setTiempos(false);
+        exportarReporteTiempoCalidad(extension, jasperFileAddress);
+    }
+    
+    /**
+     * Exportar Reporte Calidad Gráfico Stacked .PDF
+     *
+     * @param actionEvent
+     * @throws JRException
+     * @throws IOException
+     */
+    public void exportarReportePDFCalidadStacked(ActionEvent actionEvent) throws JRException, IOException {
+        String extension = "PDF";
+        String jasperFileAddress;
+        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportepdfcalidadStacked.jasper");
         setTiempos(false);
         exportarReporteTiempoCalidad(extension, jasperFileAddress);
     }
@@ -531,7 +561,7 @@ public abstract class LlamadaReporteAbstract {
     public void exportarReporteXLSCalidad(ActionEvent actionEvent) throws JRException, IOException {
         String extension = "XLS";
         String jasperFileAddress;
-        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportexlstiempo.jasper");
+        jasperFileAddress = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/reportexlscalidad.jasper");
         setTiempos(false);
         exportarReporteTiempoCalidad(extension, jasperFileAddress);
     }

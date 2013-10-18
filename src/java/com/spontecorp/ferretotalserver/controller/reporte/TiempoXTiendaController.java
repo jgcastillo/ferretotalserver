@@ -26,7 +26,7 @@ import org.primefaces.model.chart.PieChartModel;
 public class TiempoXTiendaController extends LlamadaReporteAbstract implements Serializable {
 
     private String nombreReporte = "Tiempos de Atención Totales";
-    private String nombreRango = "Tiempos";
+    private String nombreRango = "Tiendas";
     private String nombreDominio = "segundos";
 
     /**

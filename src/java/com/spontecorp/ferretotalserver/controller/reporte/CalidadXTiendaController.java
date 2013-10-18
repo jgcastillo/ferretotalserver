@@ -26,7 +26,7 @@ import org.primefaces.model.chart.ChartSeries;
 public class CalidadXTiendaController extends LlamadaReporteAbstract implements Serializable {
 
     private String nombreReporte = "Calidad Total de Llamadas por Tienda";
-    private String nombreRango = "Id de Botón";
+    private String nombreRango = "Tienda";
     private String nombreDominio = "Cantidad";
 
     /**
@@ -37,7 +37,7 @@ public class CalidadXTiendaController extends LlamadaReporteAbstract implements 
     @Override
     public void populateLlamadas(ActionEvent actionEvent) {
 
-        LlamadaFacadeExt facade = new LlamadaFacadeExt();
+         LlamadaFacadeExt facade = new LlamadaFacadeExt();
         reporteData = new ArrayList<>();
         listReporteServer = new ArrayList<>();
 
@@ -49,8 +49,6 @@ public class CalidadXTiendaController extends LlamadaReporteAbstract implements 
 
         //Obtengo la Lista de Tiendas seleccionadas
         List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
-        //Lista de Calidad 
-        List<Object> calidadList = new ArrayList<>();
 
         if (listTiendaFinal.size() > 0) {
             //Recorro la lista de Tiendas Seleccionadas
@@ -59,23 +57,57 @@ public class CalidadXTiendaController extends LlamadaReporteAbstract implements 
                 //Busco la lista de Llamadas para la Tienda seleccionada
                 setResult(facade.findLlamadas(ReporteHelper.CALIDAD_TOTAL_TIENDA, tiendaActual, fechaInicio, fechaFin));
 
-                for (Object[] array : result) {
-                    ReporteHelper helper = new ReporteHelper();
-                    //Armo una lista de Calidad
-                    String calidad = (String) array[0];
-                    if (!calidadList.contains(calidad)) {
-                        calidadList.add(calidad);
-                    }
-                    helper.setRango(((String) array[0]));
-                    helper.setDominio(Integer.valueOf(String.valueOf(array[1])));
-                    helper.setTienda((Tienda) array[2]);
-                    reporteData.add(helper);
-                }
-                
-            }
+                boolean buena = false;
+                boolean regular = false;
+                boolean mala = false;
+                boolean automatico = false;
 
-            //Se obtiene la lista de Datos procesados
-            listReporteServer = procesoDatos(listTiendaFinal, calidadList, reporteData, JpaUtilities.REPORTE_POR_CALIDAD);
+                //Arreglo para manejar las Propiedades(buenas, regulares, malas, cierre automatico)
+                Object datos[] = new Object[4];
+                ReporteHelper helper = new ReporteHelper();
+
+                //Seteo el Nombre del Objeto (Tienda)
+                helper.setNombreObj(tiendaActual.getNombre());
+
+                for (Object[] array : result) {
+                    String calidad = (String) array[0];
+                    String total = array[1].toString();
+                    Tienda store = (Tienda) array[2];
+
+                    //Seteo las Propiedades del Objeto (buenas, regulares, malas, cierre automatico)
+                    if (calidad.equalsIgnoreCase(JpaUtilities.ATENCION_BUENA)) {
+                        datos[0] = total;
+                        buena = true;
+                    } else if (calidad.equalsIgnoreCase(JpaUtilities.ATENCION_REGULAR)) {
+                        datos[1] = total;
+                        regular = true;
+                    } else if (calidad.equalsIgnoreCase(JpaUtilities.ATENCION_MALA)) {
+                        datos[2] = total;
+                        mala = true;
+                    } else if (calidad.equalsIgnoreCase(JpaUtilities.CIERRE_AUTOMATICO)) {
+                        datos[3] = total;
+                        automatico = true;
+                    }
+                }
+
+                //Si no hay información completo con 0
+                if (!buena) {
+                    datos[0] = 0;
+                }
+                if (!regular) {
+                    datos[1] = 0;
+                }
+                if (!mala) {
+                    datos[2] = 0;
+                }
+                if (!automatico) {
+                    datos[3] = 0;
+                }
+
+                helper.setPropiedadObj(datos);
+                reporteData.add(helper);
+
+            }
 
             //Seteo los Datos del Reporte
             setNombreReporte(nombreReporte);
@@ -103,38 +135,24 @@ public class CalidadXTiendaController extends LlamadaReporteAbstract implements 
     @Override
     public void createCategoryModel() {
 
-        //Obtengo la Lista de Tiendas seleccionadas
-        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
-
         categoryModel = new CartesianChartModel();
+        ChartSeries buenas = new ChartSeries("buenas");
+        ChartSeries regulares = new ChartSeries("regulares");
+        ChartSeries malas = new ChartSeries("malas");
+        ChartSeries automaticas = new ChartSeries("automáticas");
 
-        ChartSeries[] stores = new ChartSeries[listTiendaFinal.size()];
-        int i = 0;
-        for (Tienda store : listTiendaFinal) {
-            stores[i] = new ChartSeries();
-            i++;
+        for (ReporteHelper data : reporteData) {
+            Object valor[] = data.getPropiedadObj();
+            buenas.set(data.getNombreObj().toString(), Double.valueOf(valor[0].toString()));
+            regulares.set(data.getNombreObj().toString(), Double.valueOf(valor[1].toString()));
+            malas.set(data.getNombreObj().toString(), Double.valueOf(valor[2].toString()));
+            automaticas.set(data.getNombreObj().toString(), Double.valueOf(valor[3].toString()));
         }
-
-        //Se recorre la Lista de Datos
-        for (ReporteServer data : listReporteServer) {
-            int z = 0;
-            for (ReporteHelper report : data.getReporteHelper()) {
-                for (Tienda store : listTiendaFinal) {
-                    if (store.getNombre().equalsIgnoreCase(report.getTienda().getNombre())) {
-                        stores[z].set(report.getRango().toString(), report.getDominio());
-                    }
-                }
-                z++;
-            }
-        }
-
-        //Se agregan las SEries al CategoryModel
-        int j = 0;
-        for (Tienda store : listTiendaFinal) {
-            stores[j].setLabel(store.getNombre());
-            categoryModel.addSeries(stores[j]);
-            j++;
-        }
+        
+        categoryModel.addSeries(buenas);
+        categoryModel.addSeries(regulares);
+        categoryModel.addSeries(malas);
+        categoryModel.addSeries(automaticas);
 
     }
 }
