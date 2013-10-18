@@ -53,8 +53,11 @@
                     </f:facet>  
                 </p:ajaxStatus>
                 <br/>
-                <p:dataTable value="#{llamadasConnectionBean.listaLlamadas}" var="item" style="width: 60%; margin-top: 15px;" 
-                             rendered="#{llamadasConnectionBean.showTable}">
+                <p:dataTable value="#{llamadasConnectionBean.listaLlamadas}" var="item" paginator="true" style="width: 95%; margin-top: 15px;" rendered="#{llamadasConnectionBean.showTable}"
+                             rows="15" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             paginatorPosition="bottom"
+                             resizableColumns="true">
                     <p:column headerText="Sucursal" width="15%" style="text-align: center;" filterBy="#{item.tiendaId.nombre}" filterMatchMode="contains">
                         <h:outputText value="#{item.tiendaId.nombre}"/>
                     </p:column>
@@ -87,10 +90,10 @@
                     <p:column headerText="Calidad" width="15%" style="text-align: center;" filterBy="#{item.calidad}" filterMatchMode="contains">
                         <h:outputText value="#{item.calidad}"/>
                     </p:column>
-                    <p:column headerText="Tiempo" width="15%" style="text-align: center;" filterBy="#{item.tiempo}" filterMatchMode="contains">
+<!--                    <p:column headerText="Tiempo" width="15%" style="text-align: center;" filterBy="#{item.tiempo}" filterMatchMode="contains">
                         <h:outputText value="#{item.tiempo}"/>
-                    </p:column>
-                    <p:column headerText="N / F" width="15%" style="text-align: center;" filterBy="#{item.feriado}" filterMatchMode="contains">
+                    </p:column>-->
+                    <p:column headerText="Normal(0) / Feriado(1)" width="15%" style="text-align: center;" filterBy="#{item.feriado}" filterMatchMode="contains">
                         <h:outputText value="#{item.feriado}"/>
                     </p:column>
                 </p:dataTable>        

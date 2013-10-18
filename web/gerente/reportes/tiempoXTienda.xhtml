@@ -67,16 +67,16 @@
                             - <h:outputText value="#{tiempoTotalBean.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>)
                         </p>
                     </f:facet><br/>
-                    <p:column headerText="Tienda" style="text-align: center; width: 30%">
+                    <p:column headerText="Tienda" style="text-align: center; width: 40%">
                         <h:outputText value="#{llamada.nombreObj}"/>
                     </p:column>
-                    <p:column headerText="Min" style="text-align: center; width: 30%">
+                    <p:column headerText="Min" style="text-align: center; width: 20%">
                         <h:outputText value="#{llamada.propiedadObj[0]}"/>
                     </p:column>
-                    <p:column headerText="Promedio" style="text-align: center; width: 30%">
+                    <p:column headerText="Promedio" style="text-align: center; width: 20%">
                         <h:outputText value="#{llamada.propiedadObj[1]}"/>
                     </p:column>
-                    <p:column headerText="Máximo" style="text-align: center; width: 30%">
+                    <p:column headerText="Máximo" style="text-align: center; width: 20%">
                         <h:outputText value="#{llamada.propiedadObj[2]}"/>
                     </p:column>
                 </p:dataTable>

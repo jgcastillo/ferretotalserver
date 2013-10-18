@@ -14,7 +14,7 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="mensajes"/>
-            <p:panel header="Análisis de Encuestas" style="width:75%; margin-left:15px;">
+            <p:panel header="Actualización de Resultados y Análisis de Encuestas por Tienda" style="width:75%; margin-left:15px;">
                 <p:dataTable value="#{encuestaBeanController.items}" var="encuesta" paginator="true"
                              rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                              rowsPerPageTemplate="5,10,15"
@@ -33,13 +33,16 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Status" style="text-align: center">
-                        <h:outputText value="ACTIVO" rendered="#{encuesta.status==1}" />
-                        <h:outputText value="INACTIVO" rendered="#{encuesta.status==0}" />
-                    </p:column>
-                    <p:column headerText="Acción" width="10%">
-                        <p:commandButton title="Ver Preguntas" icon="ui-icon-circle-zoomout" action="#{encuestaBeanController.prepareShowAnalysisDetails}"
-                                         style="margin-left: 5px;" update=":form:mensajes"/>
+                    <!--                    <p:column headerText="Status" style="text-align: center">
+                                            <h:outputText value="ACTIVO" rendered="#{encuesta.status==1}" />
+                                            <h:outputText value="INACTIVO" rendered="#{encuesta.status==0}" />
+                                        </p:column>-->
+                    <p:column headerText="Acción" width="10%" style="text-align: center">
+                        <p:commandButton title="Actualizar Resultados por Tienda" icon="ui-icon-signal-diag" 
+                                         action="#{encuestaBeanController.prepareShowAnalysisDetails}" />
+                        <p:commandButton title="Ver Resultados por Tienda" icon="ui-icon-circle-zoomout" 
+                                         action="#{encuestaBeanController.prepareShowAnalysisDetails}"
+                                         style="margin-left: 5px;" />
                     </p:column>
                 </p:dataTable>
             </p:panel>

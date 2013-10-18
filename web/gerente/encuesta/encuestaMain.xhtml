@@ -14,7 +14,7 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="mensajes"/>
-            <p:panel header="Configurar Encuestas" style="width:75%; margin-left:15px;">
+            <p:panel header="Configurar Encuestas - Enviar Encuestas por Tienda" style="width:75%; margin-left:15px;">
                 <p:dataTable value="#{encuestaBeanController.items}" var="encuesta" paginator="true"
                              rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                              rowsPerPageTemplate="5,10,15"
@@ -37,20 +37,20 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Status" style="text-align: center">
+<!--                    <p:column headerText="Status" style="text-align: center">
                         <h:outputText value="ACTIVO" rendered="#{encuesta.status==1}" />
                         <h:outputText value="INACTIVO" rendered="#{encuesta.status==0}" />
-                    </p:column>
+                    </p:column>-->
                     <p:column headerText="Acción" width="10%">
                         <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{encuestaBeanController.prepareEdit}"
                                          style="margin-left: 5px;" update=":form:mensajes"/>
-                        <p:commandButton title="Agregar preguntas" icon="ui-icon-folder-open" action="#{encuestaBeanController.prepareAddQuestions}"
+                        <p:commandButton title="Agregar Preguntas" icon="ui-icon-folder-open" action="#{encuestaBeanController.prepareAddQuestions}"
                                          style="margin-left: 5px;" update=":form:mensajes"/>
                         <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 5px;" 
                                          action="#{encuestaBeanController.prepareDelete}" 
                                          rendered="#{encuesta.status==1}" disabled="true"
                                          update=":form:mensajes"/>
-                        <p:commandButton title="Enviar" icon="ui-icon-transferthick-e-w" 
+                        <p:commandButton title="Enviar Encuesta a Tienda" icon="ui-icon-signal-diag" 
                                          action="#{encuestaBeanController.prepareSend}" style="margin-left: 5px;"
                                          update=":form:mensajes"/>
                         <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 5px;" 
