@@ -83,8 +83,9 @@ public class EncuestaAbstract {
 
     /**
      * Me conecto al WS para enviar la Encuesta a las Tienda(s) Seleccionada(s)
+     *
      * @param listTiendaFinal
-     * @param current 
+     * @param current
      */
     public void enviarEncuestaTiendaSeleccionadas(List<Tienda> listTiendaFinal, Encuesta current) {
         try {
@@ -93,8 +94,6 @@ public class EncuestaAbstract {
 
             for (Tienda tiendaActual : listTiendaFinal) {
                 String url = null;
-                //Msg generado en el Response del WS
-                String msg = "";
 
                 //Seteo el URL de la Tienda
                 hostname = tiendaActual.getUrl();
@@ -114,8 +113,7 @@ public class EncuestaAbstract {
 
                     //Llamo al método del WS para enviar la Encuesta
                     //a la Tienda seleccionada
-                    //System.out.println("Tienda: "+tiendaActual.getNombre());
-                    msg = httpURLConnection.sendSurveyWS(url, current);
+                    httpURLConnection.sendSurveyWS(url, current);
 
                 } else {
                     JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: "
@@ -123,10 +121,60 @@ public class EncuestaAbstract {
                 }
                 if (!httpURLConnection.getStatusConnection()) {
                     JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre()
-                            + ". La Encuesta no se ha enviado.");
+                            + " La Encuesta no se ha enviado.");
                 } else {
                     JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
-                            + ". " + msg);
+                            + " La Encuesta fue enviada con éxito!");
+                }
+            }
+        } catch (NamingException ex) {
+            Logger.getLogger(EncuestaAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(EncuestaAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Me conecto al WS para obtener los Resultados de la Encuesta 
+     * de las Tienda(s) Seleccionada(s)
+     * @param listTiendaFinal
+     * @param current 
+     */
+    public void obtenerResultadosTiendaSeleccionadas(List<Tienda> listTiendaFinal, Encuesta current) {
+        try {
+            InitialContext context = new InitialContext();
+            HttpURLConnectionEncuestas httpURLConnection = (HttpURLConnectionEncuestas) context.lookup("java:module/HttpURLConnectionEncuestas");
+
+            for (Tienda tiendaActual : listTiendaFinal) {
+                String url = null;
+                int total = 0;
+
+                //Seteo el URL de la Tienda
+                hostname = tiendaActual.getUrl();
+
+                //Inicializo el Status de Conexión en False
+                //Con esto se verifica la Conexión a la Tienda
+                httpURLConnection.setStatusConnection(false);
+
+                if (!hostname.equals("") && hostname != null) {
+
+                    //Construyo el URL
+                    url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.OBTENER_RESULTADOS_ENCUESTA + "/" + current.getId();
+
+                    //Llamo al método del WS para obtener Resultados de la Encuesta
+                    //de la Tienda seleccionada
+                   total = httpURLConnection.getResultsSurveyWS(url, current, tiendaActual);
+
+                } else {
+                    JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: "
+                            + tiendaActual.getNombre() + " Problemas al Conectarse.");
+                }
+                if (!httpURLConnection.getStatusConnection()) {
+                    JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre()
+                            + ". No se han obtenido los Resultados de la Encuesta.");
+                } else {
+                    JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
+                            + ". Se obtuvieron " + total +  " resultados con éxito!");
                 }
             }
         } catch (NamingException ex) {

@@ -97,7 +97,7 @@ public class HttpURLConnectionEncuestas {
                 message = text.toString();
                 setStatusConnection(true);
             }
-            //connection
+            //Close Connection
             connection.disconnect();
 
         } catch (MalformedURLException ex) {
@@ -119,8 +119,9 @@ public class HttpURLConnectionEncuestas {
      * @param tienda
      * @throws NamingException
      */
-    public void getResultsSurveyWS(String hostname, Encuesta encuesta, Tienda tienda) throws NamingException {
+    public int getResultsSurveyWS(String hostname, Encuesta encuesta, Tienda tienda) throws NamingException {
         List<RespuestaObtenida> lista = null;
+        int total = 0;
         try {
             // Use the java.net.* APIs to access the Duke’s Age RESTful web service
             HttpURLConnection connection = null;
@@ -128,6 +129,7 @@ public class HttpURLConnectionEncuestas {
             StringBuilder sb = null;
             String line = null;
             URL serverAddress = null;
+            setStatusConnection(false);
 
             serverAddress = new URL(hostname);
             connection = (HttpURLConnection) serverAddress.openConnection();
@@ -140,13 +142,12 @@ public class HttpURLConnectionEncuestas {
                 connection.setDoInput(true);
                 connection.setReadTimeout(10000);
                 connection.connect();
+                int response = connection.getResponseCode();
 
                 //Verificamos la Conexión
                 //JpaUtilities.testHttpURLConnection(connection);
 
-                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    setStatusConnection(false);
-                } else {
+                if (response == 200) {
                     setStatusConnection(true);
 
                     rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -160,8 +161,11 @@ public class HttpURLConnectionEncuestas {
                     lista = gson.fromJson(sb.toString(), new TypeToken<List<RespuestaObtenida>>() {
                     }.getType());
 
+                    total = lista.size();
                     guardarRespuestas(lista, encuesta, tienda);
-                }
+                    
+                } 
+                //Close Connection
                 connection.disconnect();
             }
 
@@ -171,6 +175,7 @@ public class HttpURLConnectionEncuestas {
             Logger.getLogger(HttpURLConnectionLlamadas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return total;
     }
 
     /**

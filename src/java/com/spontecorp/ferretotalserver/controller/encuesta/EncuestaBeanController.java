@@ -103,6 +103,12 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
         recreateModel();
         return "encuestaMain?faces-redirect=true";
     }
+    
+    public String prepareCancelUpdate() {
+        current = null;
+        recreateModel();
+        return "surveyAnalysisMain?faces-redirect=true";
+    }
 
     public String prepareEdit() {
         getCurrent();
@@ -116,7 +122,12 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
 
     public String prepareShowAnalysisDetails() {
         getCurrent();
-        return "showAnalysisDetails?faces-redirect=true";
+        return "getResultsSurvey?faces-redirect=true";
+    }
+    
+    public String prepareUpdateResultsSurvey() {
+        getCurrent();
+        return "updateResultsSurvey?faces-redirect=true";
     }
 
     public String prepareAddQuestions() {
@@ -208,58 +219,23 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
      *
      * @return
      */
-    public String showAnalysisSurvey() {
-        try {
-            System.out.println("Tiendas seleccionadas: " + selectedTiendas.size());
+    public String resultsSurvey() {
+        
+        //Verifico las Tiendas Seleccionadas
+        getSelectedAllTiendas();
+        getSelectedTiendas();
 
-            InitialContext context = new InitialContext();
-            TiendaFacade tiendaFacade = (TiendaFacade) context.lookup("java:module/TiendaFacade");
-            HttpURLConnectionEncuestas httpURLConnection = (HttpURLConnectionEncuestas) context.lookup("java:module/HttpURLConnectionEncuestas");
-
-            //Obtengo las Tiendas Seleccionadas
-            getSelectedTiendas();
-
-            if (selectedTiendas.size() > 0) {
-                for (int i = 0; i < selectedTiendas.size(); i++) {
-                    String url = null;
-                    String hostname;
-                    //Busco la Tienda seleccionada
-                    int idTiendaSelected = Integer.parseInt(selectedTiendas.get(i));
-                    tienda = tiendaFacade.find(idTiendaSelected);
-
-                    if (tienda != null) {
-                        //Inicializo el Status de Conexión en False
-                        //Con esto se verifica la Conexión a la Tienda
-                        httpURLConnection.setStatusConnection(false);
-                        //Seteo el id de la Sucursal (Tienda)
-                        tiendaId = tienda.getSucursal();
-                        hostname = tienda.getUrl();
-                        if (!hostname.equals("") && hostname != null) {
-                            //Construyo el URL
-                            url = hostname + "/" + JpaUtilities.COMMON_PATH + "/" + JpaUtilities.OBTENER_RESULTADOS_ENCUESTA + "/" + current.getId();
-
-                            //Llamo al método del WS para enviar la Encuesta
-                            //a la Tienda seleccionada
-                            httpURLConnection.getResultsSurveyWS(url, current, tienda);
-
-                        } else {
-                            JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: " + tienda.getNombre());
-                        }
-                    }
-                    if (!httpURLConnection.getStatusConnection()) {
-                        JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tienda.getNombre());
-                    } else {
-                        JsfUtil.addSuccessMessage("Encuesta enviada con éxito. Conexión exitosa con Tienda: " + tienda.getNombre() + " !");
-                    }
-                }
-
-            }
-
-            //JsfUtil.addSuccessMessage("Encuesta enviada con éxito");
-            return prepareSend();
-        } catch (Exception e) {
-            return null;
+        //Obtengo la Lista de Tiendas seleccionadas Final
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
+        
+        if (listTiendaFinal.size() > 0) {
+            //Acceder al WS para obtener los resultados de la Encuesta de las Tienda(s) Seleccionada(s)
+            obtenerResultadosTiendaSeleccionadas(listTiendaFinal, current);
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda de la que desea obtener los resultados de la Encuesta.");
         }
+        return prepareList();
+        
     }
 
     public String getNombreReporte() {

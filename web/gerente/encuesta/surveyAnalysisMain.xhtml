@@ -33,13 +33,9 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
-                    <!--                    <p:column headerText="Status" style="text-align: center">
-                                            <h:outputText value="ACTIVO" rendered="#{encuesta.status==1}" />
-                                            <h:outputText value="INACTIVO" rendered="#{encuesta.status==0}" />
-                                        </p:column>-->
                     <p:column headerText="Acción" width="10%" style="text-align: center">
                         <p:commandButton title="Actualizar Resultados por Tienda" icon="ui-icon-signal-diag" 
-                                         action="#{encuestaBeanController.prepareShowAnalysisDetails}" />
+                                         action="#{encuestaBeanController.prepareUpdateResultsSurvey}" />
                         <p:commandButton title="Ver Resultados por Tienda" icon="ui-icon-circle-zoomout" 
                                          action="#{encuestaBeanController.prepareShowAnalysisDetails}"
                                          style="margin-left: 5px;" />
