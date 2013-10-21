@@ -15,6 +15,7 @@ import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -23,7 +24,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -48,7 +48,8 @@ public class HttpURLConnectionEncuestas {
      * @param encuesta
      * @throws Exception
      */
-    public void sendSurveyWS(String hostname, Encuesta encuesta) throws Exception {
+    public String sendSurveyWS(String hostname, Encuesta encuesta) throws Exception {
+        String message = "";
         try {
             URL serverAddress;
             serverAddress = new URL(hostname);
@@ -56,9 +57,10 @@ public class HttpURLConnectionEncuestas {
 
             //Se genera el Objeto Json de la Encuesta
             String jsn = getJsonEncuesta(encuesta);
+            setStatusConnection(false);
 
-            System.out.println("2.- URL: " + hostname);
-            System.out.println("3.- Json Encuesta: " + jsn);
+            //System.out.println("2.- URL: " + hostname);
+            //System.out.println("3.- Json Encuesta: " + jsn);
 
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
@@ -71,24 +73,31 @@ public class HttpURLConnectionEncuestas {
             jsn = new String(jsn.getBytes(), "UTF-8");
             //jsn = new String(jsn.getBytes());
 
-            setStatusConnection(false);
-            setStatusConnection(true);
             connection.getOutputStream().write(jsn.getBytes());
             connection.getOutputStream().flush();
             connection.connect();
-
-            //if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            setStatusConnection(false);
-            //} else {
-            setStatusConnection(true);
-            connection.getResponseCode();
-            //}
+            int response = connection.getResponseCode();
 
             //Verificamos la Conexión
-            //JpaUtilities.testHttpURLConnection(connection);
-
+            //JpaUtilities.testHttpURLConnection(connection); 
+            
+            //Si la Conexión fue exitosa leo el Response
+            //lo seteo en la variable message para imprimirla en el Jsf
+            //y seteo el Status de Conexión a true. (Para validar mensaje a mostrar al Usuario).
+            if (response == 200) {
+                InputStreamReader in = new InputStreamReader((InputStream) connection.getContent());
+                BufferedReader buff = new BufferedReader(in);
+                StringBuilder text = new StringBuilder();
+                String line;
+                
+                while ((line = buff.readLine()) != null) {
+                        text.append(line);
+                }
+                
+                message = text.toString();
+                setStatusConnection(true);
+            }
             //connection
-            System.out.println("Status Conexion: " + statusConnection);
             connection.disconnect();
 
         } catch (MalformedURLException ex) {
@@ -99,6 +108,7 @@ public class HttpURLConnectionEncuestas {
             Logger.getLogger(HttpURLConnectionEncuestas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return message;
     }
 
     /**
@@ -170,8 +180,6 @@ public class HttpURLConnectionEncuestas {
      */
     public String getJsonEncuesta(Encuesta encuesta) throws NamingException {
         String json = null;
-        System.out.println("Encuesta: " + encuesta);
-        System.out.println("encuesta.getPreguntaList().size(): " + encuesta.getPreguntaList().size());
 
         InitialContext context = new InitialContext();
         PreguntaFacade preguntaFacade = (PreguntaFacade) context.lookup("java:module/PreguntaFacade");
@@ -182,7 +190,7 @@ public class HttpURLConnectionEncuestas {
             List<RespuestaConf> opcionsList = respuestaConfFacade.findRespuestaConf(pregunta);
             pregunta.setRespuestaConfList(opcionsList);
         }
-        
+
         encuesta.setPreguntaList(preguntaList);
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();

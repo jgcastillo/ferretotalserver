@@ -93,6 +93,8 @@ public class EncuestaAbstract {
 
             for (Tienda tiendaActual : listTiendaFinal) {
                 String url = null;
+                //Msg generado en el Response del WS
+                String msg = "";
 
                 //Seteo el URL de la Tienda
                 hostname = tiendaActual.getUrl();
@@ -112,18 +114,19 @@ public class EncuestaAbstract {
 
                     //Llamo al método del WS para enviar la Encuesta
                     //a la Tienda seleccionada
-                    httpURLConnection.sendSurveyWS(url, current);
+                    //System.out.println("Tienda: "+tiendaActual.getNombre());
+                    msg = httpURLConnection.sendSurveyWS(url, current);
 
                 } else {
                     JsfUtil.addErrorMessage("En Configuración de Tiendas verifique el URL de la Tienda: "
-                            + tiendaActual.getNombre() + " Problemas al Conectarse. La Encuesta no se ha enviado.");
+                            + tiendaActual.getNombre() + " Problemas al Conectarse.");
                 }
                 if (!httpURLConnection.getStatusConnection()) {
                     JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre()
-                            + " La Encuesta no se ha enviado.");
+                            + ". La Encuesta no se ha enviado.");
                 } else {
                     JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
-                            + " La Encuesta fue enviada con éxito!");
+                            + ". " + msg);
                 }
             }
         } catch (NamingException ex) {
