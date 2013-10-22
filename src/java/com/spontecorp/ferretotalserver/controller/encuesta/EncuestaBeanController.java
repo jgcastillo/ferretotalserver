@@ -151,6 +151,7 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
     }
 
     private void recreateModel() {
+        selectedAllTiendas = null;
         selectedTiendas = null;
         items = null;
     }
