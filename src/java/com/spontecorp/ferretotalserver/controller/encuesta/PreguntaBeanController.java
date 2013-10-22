@@ -270,11 +270,12 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
     public void setNombreReporte(String nombreReporte) {
         this.nombreReporte = nombreReporte;
     }
-    
+
     /**
-     * Se Analizan los resultados de la Encuesta 
-     * para la(s) tienda(s) seleccionada(s)
-     * @return 
+     * Se Analizan los resultados de la Encuesta para la(s) tienda(s)
+     * seleccionada(s)
+     *
+     * @return
      */
     public String analisysSurvey() {
         preguntas = null;
@@ -284,18 +285,15 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
 
         //Obtengo la Lista de Tiendas seleccionadas Final
         List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
-        
+
         if (listTiendaFinal.size() > 0) {
-            for(Tienda store : listTiendaFinal){
-                getPreguntasXTienda(store);
-            }
+            getPreguntasXTienda(listTiendaFinal);
             showQuestions = true;
-            System.out.println("Analizo los Resultados...");
         } else {
             JsfUtil.addErrorMessage("Seleccione la Tienda de la que desea analizar los resultados de la Encuesta.");
         }
         return null;
-        
+
     }
 
     /**
@@ -303,7 +301,7 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
      *
      * @return
      */
-    public List<Pregunta> getPreguntasXTienda(Tienda store) {
+    public List<Pregunta> getPreguntasXTienda(List<Tienda> listTienda) {
         preguntas = null;
         opcionsList = null;
         categoryModel = null;
@@ -312,13 +310,24 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
         if (preguntas == null) {
             preguntas = new ArrayList(getPreguntaFacade().findAll(encuesta));
             for (Pregunta pregunta : preguntas) {
-                List<RespuestaObtenida> respList = null;
-                List<RespuestaConf> options = null;
+                List<List<RespuestaObtenida>> respListTotal = new ArrayList<>();
+                List<RespuestaObtenida> respList = new ArrayList<>();
+                List<RespuestaConf> options = new ArrayList<>();
                 List<Numericas> listaNumericas = new ArrayList<>();
                 List<Integer> listRespObtenidas = new ArrayList<>();
 
-                if (respList == null) {
-                    respList = getRespObtenidaFacade().findRespuestaObtenidaList(pregunta, store);
+                if (respList.isEmpty()) {
+                    for (Tienda store : listTienda) {
+                        List<RespuestaObtenida> resps = new ArrayList<>();
+                        resps = getRespObtenidaFacade().findRespuestaObtenidaList(pregunta, store);
+                        respListTotal.add(resps);
+                    }
+                }
+                
+                for(List<RespuestaObtenida> list : respListTotal){
+                    for(RespuestaObtenida ro : list){
+                        respList.add(ro);
+                    }
                 }
 
                 //Si la Pregunta es de Tipo Numérica
@@ -350,7 +359,7 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
 
                 //Si la Pregunta es de Tipo Selección
                 if (pregunta.getTipo() == 3) {
-                    if (options == null) {
+                    if (options.isEmpty()) {
                         options = getRespuestaFacade().findRespuestaConf(pregunta);
                         pregunta.setRespuestaConfList(options);
                     }
@@ -706,15 +715,15 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String prepareCancelAnalisys() {
         current = null;
         recreateModel();
         return "surveyAnalysisMain?faces-redirect=true";
     }
-    
+
     /**
      *
      * @return
@@ -796,7 +805,7 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
         message3 = false;
         showQuestions = false;
     }
-    
+
     /**
      * Exportar Reportes a PDF (Gráfico Bar)
      *
@@ -823,11 +832,12 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
         exportarReporte(extension, jasperFileAddress);
 
     }
-    
+
     /**
      * Exportar Reportes a PDF (Sólo para Preguntas de tipo Textual)
+     *
      * @throws JRException
-     * @throws IOException 
+     * @throws IOException
      */
     public void exportarReportePDFTextual() throws JRException, IOException {
         String extension = "PDF";
@@ -835,11 +845,12 @@ public class PreguntaBeanController extends EncuestaAbstract implements Serializ
         exportarReporteTextual(extension, jasperFileAddress);
 
     }
-    
-     /**
+
+    /**
      * Exportar Reportes a PDF (Sólo para Preguntas de tipo Textual)
+     *
      * @throws JRException
-     * @throws IOException 
+     * @throws IOException
      */
     public void exportarReporteXLSTextual() throws JRException, IOException {
         String extension = "XLS";
