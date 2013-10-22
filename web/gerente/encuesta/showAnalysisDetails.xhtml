@@ -11,51 +11,50 @@
         <ui:composition template="./../../WEB-INF/templates/layout.xhtml">
 
             <ui:define name="title">
-                Enviar Encuesta
+                Analizar Resultados de Encuesta por Tienda
             </ui:define>
 
             <ui:define name="content">
-
-                <h:form id="form">
-                    <p:growl id="mensajes" />
-                    <p:panel id="panel" header="Análisis de la Encuesta: #{encuestaBeanController.selected.nombre}" style="width:75%; margin-left:15px;">
-                        <h:panelGrid columns="3" style="margin-top: 10px;">    
-                            <p:outputLabel value="Seleccione la Tienda a la que desea Enviar la Encuesta: " style="width: 50px;"/> 
-                            <p:selectManyCheckbox value="#{encuestaBeanController.selectedTiendas}" 
-                                                  layout="pageDirection">  
-                                <f:selectItems id="test1" value="#{encuestaBeanController.tiendas}" /> 
+                <h:form id="formUpdateSurvey">
+                    <p:panel header="Seleccione la(s) Tienda(s) de la(s) que desea Analizar los Resultados de la Encuesta: #{encuestaBeanController.selected.nombre}" style="width:75%; margin-left:15px;">
+                        <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
+                            <h:outputText value="Analizar: " />  
+                            <p:selectManyCheckbox value="#{encuestaBeanController.selectedTiendas}" >  
+                                <f:selectItems value="#{encuestaBeanController.tiendas}" /> 
                             </p:selectManyCheckbox> 
                         </h:panelGrid>
-
+                        <h:panelGrid columns="2" style="margin-bottom: 10px;">
+                            <h:outputText value="Analizar: " />  
+                            <p:selectManyCheckbox value="#{encuestaBeanController.selectedAllTiendas}">  
+                                <f:selectItems value="#{encuestaBeanController.allTiendas}" /> 
+                            </p:selectManyCheckbox> 
+                        </h:panelGrid>
+                       
+                        <p:ajaxStatus style="right:45%; left:45%">  
+                            <f:facet name="start">  
+                                <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+                            </f:facet>  
+                            <f:facet name="complete">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                        </p:ajaxStatus>
                         <f:facet name="footer">
                             <h:panelGrid columns="3" style="display:block;margin-left: 50%">
-                                <p:commandButton value="Aceptar" title="Aceptar" icon="ui-icon-disk" 
-                                                 action="#{encuestaBeanController.showAnalysisSurvey}"
-                                                 ajax="true" update="panel"/>
+                                <p:commandButton value="Analizar Resultados" title="Analizar Resultados" icon="ui-icon-signal-diag" 
+                                                 actionListener="#{encuestaBeanController.analisysSurvey}"
+                                                 ajax="true" update="formUpdateSurvey"/>
                                 <p:spacer width="10"/>
                                 <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
-                                                 action="/gerente/encuesta/surveyAnalysisMain"/>
+                                                 action="#{encuestaBeanController.prepareCancelUpdate}"/>
                             </h:panelGrid>
                         </f:facet>
                         <h:panelGroup id="messagePanel" layout="block">
                             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                         </h:panelGroup>
                     </p:panel>
-
                 </h:form>
-                <p:ajaxStatus style="right:45%; left:45%">  
-                    <f:facet name="start">  
-                        <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
-                    </f:facet>  
-                    <f:facet name="complete">  
-                        <h:outputText value="" />  
-                    </f:facet>  
-                </p:ajaxStatus>
-
             </ui:define>
-
         </ui:composition>
-
     </body>
 </html>
 

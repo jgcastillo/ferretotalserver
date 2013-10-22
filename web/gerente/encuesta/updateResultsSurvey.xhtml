@@ -11,20 +11,20 @@
         <ui:composition template="./../../WEB-INF/templates/layout.xhtml">
 
             <ui:define name="title">
-                Enviar Encuesta por Tienda
+                Actualizar Resultados de Encuesta por Tienda
             </ui:define>
 
             <ui:define name="content">
                 <h:form id="formSendSurvey">
                     <p:panel header="Seleccione la(s) Tienda(s) de la(s) que desea Obtener los Resultados de la Encuesta: #{encuestaBeanController.selected.nombre}" style="width:75%; margin-left:15px;">
                         <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
-                            <h:outputText value="Enviar: " />  
+                            <h:outputText value="Actualizar: " />  
                             <p:selectManyCheckbox value="#{encuestaBeanController.selectedTiendas}" >  
                                 <f:selectItems value="#{encuestaBeanController.tiendas}" /> 
                             </p:selectManyCheckbox> 
                         </h:panelGrid>
                         <h:panelGrid columns="2" style="margin-bottom: 10px;">
-                            <h:outputText value="Enviar: " />  
+                            <h:outputText value="Actualizar: " />  
                             <p:selectManyCheckbox value="#{encuestaBeanController.selectedAllTiendas}">  
                                 <f:selectItems value="#{encuestaBeanController.allTiendas}" /> 
                             </p:selectManyCheckbox> 

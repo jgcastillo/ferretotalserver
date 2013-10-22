@@ -122,7 +122,7 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
 
     public String prepareShowAnalysisDetails() {
         getCurrent();
-        return "getResultsSurvey?faces-redirect=true";
+        return "showAnalysisDetails?faces-redirect=true";
     }
     
     public String prepareUpdateResultsSurvey() {
@@ -233,6 +233,29 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
             obtenerResultadosTiendaSeleccionadas(listTiendaFinal, current);
         } else {
             JsfUtil.addErrorMessage("Seleccione la Tienda de la que desea obtener los resultados de la Encuesta.");
+        }
+        return prepareList();
+        
+    }
+    
+    /**
+     * Se Analizan los resultados de la Encuesta 
+     * para la(s) tienda(s) seleccionada(s)
+     * @return 
+     */
+    public String analisysSurvey() {
+        
+        //Verifico las Tiendas Seleccionadas
+        getSelectedAllTiendas();
+        getSelectedTiendas();
+
+        //Obtengo la Lista de Tiendas seleccionadas Final
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
+        
+        if (listTiendaFinal.size() > 0) {
+            System.out.println("Analizo los Resultados...");
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda de la que desea analizar los resultados de la Encuesta.");
         }
         return prepareList();
         
