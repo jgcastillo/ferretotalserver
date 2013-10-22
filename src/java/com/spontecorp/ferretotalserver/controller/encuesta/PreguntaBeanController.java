@@ -9,6 +9,7 @@ import com.spontecorp.ferretotalserver.entity.Numericas;
 import com.spontecorp.ferretotalserver.entity.Pregunta;
 import com.spontecorp.ferretotalserver.entity.RespuestaConf;
 import com.spontecorp.ferretotalserver.entity.RespuestaObtenida;
+import com.spontecorp.ferretotalserver.entity.Tienda;
 import com.spontecorp.ferretotalserver.jpa.EncuestaFacade;
 import com.spontecorp.ferretotalserver.jpa.PreguntaFacade;
 import com.spontecorp.ferretotalserver.jpa.RespuestaConfFacade;
@@ -40,7 +41,7 @@ import java.util.logging.Logger;
  */
 @ManagedBean(name = "preguntaBean")
 @SessionScoped
-public class PreguntaBeanController implements Serializable {
+public class PreguntaBeanController extends EncuestaAbstract implements Serializable {
 
     private Pregunta current;
     private Pregunta selectedQuestion;
@@ -81,6 +82,7 @@ public class PreguntaBeanController implements Serializable {
     private boolean message1 = false;
     private boolean message2 = false;
     private boolean message3 = false;
+    private boolean showQuestions = false;
     //Datos para los Gráficos y Reportes
     protected boolean showChart = false;
     private CartesianChartModel categoryModel;
@@ -217,6 +219,14 @@ public class PreguntaBeanController implements Serializable {
         return message3;
     }
 
+    public boolean isShowQuestions() {
+        return showQuestions;
+    }
+
+    public void setShowQuestions(boolean showQuestions) {
+        this.showQuestions = showQuestions;
+    }
+
     public boolean isShowChart() {
         return showChart;
     }
@@ -260,13 +270,40 @@ public class PreguntaBeanController implements Serializable {
     public void setNombreReporte(String nombreReporte) {
         this.nombreReporte = nombreReporte;
     }
+    
+    /**
+     * Se Analizan los resultados de la Encuesta 
+     * para la(s) tienda(s) seleccionada(s)
+     * @return 
+     */
+    public String analisysSurvey() {
+        preguntas = null;
+        //Verifico las Tiendas Seleccionadas
+        getSelectedAllTiendas();
+        getSelectedTiendas();
+
+        //Obtengo la Lista de Tiendas seleccionadas Final
+        List<Tienda> listTiendaFinal = obtenerListTiendaSeleccionadas();
+        
+        if (listTiendaFinal.size() > 0) {
+            for(Tienda store : listTiendaFinal){
+                getPreguntasXTienda(store);
+            }
+            showQuestions = true;
+            System.out.println("Analizo los Resultados...");
+        } else {
+            JsfUtil.addErrorMessage("Seleccione la Tienda de la que desea analizar los resultados de la Encuesta.");
+        }
+        return null;
+        
+    }
 
     /**
      * Listado de Preguntas para Analizar las Encuestas
      *
      * @return
      */
-    public List<Pregunta> getPreguntas() {
+    public List<Pregunta> getPreguntasXTienda(Tienda store) {
         preguntas = null;
         opcionsList = null;
         categoryModel = null;
@@ -281,7 +318,7 @@ public class PreguntaBeanController implements Serializable {
                 List<Integer> listRespObtenidas = new ArrayList<>();
 
                 if (respList == null) {
-                    respList = getRespObtenidaFacade().findRespuestaObtenidaList(pregunta);
+                    respList = getRespObtenidaFacade().findRespuestaObtenidaList(pregunta, store);
                 }
 
                 //Si la Pregunta es de Tipo Numérica
@@ -408,6 +445,14 @@ public class PreguntaBeanController implements Serializable {
             }
         }
         return preguntas;
+    }
+
+    public List<Pregunta> getPreguntas() {
+        return preguntas;
+    }
+
+    public void setPreguntas(List<Pregunta> preguntas) {
+        this.preguntas = preguntas;
     }
 
     /**
@@ -661,6 +706,16 @@ public class PreguntaBeanController implements Serializable {
     }
 
     /**
+     * 
+     * @return 
+     */
+    public String prepareCancelAnalisys() {
+        current = null;
+        recreateModel();
+        return "surveyAnalysisMain?faces-redirect=true";
+    }
+    
+    /**
      *
      * @return
      */
@@ -736,9 +791,12 @@ public class PreguntaBeanController implements Serializable {
         tipoPregunta = 0;
         preguntaItems = null;
         promptPreguntaTextual = null;
+        selectedAllTiendas = null;
+        selectedTiendas = null;
         message3 = false;
+        showQuestions = false;
     }
-
+    
     /**
      * Exportar Reportes a PDF (Gráfico Bar)
      *

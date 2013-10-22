@@ -48,10 +48,11 @@ public class RespuestaObtenidaFacade extends AbstractFacade<RespuestaObtenida> {
         return q.getResultList().size();
     }
 
-    public List<RespuestaObtenida> findRespuestaObtenidaList(Pregunta pregunta) {
-        String query = "SELECT ro from RespuestaObtenida ro WHERE ro.preguntaId = :pregunta";
+    public List<RespuestaObtenida> findRespuestaObtenidaList(Pregunta pregunta, Tienda tienda) {
+        String query = "SELECT ro from RespuestaObtenida ro WHERE ro.preguntaId = :pregunta AND ro.tiendaId = :tienda";
         Query q = getEntityManager().createQuery(query);
         q.setParameter("pregunta", pregunta);
+        q.setParameter("tienda", tienda);
         return q.getResultList();
     }
     

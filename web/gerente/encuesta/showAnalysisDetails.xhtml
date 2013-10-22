@@ -15,21 +15,21 @@
             </ui:define>
 
             <ui:define name="content">
-                <h:form id="formUpdateSurvey">
-                    <p:panel header="Seleccione la(s) Tienda(s) de la(s) que desea Analizar los Resultados de la Encuesta: #{encuestaBeanController.selected.nombre}" style="width:75%; margin-left:15px;">
+                <h:form id="surveyAnalysisMain">
+                    <p:panel header="Seleccione la(s) Tienda(s) de la(s) que desea Analizar los Resultados de la Encuesta: #{preguntaBean.encuesta.nombre}" style="width:75%; margin-left:15px;">
                         <h:panelGrid columns="2" style="margin-bottom: 10px;" id="selectTienda">
                             <h:outputText value="Analizar: " />  
-                            <p:selectManyCheckbox value="#{encuestaBeanController.selectedTiendas}" >  
-                                <f:selectItems value="#{encuestaBeanController.tiendas}" /> 
+                            <p:selectManyCheckbox value="#{preguntaBean.selectedTiendas}" >  
+                                <f:selectItems value="#{preguntaBean.tiendas}" /> 
                             </p:selectManyCheckbox> 
                         </h:panelGrid>
                         <h:panelGrid columns="2" style="margin-bottom: 10px;">
                             <h:outputText value="Analizar: " />  
-                            <p:selectManyCheckbox value="#{encuestaBeanController.selectedAllTiendas}">  
-                                <f:selectItems value="#{encuestaBeanController.allTiendas}" /> 
+                            <p:selectManyCheckbox value="#{preguntaBean.selectedAllTiendas}">  
+                                <f:selectItems value="#{preguntaBean.allTiendas}" /> 
                             </p:selectManyCheckbox> 
                         </h:panelGrid>
-                       
+
                         <p:ajaxStatus style="right:45%; left:45%">  
                             <f:facet name="start">  
                                 <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
@@ -41,17 +41,36 @@
                         <f:facet name="footer">
                             <h:panelGrid columns="3" style="display:block;margin-left: 50%">
                                 <p:commandButton value="Analizar Resultados" title="Analizar Resultados" icon="ui-icon-signal-diag" 
-                                                 actionListener="#{encuestaBeanController.analisysSurvey}"
-                                                 ajax="true" update="formUpdateSurvey"/>
+                                                 actionListener="#{preguntaBean.analisysSurvey}"
+                                                 ajax="true" update="surveyAnalysisMain"/>
                                 <p:spacer width="10"/>
-                                <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true"
-                                                 action="#{encuestaBeanController.prepareCancelUpdate}"/>
+                                <p:commandButton value="Cancelar" title="Cancelar" icon="ui-icon-cancel" immediate="true" 
+                                                 action="#{preguntaBean.prepareCancelAnalisys}"/>
                             </h:panelGrid>
                         </f:facet>
                         <h:panelGroup id="messagePanel" layout="block">
                             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                         </h:panelGroup>
                     </p:panel>
+
+                    <p:dataTable value="#{preguntaBean.preguntas}" var="pregunta" rendered="#{preguntaBean.showQuestions}"
+                                 style="width:75%; margin-top:15px; margin-left:18px;">
+                        <p:column headerText="Preguntas">
+                            <h:outputText value="#{pregunta.pregunta}"/>
+                        </p:column>
+                        <p:column headerText="Acción" style="width:4%; text-align: center">  
+                            <p:commandButton id="selectQuestion" ajax="true" update=":grafico" oncomplete="composeDlg.show()" icon="ui-icon-search" 
+                                             rendered="#{pregunta.tipo != 1}" title="Ver Análisis">  
+                                <f:setPropertyActionListener value="#{pregunta}" target="#{preguntaBean.selectedQuestion}"/>  
+                            </p:commandButton> 
+
+                            <p:commandButton id="selectQuestionText" ajax="true" update=":textual" oncomplete="composeDlgText.show()" icon="ui-icon-search" 
+                                             rendered="#{pregunta.tipo == 1}" title="Ver Análisis">  
+                                <f:setPropertyActionListener value="#{pregunta}" target="#{preguntaBean.selectedQuestionTextual}"/>  
+                            </p:commandButton> 
+
+                        </p:column> 
+                    </p:dataTable>
                 </h:form>
             </ui:define>
         </ui:composition>
