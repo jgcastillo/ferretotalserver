@@ -7,6 +7,7 @@ package com.spontecorp.ferretotalserver.jpa;
 import com.spontecorp.ferretotalserver.entity.Encuesta;
 import com.spontecorp.ferretotalserver.entity.Pregunta;
 import com.spontecorp.ferretotalserver.entity.RespuestaObtenida;
+import com.spontecorp.ferretotalserver.entity.Tienda;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,13 +33,6 @@ public class RespuestaObtenidaFacade extends AbstractFacade<RespuestaObtenida> {
         super(RespuestaObtenida.class);
     }
 
-    public List<RespuestaObtenida> findRespuestaObtenida(Encuesta encuesta) {
-        String query = "SELECT rc from RespuestaObtenida rc WHERE rc.respuestaId = :respuesta";
-        Query q = getEntityManager().createQuery(query);
-        q.setParameter("respuesta", encuesta);
-        return q.getResultList();
-    }
-
     public int findRespuestaObtenida(Pregunta pregunta) {
         String query = "SELECT ro from RespuestaObtenida ro WHERE ro.preguntaId = :pregunta";
         Query q = getEntityManager().createQuery(query);
@@ -60,5 +54,14 @@ public class RespuestaObtenidaFacade extends AbstractFacade<RespuestaObtenida> {
         q.setParameter("pregunta", pregunta);
         return q.getResultList();
     }
+    
+    public List<RespuestaObtenida> findRespuestaObtenida(Encuesta encuesta, Tienda tienda) {
+        String query = "SELECT ro from RespuestaObtenida ro WHERE ro.encuestaId = :encuesta AND ro.tiendaId = :tienda";
+        Query q = getEntityManager().createQuery(query);
+        q.setParameter("encuesta", encuesta);
+        q.setParameter("tienda", tienda);
+        return q.getResultList();
+    }
+
     
 }

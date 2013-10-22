@@ -220,6 +220,16 @@ public class HttpURLConnectionEncuestas {
         RespuestaConfFacade respuestaConfFacade = (RespuestaConfFacade) context.lookup("java:module/RespuestaConfFacade");
         RespuestaObtenidaFacade respuestaObtFacade = (RespuestaObtenidaFacade) context.lookup("java:module/RespuestaObtenidaFacade");
 
+        //Verifico si hay Respuestas de esta Encuesta en la BD
+        List<RespuestaObtenida> respExistentes = respuestaObtFacade.findRespuestaObtenida(encuesta, tienda);
+
+        //Si hay Respuestas existentes recorro la lista y las elimino.
+        if(respExistentes.size() > 0){
+            for(RespuestaObtenida ro : respExistentes){
+                respuestaObtFacade.remove(ro);
+            }
+        }
+        
         //Recorro la lista de Respuestas Obtenidas
         for (RespuestaObtenida respuesta : respuestaJson) {
             //Seteo el id de la Encuesta

@@ -175,8 +175,13 @@ public class EncuestaAbstract {
                     JsfUtil.addErrorMessage("Problemas al Conectarse con la Tienda: " + tiendaActual.getNombre()
                             + ". No se han obtenido los Resultados de la Encuesta.");
                 } else {
-                    JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
+                    if(total > 0){
+                        JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
                             + ". Se obtuvieron " + total +  " resultados con éxito!");
+                    }else{
+                        JsfUtil.addSuccessMessage("Conexión exitosa con Tienda: " + tiendaActual.getNombre()
+                            + ". No se encontraron Resultados para esta Encuesta.");
+                    }
                 }
             }
         } catch (NamingException ex) {
