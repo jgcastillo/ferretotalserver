@@ -102,7 +102,7 @@
 		<band height="491" splitType="Stretch">
 			<elementGroup/>
 			<barChart>
-				<chart isShowLegend="false" customizerClass="com.spontecorp.ferreasesor.utilities.JasperCustom">
+				<chart isShowLegend="false" customizerClass="com.spontecorp.ferretotalserver.utilities.JasperCustom">
 					<reportElement uuid="1127f276-0f58-4039-8117-5cecb2644721" positionType="FixRelativeToBottom" x="66" y="50" width="475" height="180"/>
 					<chartTitle/>
 					<chartSubtitle/>
