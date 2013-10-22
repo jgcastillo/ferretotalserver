@@ -93,6 +93,7 @@ public class HttpURLConnectionEncuestas {
                 while ((line = buff.readLine()) != null) {
                         text.append(line);
                 }
+                buff.close();
                 
                 message = text.toString();
                 setStatusConnection(true);
@@ -156,6 +157,7 @@ public class HttpURLConnectionEncuestas {
                     while ((line = rd.readLine()) != null) {
                         sb.append(line);
                     }
+                    rd.close();
 
                     Gson gson = new Gson();
                     lista = gson.fromJson(sb.toString(), new TypeToken<List<RespuestaObtenida>>() {
