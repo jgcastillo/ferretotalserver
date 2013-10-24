@@ -34,6 +34,21 @@
                             <p:commandButton title="Eliminar" icon="ui-icon-trash" style="margin-left: 10px;" action="#{ubicacionController.prepareView}"/>
                         </p:column>
                     </p:dataTable>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="3" style="display:block;margin-left: 64%">
+                            <p:commandButton value="Actualizar Pasillos en Tiendas" title="Actualizar Pasillos en Tiendas" icon="ui-icon-signal-diag" 
+                                             actionListener="#{ubicacionController.updatePasillosTiendas}"
+                                             ajax="true" update="form"/>
+                        </h:panelGrid>
+                    </f:facet>
+                    <p:ajaxStatus style="right:55%; left:45%">  
+                        <f:facet name="start">  
+                            <h:graphicImage library="images" name="ajax-loader.gif" style="margin-top: 10px; margin-bottom: 0px; margin-left: 40%;margin-right: 45%"/>
+                        </f:facet>  
+                        <f:facet name="complete">  
+                            <h:outputText value="" />  
+                        </f:facet>  
+                    </p:ajaxStatus>
                     <h:panelGroup id="messagePanel" layout="block">
                         <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                     </h:panelGroup>

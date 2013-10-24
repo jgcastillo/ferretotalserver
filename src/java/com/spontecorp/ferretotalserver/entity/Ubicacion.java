@@ -4,6 +4,7 @@
  */
 package com.spontecorp.ferretotalserver.entity;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,8 +39,10 @@ public class Ubicacion implements Serializable {
     private Integer id;
     @Size(max = 50)
     @Column(name = "Nombre")
+    @Expose
     private String nombre;
     @Column(name = "Status")
+    @Expose
     private Integer status;
 
     public Ubicacion() {

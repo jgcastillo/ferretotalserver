@@ -22,47 +22,42 @@ import org.slf4j.LoggerFactory;
  */
 public class JpaUtilities {
 
-    private static final Logger logger = LoggerFactory.getLogger(JpaUtilities.class); 
+    private static final Logger logger = LoggerFactory.getLogger(JpaUtilities.class);
     private static String PERSITENCE_UNIT = "FerreAsesorServerPU";
-    
     public static int HABILITADO = 1;
     public static int INHABILITADO = 0;
     public static final Integer ID_TIENDA = 1;
     public static final int FERIADO = 1;
     public static final int NORMAL = 0;
-    
     //Ruta del WS
     public static final String COMMON_PATH = "ferreasesorweb/webresources/llamadaService";
-    
     //PAra Seleccionar el Metodo del WS dependiendo de la solicitud
-    public static final String TOTAL_LLAMADA_TIENDA = "totaltienda" ;
-    public static final String UPDATE_TIENDA_X_FECHA = "tiendaporfecha" ;
+    public static final String TOTAL_LLAMADA_TIENDA = "totaltienda";
+    public static final String UPDATE_TIENDA_X_FECHA = "tiendaporfecha";
     public static final String ENVIAR_ENCUESTA = "enviarencuesta";
     public static final String OBTENER_RESULTADOS_ENCUESTA = "obtenerresultadosencuesta3";
     public static final String UPDATE_LLAMADA_FECHA = "updatellamadasporfecha";
-    
+    public static final String UPDATE_UBICACION_TIENDA = "guardarubicaciones";
     //Encuesta Tipo de pregunta
     public static final int PREGUNTA_TEXTUAL = 1;
     public static final int PREGUNTA_NUMERICA = 2;
     public static final int PREGUNTA_SELECCION = 3;
     public static final int PREGUNTA_CALIFICACION = 4;
-    
     // Tipo de reporte a mostrar
     public static final int REPORTE_POR_FECHA = 1;
     public static final int REPORTE_POR_DISPOSITIVO = 2;
     public static final int REPORTE_POR_FERREASESOR = 3;
     public static final int REPORTE_POR_CALIDAD = 4;
-    
     //Calidad de la Llamada
     public static final String ATENCION_BUENA = "Buena";
     public static final String ATENCION_REGULAR = "Regular";
     public static final String ATENCION_MALA = "Mala";
     public static final String CIERRE_AUTOMATICO = "Automatica";
 
-    public JpaUtilities(){
+    public JpaUtilities() {
     }
-    
-    public static EntityManagerFactory getEntityManagerFactory(){
+
+    public static EntityManagerFactory getEntityManagerFactory() {
         return Persistence.createEntityManagerFactory(PERSITENCE_UNIT);
 //        String[] props = null;
 //        try {
@@ -71,8 +66,8 @@ public class JpaUtilities {
 //        }
 //        return setProperties(props[0], props[1], props[2], props[3]);
     }
-    
-    private static EntityManagerFactory setProperties(String url, String psw, String driver, String user){
+
+    private static EntityManagerFactory setProperties(String url, String psw, String driver, String user) {
         Map props = new HashMap();
         props.put("javax.persistence.jdbc.url", url);
         props.put("javax.persistence.jdbc.password", psw);
@@ -81,8 +76,8 @@ public class JpaUtilities {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSITENCE_UNIT, props);
         return emf;
     }
-    
-    private static String[] readPreFile() throws IOException{
+
+    private static String[] readPreFile() throws IOException {
         Cifrador cipher = new Cifrador();
         String[] props = new String[5];
         BufferedReader input = null;
@@ -92,10 +87,10 @@ public class JpaUtilities {
             String decode;
             String temp = null;
             input = new BufferedReader(new FileReader("pre.spt"));
-            
+
             while ((line = input.readLine()) != null) {
                 props[i++] = line;
-            } 
+            }
 //            while((line = input.readLine()) != null){
 //                System.out.println("read: " + line);
 //                if(line.endsWith("=")){
@@ -114,13 +109,13 @@ public class JpaUtilities {
         } catch (IOException e) {
             logger.error("Error leyendo archivo de configuración" + e);
         } finally {
-            if(input != null){
+            if (input != null) {
                 input.close();
             }
         }
         return props;
     }
-  
+
     /**
      * Método para Verificar la Conexión con el WS
      *
@@ -154,5 +149,4 @@ public class JpaUtilities {
             }
         }
     }
-    
 }
