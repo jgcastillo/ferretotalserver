@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +58,9 @@ public class HttpURLConnectionUbicacion implements Serializable{
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Length", Integer.toString(jsn.length()));
 
-            jsn = new String(jsn.getBytes(), "UTF-8");
+            //jsn = new String(jsn.getBytes(), "UTF-8");
+            jsn = new String(jsn.getBytes(), Charset.forName("UTF-8"));
+            System.out.println("Charset.defaultCharset(): "+Charset.forName("UTF-8"));
             //jsn = new String(jsn.getBytes());
 
             connection.getOutputStream().write(jsn.getBytes());
@@ -72,7 +75,7 @@ public class HttpURLConnectionUbicacion implements Serializable{
             //lo seteo en la variable message para imprimirla en el Jsf
             //y seteo el Status de Conexión a true. (Para validar mensaje a mostrar al Usuario).
             if (response == 200) {
-                InputStreamReader in = new InputStreamReader((InputStream) connection.getContent());
+                InputStreamReader in = new InputStreamReader((InputStream) connection.getContent(), "UTF-8");
                 BufferedReader buff = new BufferedReader(in);
                 StringBuilder text = new StringBuilder();
                 String line;

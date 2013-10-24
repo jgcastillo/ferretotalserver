@@ -70,8 +70,8 @@ public class HttpURLConnectionEncuestas {
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Length", Integer.toString(jsn.length()));
 
-            jsn = new String(jsn.getBytes(), "UTF-8");
-            //jsn = new String(jsn.getBytes());
+            //jsn = new String(jsn.getBytes(), "UTF-8");
+            jsn = new String(jsn.getBytes());
 
             connection.getOutputStream().write(jsn.getBytes());
             connection.getOutputStream().flush();
@@ -85,7 +85,7 @@ public class HttpURLConnectionEncuestas {
             //lo seteo en la variable message para imprimirla en el Jsf
             //y seteo el Status de Conexión a true. (Para validar mensaje a mostrar al Usuario).
             if (response == 200) {
-                InputStreamReader in = new InputStreamReader((InputStream) connection.getContent());
+                InputStreamReader in = new InputStreamReader((InputStream) connection.getContent(), "UTF-8");
                 BufferedReader buff = new BufferedReader(in);
                 StringBuilder text = new StringBuilder();
                 String line;
@@ -151,7 +151,7 @@ public class HttpURLConnectionEncuestas {
                 if (response == 200) {
                     setStatusConnection(true);
 
-                    rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    rd = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
                     sb = new StringBuilder();
 
                     while ((line = rd.readLine()) != null) {
