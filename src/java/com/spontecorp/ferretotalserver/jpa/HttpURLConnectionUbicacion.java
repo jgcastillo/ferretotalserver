@@ -18,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,26 +45,19 @@ public class HttpURLConnectionUbicacion implements Serializable{
             HttpURLConnection connection = (HttpURLConnection) serverAddress.openConnection();
 
             setStatusConnection(false);
-
-            System.out.println("2.- URL: " + hostname);
-            System.out.println("3.- Json UbicacionList: " + jsn);
-
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
 
             connection.setRequestProperty("charset", "UTF-8");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Length", Integer.toString(jsn.length()));
+            byte[] bytes = jsn.getBytes("UTF-8");
+            connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
 
-            //jsn = new String(jsn.getBytes(), "UTF-8");
-            jsn = new String(jsn.getBytes(), Charset.forName("UTF-8"));
-            System.out.println("Charset.defaultCharset(): "+Charset.forName("UTF-8"));
-            //jsn = new String(jsn.getBytes());
-
-            connection.getOutputStream().write(jsn.getBytes());
+            connection.getOutputStream().write(bytes);
             connection.getOutputStream().flush();
             connection.connect();
+            
             int response = connection.getResponseCode();
 
             //Verificamos la Conexión

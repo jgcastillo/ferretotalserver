@@ -68,14 +68,14 @@ public class HttpURLConnectionEncuestas {
             connection.setRequestProperty("charset", "UTF-8");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Length", Integer.toString(jsn.length()));
+            
+            byte[] bytes = jsn.getBytes("UTF-8");
+            connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
 
-            //jsn = new String(jsn.getBytes(), "UTF-8");
-            jsn = new String(jsn.getBytes());
-
-            connection.getOutputStream().write(jsn.getBytes());
+            connection.getOutputStream().write(bytes);
             connection.getOutputStream().flush();
             connection.connect();
+            
             int response = connection.getResponseCode();
 
             //Verificamos la Conexión
