@@ -30,6 +30,11 @@
                         <p:menuitem value="Análisis Encuestas" action="/gerente/encuesta/surveyAnalysisMain" 
                                     ajax="false" icon="ui-icon-image"/>
                     </p:submenu>
+                    <p:submenu label="Back Up &amp; Restore">
+<!--                        <p:menuitem value="Configurar Base de Datos" action="/admin/configurationDb/List.xhtml" ajax="false" icon="ui-icon-home" />-->
+                        <p:menuitem value="Back Up" action="/admin/respaldo/backup.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Restore" action="/admin/respaldo/restore.xhtml" ajax="false" icon="ui-icon-home" />
+                    </p:submenu>
                     <p:submenu label="Navegación">
                         <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />
                         <p:menuitem value="Logout" action="#{loginBean.logout}" icon="ui-icon-power"/>
@@ -51,20 +56,10 @@
                         <p:menuitem value="Análisis Encuestas" action="/gerente/encuesta/surveyAnalysisMain" 
                                     ajax="false" icon="ui-icon-image"/>
                      </p:submenu>
-                    <p:submenu label="Navegación">
-                        <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />
-                        <p:menuitem value="Logout" action="#{loginBean.logout}" icon="ui-icon-power"/>
-                    </p:submenu>
-                </p:panelMenu>
-            </c:if>
-            <c:if test="#{loginBean.asesor}" >
-                <p:panelMenu id="menuAsesor">
-                    <p:submenu label="Encuestas">
-                        <p:menuitem value="Ver Encuesta" action="/main.xhtml" ajax="false" icon="ui-icon-search"/>
-                    </p:submenu>
-                    <p:submenu label="Recolector de Información">
-                        <p:menuitem value="Ver Recolector Información" action="/recolectorInformacion.xhtml" 
-                                    ajax="false" icon="ui-icon-search"/>
+                    <p:submenu label="Back Up &amp; Restore">
+<!--                        <p:menuitem value="Configurar Base de Datos" action="/admin/configurationDb/List.xhtml" ajax="false" icon="ui-icon-home" />-->
+                        <p:menuitem value="Back Up" action="/admin/respaldo/backup.xhtml" ajax="false" icon="ui-icon-home" />
+                        <p:menuitem value="Restore" action="/admin/respaldo/restore.xhtml" ajax="false" icon="ui-icon-home" />
                     </p:submenu>
                     <p:submenu label="Navegación">
                         <p:menuitem value="Principal" action="/main1.xhtml" ajax="false" icon="ui-icon-home" />

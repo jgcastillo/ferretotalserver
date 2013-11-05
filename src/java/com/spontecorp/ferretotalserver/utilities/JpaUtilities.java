@@ -2,6 +2,8 @@ package com.spontecorp.ferretotalserver.utilities;
 
 import com.spontecorp.ferretotalserver.security.Cifrador;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +56,17 @@ public class JpaUtilities {
     public static final String ATENCION_REGULAR = "Regular";
     public static final String ATENCION_MALA = "Mala";
     public static final String CIERRE_AUTOMATICO = "Automatica";
+    //Datos de la BD a respaldar
+    public static final String DB_NAME = "ferreasesor_server";
+    public static final String DB_USER = "root";
+    public static final String DB_PASSWORD = "root";
+    //Ruta del mysqldump.exe 
+    //Hacer BackUp de la BD
+    public static final String mysqldump = "\"C:\\Program Files\\MySQL\\MySQL Server 5.1\\bin\\mysqldump.exe\"";
+    //Ruta del mysql.exe 
+    //Hacer Restore de la BD
+    public static final String mysql = "\"C:\\Program Files\\MySQL\\MySQL Server 5.1\\bin\\mysql.exe\"";
+
 
     public JpaUtilities() {
     }
@@ -148,5 +162,57 @@ public class JpaUtilities {
                 System.out.println("connHeaderField: " + entry);
             }
         }
+    }
+    
+    /**
+     * Guardo el Archivo en la Carpeta Temporal
+     *
+     * @param mFile
+     * @return
+     */
+    public static boolean saveFile(UploadedFile mFile, String srcFile) {
+        boolean retorno = false;
+        long FileLength = 0;
+        
+        try {
+            File file = new File(srcFile);
+            byte[] bytes = mFile.getContents();
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(bytes);
+                fos.flush();
+                fos.close();
+            }
+
+            FileLength = file != null ? file.length() : 0;
+            retorno = FileLength > 0;
+
+        } catch (Exception e) {
+            System.out.println("Error al salvar el archivo en la ruta: " + srcFile);
+            return false;
+        }
+        return retorno;
+    }
+    
+    /**
+     * Elimino el Archivo de la Carpeta Temporal una vez Restaurado
+     *
+     * @param srcFile
+     */
+    public static boolean deleteFile(String srcFile) {
+        boolean delete = false;
+        try {
+            //System.out.println("Delete file: " + srcFile);
+            File newfile = new File(srcFile);
+            if (newfile.delete()) {
+                //System.out.println(newfile.getName() + " is deleted!");
+                delete = true;
+            } else {
+                //System.out.println("Delete operation is failed.");
+                delete = false;
+            }
+        } catch (Exception e) {
+            System.out.println("Delete operation is failed.");
+        }
+        return delete;
     }
 }
