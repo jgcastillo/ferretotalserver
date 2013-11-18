@@ -5,13 +5,20 @@
 package com.spontecorp.ferretotalserver.controller.bean;
 
 import com.spontecorp.ferretotalserver.controller.util.JsfUtil;
+import com.spontecorp.ferretotalserver.entity.ConfigurationDb;
+import com.spontecorp.ferretotalserver.jpa.ConfigurationDbFacade;
 import com.spontecorp.ferretotalserver.utilities.JpaUtilities;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -21,19 +28,50 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean(name = "restoreBeanController")
 @SessionScoped
-public class RestoreBeanController implements Serializable{
-     private UploadedFile uploadedFile;
+public class RestoreBeanController implements Serializable {
+
+    private UploadedFile uploadedFile;
     private StreamedContent downloadFile;
     //Datos de la BD 
-    private String dbName = JpaUtilities.DB_NAME;
-    private String dbUserName = JpaUtilities.DB_USER;
-    private String dbPassword = JpaUtilities.DB_PASSWORD;
-    private String mysql = JpaUtilities.mysql;
+    private String dbName = null;
+    private String dbUserName = null;
+    private String dbPassword = null;
+    private String mysqlexe = null;
     //Ruta para crear el archivo .sql
-    private String srcFile;
-    private String restoreFile;
+    private String srcFile = null;
+    private String restoreFile = null;
 
     public RestoreBeanController() {
+    }
+
+    /**
+     * Obtengo la configuración de la Base de Datos
+     *
+     * @return
+     */
+    public boolean configurarDB() {
+        List<ConfigurationDb> configuracionDB = new ArrayList<>();
+        ConfigurationDb configDB = new ConfigurationDb();
+        boolean isConfig = false;
+        try {
+            InitialContext context = new InitialContext();
+            ConfigurationDbFacade configuracionDBFacade = (ConfigurationDbFacade) context.lookup("java:module/ConfigurationDbFacade");
+            configuracionDB = configuracionDBFacade.findAll();
+            if (configuracionDB.size() > 0) {
+                configDB = configuracionDB.get(0);
+                dbName = configDB.getDbName();
+                dbUserName = configDB.getDbuserName();
+                dbPassword = configDB.getDbPassword();
+                // Set path. Set location of mysqlexe        
+                mysqlexe = "\"" + configDB.getPathMysql() + "\"";
+                isConfig = true;
+            } else {
+                isConfig = false;
+            }
+        } catch (NamingException ex) {
+            java.util.logging.Logger.getLogger(JpaUtilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isConfig;
     }
 
     /**
@@ -50,6 +88,9 @@ public class RestoreBeanController implements Serializable{
 
         if (uploadedFile != null) {
 
+            //Obtengo la configuración de la Base de Datos
+            configurarDB();
+
             if (uploadedFile.getContentType().equalsIgnoreCase(contentType)) {
                 restoreFile = uploadedFile.getFileName();
 
@@ -61,7 +102,7 @@ public class RestoreBeanController implements Serializable{
 
                 if (result) {
                     //Se arma el comando a ejecutar
-                    String[] executeCmd = new String[]{mysql, "--user=" + dbUserName, "--password="
+                    String[] executeCmd = new String[]{mysqlexe, "--user=" + dbUserName, "--password="
                         + dbPassword, dbName, "-e", "source " + srcFile};
                     Process runtimeProcess;
 
@@ -111,6 +152,4 @@ public class RestoreBeanController implements Serializable{
     public void setDownloadFile(StreamedContent downloadFile) {
         this.downloadFile = downloadFile;
     }
-
-    
 }

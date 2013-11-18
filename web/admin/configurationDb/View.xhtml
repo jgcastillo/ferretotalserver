@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewConfigurationDbTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewConfigurationDbLabel_dbName}"/>
+                    <h:outputText value="#{configurationDbController.selected.dbName}" title="#{bundle.ViewConfigurationDbTitle_dbName}"/>
+                    <h:outputText value="#{bundle.ViewConfigurationDbLabel_dbuserName}"/>
+                    <h:outputText value="#{configurationDbController.selected.dbuserName}" title="#{bundle.ViewConfigurationDbTitle_dbuserName}"/>
+                    <h:outputText value="#{bundle.ViewConfigurationDbLabel_dbPassword}"/>
+                    <h:outputText value="#{configurationDbController.selected.dbPassword}" title="#{bundle.ViewConfigurationDbTitle_dbPassword}"/>
+                    <h:outputText value="#{bundle.ViewConfigurationDbLabel_pathMysqldump}"/>
+                    <h:outputText value="#{configurationDbController.selected.pathMysqldump}" title="#{bundle.ViewConfigurationDbTitle_pathMysqldump}"/>
+                    <h:outputText value="#{bundle.ViewConfigurationDbLabel_pathMysql}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{configurationDbController.destroyAndView}" value="#{bundle.ViewConfigurationDbDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewConfigurationDbEditLink}"/>
+                <br />
+                <h:commandLink action="#{configurationDbController.prepareCreate}" value="#{bundle.ViewConfigurationDbCreateLink}" />
+                <br />
+                <h:commandLink action="#{configurationDbController.prepareList}" value="#{bundle.ViewConfigurationDbShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewConfigurationDbIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
