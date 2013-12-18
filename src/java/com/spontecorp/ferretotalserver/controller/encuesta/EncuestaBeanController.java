@@ -76,7 +76,7 @@ public class EncuestaBeanController extends EncuestaAbstract implements Serializ
     }
 
     public DataModel getItems() {
-        items = null;
+       // items = null;
         if (items == null) {
             items = new ListDataModel(getFacade().findAll());
         }
